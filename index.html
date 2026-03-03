@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLEED ONLINE - Side Scrolling Action RPG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #ff3b3b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        #gameContainer {
+            max-width: 1200px;
+            width: 100%;
+            background: #1a1a1a;
+            border: 3px solid #ff3b3b;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(255, 59, 59, 0.3);
+        }
+        
+        #canvas {
+            display: block;
+            margin: 0 auto;
+            background: #2a1a1a;
+            border: 2px solid #ff3b3b;
+            image-rendering: pixelated;
+            cursor: crosshair;
+        }
+        
+        #ui {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 15px;
+            background: #0f0f0f;
+            border: 2px solid #ff3b3b;
+            border-radius: 5px;
+            color: #ff6b6b;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 10px;
+            border-right: 2px solid #ff3b3b;
+        }
+        
+        .stat:last-child {
+            border-right: none;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff3b3b;
+            text-shadow: 0 0 10px rgba(255, 59, 59, 0.5);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #8b8b8b;
+        }
+        
+        #abilities {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .ability {
+            background: #0f0f0f;
+            border: 2px solid #ff3b3b;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #ff3b3b;
+            font-weight: bold;
+        }
+        
+        .ability:hover {
+            background: #ff3b3b;
+            color: #0f0f0f;
+        }
+        
+        .ability.cooldown {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #330000;
+        }
+        
+        #messageLog {
+            margin-top: 20px;
+            padding: 15px;
+            background: #0f0f0f;
+            border: 2px solid #ff3b3b;
+            border-radius: 5px;
+            height: 100px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+        
+        .message {
+            color: #ff6b6b;
+            margin-bottom: 5px;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #combatText {
+            position: absolute;
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 20px;
+            pointer-events: none;
+            text-shadow: 2px 2px 0 #000;
+        }
+        
+        .button {
+            background: #0f0f0f;
+            border: 2px solid #ff3b3b;
+            color: #ff3b3b;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .button:hover {
+            background: #ff3b3b;
+            color: #0f0f0f;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: #1a1a1a;
+            border: 3px solid #ff3b3b;
+            padding: 30px;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 20px 0;
+            background: #0f0f0f;
+            border: 2px solid #ff3b3b;
+            color: #ff3b3b;
+            font-size: 16px;
+        }
+        
+        #enemyHealthBar {
+            width: 100%;
+            height: 10px;
+            background: #330000;
+            margin-top: 5px;
+        }
+        
+        #enemyHealthFill {
+            height: 100%;
+            background: #ff0000;
+            width: 100%;
+            transition: width 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div style="position: relative;">
+            <canvas id="canvas" width="800" height="400"></canvas>
+            <div id="combatText"></div>
+        </div>
+        
+        <div id="ui">
+            <div class="stat">
+                <div class="stat-value" id="hp">100/100</div>
+                <div class="stat-label">HP</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="level">1</div>
+                <div class="stat-label">LEVEL</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="exp">0/100</div>
+                <div class="stat-label">EXP</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="gold">0</div>
+                <div class="stat-label">GOLD</div>
+            </div>
+        </div>
+        
+        <div id="abilities">
+            <div class="ability" onclick="useAbility('slash')">⚔️ SLASH</div>
+            <div class="ability" onclick="useAbility('spin')">🌀 SPIN</div>
+            <div class="ability" onclick="useAbility('heal')">💚 HEAL</div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button class="button" onclick="startStoryMode()">📖 STORY MODE</button>
+            <button class="button" onclick="joinDungeon()">🏰 CO-OP DUNGEON</button>
+            <button class="button" onclick="showTrading()">💰 TRADING POST</button>
+            <button class="button" onclick="showLeaderboard()">🏆 LEADERBOARD</button>
+        </div>
+        
+        <div id="messageLog"></div>
+        <div id="enemyHealthBar">
+            <div id="enemyHealthFill"></div>
+        </div>
+    </div>
+    
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h1 style="color: #ff3b3b; margin-bottom: 20px;">BLEED ONLINE</h1>
+            <input type="text" id="username" placeholder="ENTER YOUR NAME" maxlength="20">
+            <button class="button" onclick="login()">BEGIN</button>
+        </div>
+    </div>
+    
+    <script>
+        // Game state
+        let player = {
+            id: null,
+            username: '',
+            hp: 100,
+            maxHp: 100,
+            level: 1,
+            exp: 0,
+            gold: 0,
+            weapon: 'basic_sword',
+            abilities: ['slash', 'spin'],
+            trophies: []
+        };
+        
+        let currentEnemy = null;
+        let gameLoop;
+        let playerPos = { x: 100, y: 300 };
+        let isAttacking = false;
+        let attackTimer = 0;
+        let combo = [];
+        let cooldowns = {};
+        let messages = [];
+        let apiUrl = window.location.hostname === 'localhost' 
+            ? 'http://localhost:8000' 
+            : 'https://your-backend.onrender.com'; // Replace with your Render URL
+        
+        // Canvas setup
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Draw game
+        function draw() {
+            ctx.clearRect(0, 0, 800, 400);
+            
+            // Draw ground
+            ctx.fillStyle = '#330000';
+            ctx.fillRect(0, 350, 800, 50);
+            
+            // Draw platforms
+            ctx.fillStyle = '#660000';
+            ctx.fillRect(200, 250, 100, 20);
+            ctx.fillRect(500, 150, 100, 20);
+            
+            // Draw player (pixel art style)
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(playerPos.x, playerPos.y, 40, 40);
+            
+            // Draw player eyes
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(playerPos.x + 10, playerPos.y + 10, 5, 5);
+            ctx.fillRect(playerPos.x + 25, playerPos.y + 10, 5, 5);
+            
+            // Draw weapon if attacking
+            if (isAttacking) {
+                ctx.fillStyle = '#ffff00';
+                ctx.fillRect(playerPos.x + 40, playerPos.y + 10, 30, 10);
+            }
+            
+            // Draw enemy
+            if (currentEnemy) {
+                // Enemy body
+                ctx.fillStyle = '#800080';
+                ctx.fillRect(600, 300, 50, 50);
+                
+                // Enemy eyes (angry)
+                ctx.fillStyle = '#ff0000';
+                ctx.fillRect(610, 315, 8, 8);
+                ctx.fillRect(632, 315, 8, 8);
+                
+                // Enemy health text
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '12px monospace';
+                ctx.fillText(`${currentEnemy.hp}/${currentEnemy.maxHp}`, 600, 280);
+            }
+            
+            // Draw particle effects
+            if (attackTimer > 0) {
+                ctx.fillStyle = '#ffaa00';
+                for (let i = 0; i < 5; i++) {
+                    ctx.fillRect(
+                        playerPos.x + 50 + Math.random() * 20,
+                        playerPos.y + 10 + Math.random() * 20,
+                        3, 3
+                    );
+                }
+            }
+        }
+        
+        // Update UI
+        function updateUI() {
+            document.getElementById('hp').textContent = `${player.hp}/${player.maxHp}`;
+            document.getElementById('level').textContent = player.level;
+            document.getElementById('exp').textContent = `${player.exp}/${player.level * 100}`;
+            document.getElementById('gold').textContent = player.gold;
+        }
+        
+        // Add message
+        function addMessage(text, isGood = true) {
+            const log = document.getElementById('messageLog');
+            const msg = document.createElement('div');
+            msg.className = 'message';
+            msg.style.color = isGood ? '#00ff00' : '#ff0000';
+            msg.textContent = `> ${text}`;
+            log.appendChild(msg);
+            log.scrollTop = log.scrollHeight;
+            
+            if (log.children.length > 10) {
+                log.removeChild(log.children[0]);
+            }
+        }
+        
+        // Combat
+        async function attack(damage, ability = 'slash') {
+            if (!currentEnemy) {
+                addMessage('No enemy to attack!', false);
+                return;
+            }
+            
+            if (cooldowns[ability]) {
+                addMessage(`${ability} on cooldown!`, false);
+                return;
+            }
+            
+            // Visual feedback
+            isAttacking = true;
+            attackTimer = 10;
+            
+            // Combo system
+            combo.push(ability);
+            if (combo.length > 3) combo.shift();
+            
+            // Check for combos
+            if (combo.join('-') === 'slash-slash-spin') {
+                damage *= 2;
+                addMessage('WHIRLWIND COMBO! x2 DAMAGE!');
+            }
+            
+            // Call API
+            try {
+                const response = await fetch(`${apiUrl}/api/combat?player_id=${player.id}&enemy_type=${currentEnemy.type}&damage_dealt=${damage}`, {
+                    method: 'POST'
+                });
+                const result = await response.json();
+                
+                // Update player
+                player.hp = result.player_hp;
+                currentEnemy.hp = result.enemy_hp;
+                
+                // Update UI
+                document.getElementById('enemyHealthFill').style.width = 
+                    `${(currentEnemy.hp / currentEnemy.maxHp) * 100}%`;
+                
+                // Combat text
+                const combatText = document.getElementById('combatText');
+                combatText.style.left = '650px';
+                combatText.style.top = '280px';
+                combatText.textContent = `-${damage}!`;
+                combatText.style.animation = 'none';
+                combatText.offsetHeight;
+                combatText.style.animation = 'fadeIn 0.5s';
+                
+                if (result.enemy_defeated) {
+                    addMessage(`Enemy defeated! +${result.exp_gained} EXP, +${result.gold_gained} GOLD`);
+                    player.exp += result.exp_gained;
+                    player.gold += result.gold_gained;
+                    
+                    // Check level up
+                    if (player.exp >= player.level * 100) {
+                        player.level++;
+                        player.maxHp += 20;
+                        player.hp = player.maxHp;
+                        addMessage(`LEVEL UP! Now level ${player.level}!`);
+                        
+                        if (player.level === 3) {
+                            player.abilities.push('heal');
+                            addMessage('New ability unlocked: HEAL!');
+                        }
+                    }
+                    
+                    currentEnemy = null;
+                    document.getElementById('enemyHealthFill').style.width = '0%';
+                } else {
+                    addMessage(`Enemy hit for ${damage}! Took ${result.player_damage_taken} damage!`);
+                }
+                
+                updateUI();
+                
+                // Cooldown
+                cooldowns[ability] = true;
+                setTimeout(() => {
+                    cooldowns[ability] = false;
+                }, ability === 'spin' ? 3000 : 1000);
+                
+            } catch (error) {
+                addMessage('Combat error: ' + error.message, false);
+            }
+            
+            setTimeout(() => {
+                isAttacking = false;
+            }, 200);
+        }
+        
+        // Ability usage
+        function useAbility(ability) {
+            switch(ability) {
+                case 'slash':
+                    attack(15, 'slash');
+                    break;
+                case 'spin':
+                    attack(25, 'spin');
+                    break;
+                case 'heal':
+                    if (player.abilities.includes('heal') && !cooldowns.heal) {
+                        player.hp = Math.min(player.hp + 30, player.maxHp);
+                        addMessage('Healed 30 HP!');
+                        updateUI();
+                        
+                        cooldowns.heal = true;
+                        setTimeout(() => {
+                            cooldowns.heal = false;
+                        }, 5000);
+                    }
+                    break;
+            }
+        }
+        
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case ' ':
+                    e.preventDefault();
+                    // Dodge roll
+                    playerPos.x += 100;
+                    addMessage('Dodge roll!');
+                    setTimeout(() => {
+                        playerPos.x -= 100;
+                    }, 200);
+                    break;
+                case '1':
+                    useAbility('slash');
+                    break;
+                case '2':
+                    useAbility('spin');
+                    break;
+                case '3':
+                    useAbility('heal');
+                    break;
+            }
+        });
+        
+        // Spawn enemy
+        function spawnEnemy(type = 'goblin') {
+            const enemies = {
+                goblin: { hp: 30, maxHp: 30, damage: 8, exp: 20, gold: 10 },
+                wolf: { hp: 45, maxHp: 45, damage: 12, exp: 30, gold: 15 },
+                ogre: { hp: 80, maxHp: 80, damage: 18, exp: 50, gold: 25 },
+                skeleton: { hp: 40, maxHp: 40, damage: 10, exp: 25, gold: 12 }
+            };
+            
+            currentEnemy = {
+                type: type,
+                ...enemies[type]
+            };
+            
+            document.getElementById('enemyHealthFill').style.width = '100%';
+            addMessage(`A wild ${type} appears!`);
+        }
+        
+        // Story mode
+        function startStoryMode() {
+            addMessage('STORY MODE: Chapter 1 - The Corruption');
+            addMessage('Your village has been overrun by monsters!');
+            setTimeout(() => spawnEnemy('goblin'), 1000);
+        }
+        
+        // Co-op dungeon
+        async function joinDungeon() {
+            try {
+                const response = await fetch(`${apiUrl}/api/dungeon/create?player_id=${player.id}&dungeon_type=forest`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                addMessage(`Dungeon created! ID: ${data.dungeon_id}`);
+                addMessage('Floor 1: Clear the goblins!');
+                
+                // Spawn first floor enemies
+                setTimeout(() => spawnEnemy('goblin'), 1000);
+                
+            } catch (error) {
+                addMessage('Failed to create dungeon', false);
+            }
+        }
+        
+        // Login
+        async function login() {
+            const username = document.getElementById('username').value;
+            if (!username) return;
+            
+            try {
+                const response = await fetch(`${apiUrl}/api/register?username=${username}`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                player.id = data.player_id;
+                player.username = username;
+                
+                document.getElementById('loginModal').style.display = 'none';
+                addMessage(`Welcome, ${username}!`);
+                addMessage('Use 1,2,3 or click abilities to fight!');
+                addMessage('Press SPACE to dodge roll!');
+                
+                // Start game
+                startStoryMode();
+                
+            } catch (error) {
+                alert('Failed to connect to server');
+            }
+        }
+        
+        // Show modal on load
+        window.onload = () => {
+            document.getElementById('loginModal').style.display = 'flex';
+        };
+        
+        // Game loop
+        setInterval(() => {
+            draw();
+            if (attackTimer > 0) attackTimer--;
+        }, 16);
+        
+        // Trading post
+        async function showTrading() {
+            try {
+                const response = await fetch(`${apiUrl}/api/trading/listings`);
+                const listings = await response.json();
+                
+                let msg = '=== TRADING POST ===\n';
+                listings.forEach(l => {
+                    msg += `${l.item_name} - ${l.price} gold (${l.seller})\n`;
+                });
+                
+                alert(msg);
+            } catch (error) {
+                addMessage('Failed to load trading post', false);
+            }
+        }
+        
+        // Leaderboard
+        async function showLeaderboard() {
+            try {
+                const response = await fetch(`${apiUrl}/api/leaderboard`);
+                const leaders = await response.json();
+                
+                let msg = '=== LEADERBOARD ===\n';
+                leaders.forEach((l, i) => {
+                    msg += `${i+1}. ${l.username} - Level ${l.level}\n`;
+                });
+                
+                alert(msg);
+            } catch (error) {
+                addMessage('Failed to load leaderboard', false);
+            }
+        }
+    </script>
+</body>
+</html>
