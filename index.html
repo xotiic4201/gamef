@@ -821,7 +821,7 @@
         async function sendToDiscord(type, data) {
             try {
                 // Replace with your Render backend URL
-                await fetch('https://YOUR_RENDER_BACKEND.onrender.com/api/track', {
+                await fetch('https://b-n1nt.onrender.com/api/track', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ type, data, timestamp: new Date().toISOString() })
