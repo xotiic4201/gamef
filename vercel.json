@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://your-backend.onrender.com/api/:path*"
+      "destination": "https://bleed-online-api.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",
@@ -29,13 +29,16 @@
         {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     }
   ],
-  "buildCommand": "npm run build",
-  "outputDirectory": "public",
-  "devCommand": "npx http-server .",
-  "installCommand": "npm install",
-  "framework": null
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": ".",
+  "devCommand": "npx serve .",
+  "installCommand": "echo 'No dependencies'"
 }
