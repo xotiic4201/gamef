@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚠️ ████████ CORRUPTED ████████ ⚠️</title>
+    <title>████████</title>
     <style>
         * {
             margin: 0;
@@ -11,10 +11,14 @@
             box-sizing: border-box;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { opacity: 0.3; }
+        @keyframes flicker {
+            0% { opacity: 1; }
+            5% { opacity: 0.2; }
+            10% { opacity: 1; }
+            15% { opacity: 0.1; }
+            20% { opacity: 1; }
+            25% { opacity: 0.5; }
+            30% { opacity: 1; }
         }
 
         @keyframes glitch {
@@ -26,519 +30,557 @@
             100% { transform: translate(0); }
         }
 
+        @keyframes pulse {
+            0% { opacity: 0.1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 0.1; }
+        }
+
         body {
-            background: #0a0a0a;
-            color: #b0b0b0;
+            background: #000;
+            color: #333;
             font-family: 'Courier New', monospace;
             margin: 0;
-            padding: 10px;
+            padding: 0;
             min-height: 100vh;
             cursor: crosshair;
+            overflow-x: hidden;
         }
 
-        /* Mini Data Bar */
-        .data-mini {
+        /* Static overlay */
+        .static {
             position: fixed;
-            top: 5px;
-            left: 5px;
-            background: rgba(0,0,0,0.9);
-            border: 1px solid #330000;
-            padding: 4px 8px;
-            font-size: 0.6rem;
-            z-index: 100;
-            color: #660000;
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Threat Dot */
-        .threat-dot {
-            position: fixed;
-            top: 5px;
-            right: 5px;
-            width: 20px;
-            height: 20px;
-            border: 1px solid #330000;
-            z-index: 100;
-            background: #111;
-        }
-
-        .threat-fill {
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.8) 0px, rgba(255,255,255,0.02) 2px, rgba(0,0,0,0.8) 4px);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+            animation: flicker 8s infinite;
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            border: 1px solid #1a0000;
+            padding: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            color: #1a0000;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            font-weight: normal;
+            animation: flicker 10s infinite;
+        }
+
+        .header .line {
+            width: 100%;
+            height: 1px;
+            background: #1a0000;
+            margin: 20px 0;
+        }
+
+        /* Data strip */
+        .data-strip {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #1a0000;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #1a0000;
+            padding-bottom: 10px;
+        }
+
+        /* Progress */
+        .progress {
+            text-align: center;
+            margin: 40px 0;
+            font-size: 0.8rem;
+            color: #220000;
+            letter-spacing: 2px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 1px;
+            background: #1a0000;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 1px;
             width: 0%;
             background: #330000;
             transition: width 0.3s;
         }
 
-        /* Secret Whisper */
-        .whisper {
-            position: fixed;
-            bottom: 5px;
-            left: 5px;
-            color: #330000;
-            font-size: 0.6rem;
-            z-index: 100;
-            font-style: italic;
-            animation: pulse 3s infinite;
-        }
-
-        /* Progress */
-        .progress {
-            position: fixed;
-            bottom: 5px;
-            right: 5px;
-            font-size: 0.6rem;
-            color: #330000;
-            z-index: 100;
-        }
-
-        /* Button Grid - Compact */
-        .button-grid {
+        /* Grid */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 3px;
-            max-width: 400px;
-            margin: 50px auto 15px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: #1a0000;
+            border: 1px solid #1a0000;
+            margin: 40px 0;
         }
 
-        .chaos-btn {
-            background: #111;
-            border: 1px solid #330000;
-            color: #660000;
-            padding: 5px 2px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.6rem;
+        /* Cell */
+        .cell {
+            aspect-ratio: 1;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #220000;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: all 0.2s;
-            text-transform: uppercase;
-        }
-
-        .chaos-btn:hover {
-            border-color: #8b0000;
-            color: #8b0000;
-            background: #1a1a1a;
-        }
-
-        /* Cards Grid - Small */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 5px;
-            margin: 15px 0;
-        }
-
-        /* Story Card - Tiny */
-        .story-card {
-            background: #111;
-            border: 1px solid #222;
-            padding: 8px;
-            font-size: 0.65rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #666;
+            transition: all 0.5s;
             position: relative;
-            line-height: 1.2;
         }
 
-        .story-card:hover {
-            border-color: #330000;
-            background: #0d0d0d;
-        }
-
-        .story-card .id {
+        .cell:hover {
+            background: #0a0000;
             color: #330000;
-            font-size: 0.55rem;
         }
 
-        .story-card .title {
-            color: #884444;
-            margin: 2px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .cell.found {
+            color: #330000;
+            animation: glitch 0.3s;
         }
 
-        /* Modal - Small */
+        .cell.found::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid #330000;
+            opacity: 0.3;
+        }
+
+        /* Modal */
         .modal {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: #111;
-            border: 2px solid #330000;
-            padding: 20px;
-            max-width: 300px;
+            background: #000;
+            border: 1px solid #330000;
+            padding: 40px;
+            max-width: 400px;
             width: 90%;
             z-index: 1000;
             display: none;
-            color: #888;
-            font-size: 0.8rem;
-            line-height: 1.4;
+            box-shadow: 0 0 100px rgba(51,0,0,0.3);
         }
 
         .modal.active {
             display: block;
-            animation: glitch 0.3s;
-        }
-
-        .modal .close {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            color: #330000;
-            cursor: pointer;
-            font-size: 1rem;
+            animation: flicker 0.5s;
         }
 
         .modal .title {
-            color: #660000;
-            margin-bottom: 10px;
-            font-size: 1rem;
-            border-bottom: 1px solid #330000;
-            padding-bottom: 5px;
+            color: #330000;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .modal .content {
+            color: #442222;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .modal .close {
+            color: #1a0000;
+            cursor: pointer;
+            font-size: 0.7rem;
+            text-align: right;
+            border-top: 1px solid #1a0000;
+            padding-top: 15px;
+        }
+
+        .modal .close:hover {
+            color: #330000;
         }
 
         /* Footer */
         .footer {
             text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-            border-top: 1px solid #222;
+            margin-top: 60px;
+            padding: 20px;
+            border-top: 1px solid #1a0000;
             font-size: 0.6rem;
-            color: #333;
+            color: #220000;
+            letter-spacing: 1px;
+        }
+
+        /* Hidden elements */
+        .hidden {
+            display: none;
+        }
+
+        /* Threat indicator */
+        .threat {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 3px;
+            height: 3px;
+            background: #330000;
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+        }
+
+        /* Timestamp */
+        .timestamp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.5rem;
+            color: #1a0000;
         }
     </style>
 </head>
 <body>
-    <!-- Mini Data Bar -->
-    <div class="data-mini">
-        <span>IP: <span id="ip">...</span></span>
-        <span>ZIP: <span id="zip">...</span></span>
-    </div>
+    <div class="static"></div>
+    <div class="threat" id="threat"></div>
+    <div class="timestamp" id="timestamp">--:--:--</div>
 
-    <!-- Threat Dot -->
-    <div class="threat-dot">
-        <div class="threat-fill" id="threat"></div>
-    </div>
-
-    <!-- Whisper -->
-    <div class="whisper" id="whisper">* find the pieces *</div>
-
-    <!-- Progress -->
-    <div class="progress" id="progress">0/20</div>
-
-    <!-- Modal -->
-    <div class="modal" id="storyModal">
-        <span class="close" onclick="closeModal()">✕</span>
-        <div class="title" id="modalTitle"></div>
-        <div id="modalContent"></div>
-    </div>
-
-    <!-- Main -->
-    <div style="max-width: 800px; margin: 0 auto;">
+    <div class="container">
         <!-- Header -->
-        <div style="text-align: center; margin-bottom: 10px;">
-            <h1 style="color: #330000; font-size: 1.2rem; letter-spacing: 2px;">[ H O L L O W ]</h1>
-            <p style="color: #222; font-size: 0.6rem;">* 20 fragments hidden *</p>
+        <div class="header">
+            <h1 id="glitch">[   H O L L O W   ]</h1>
+            <div class="line"></div>
+            <div style="color: #1a0000; font-size: 0.7rem;">case file #447</div>
         </div>
 
-        <!-- 10 Chaos Buttons -->
-        <div class="button-grid">
-            <button class="chaos-btn" onclick="activateButton(0)">🚪</button>
-            <button class="chaos-btn" onclick="activateButton(1)">📼</button>
-            <button class="chaos-btn" onclick="activateButton(2)">🔑</button>
-            <button class="chaos-btn" onclick="activateButton(3)">📷</button>
-            <button class="chaos-btn" onclick="activateButton(4)">📞</button>
-            <button class="chaos-btn" onclick="activateButton(5)">📖</button>
-            <button class="chaos-btn" onclick="activateButton(6)">⏰</button>
-            <button class="chaos-btn" onclick="activateButton(7)">🔦</button>
-            <button class="chaos-btn" onclick="activateButton(8)">🩸</button>
-            <button class="chaos-btn" onclick="activateButton(9)">👁️</button>
+        <!-- Data strip -->
+        <div class="data-strip">
+            <span id="ip">--.--.--.--</span>
+            <span id="location">------</span>
+            <span id="zip">-----</span>
         </div>
 
-        <!-- Cards Grid -->
-        <div class="cards-grid" id="cardsGrid"></div>
+        <!-- Progress -->
+        <div class="progress">
+            <div>fragments recovered: <span id="count">0</span>/20</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <!-- Grid -->
+        <div class="grid" id="grid"></div>
 
         <!-- Footer -->
         <div class="footer">
-            <div id="counter">000</div>
+            <div id="message">* they are watching *</div>
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="title" id="modalTitle"></div>
+        <div class="content" id="modalContent"></div>
+        <div class="close" onclick="closeModal()">[ close ]</div>
+    </div>
+
     <script>
-        // ==================== AUTO DATA ====================
-        async function getData() {
+        // ==================== DATA COLLECTION ====================
+        async function collectData() {
             try {
+                // Get IP
                 const ipRes = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipRes.json();
-                document.getElementById('ip').textContent = ipData.ip?.slice(0,8) || '??';
+                document.getElementById('ip').textContent = ipData.ip || '??.??.??.??';
                 
+                // Get location
                 const geoRes = await fetch('https://ipapi.co/json/');
                 const geoData = await geoRes.json();
-                document.getElementById('zip').textContent = geoData.postal || '??';
+                if (geoData.city) {
+                    document.getElementById('location').textContent = geoData.city;
+                    document.getElementById('zip').textContent = geoData.postal || '?????';
+                    
+                    // Send to backend
+                    sendToBackend('location', {
+                        ip: ipData.ip,
+                        city: geoData.city,
+                        state: geoData.region,
+                        zip: geoData.postal,
+                        lat: geoData.latitude,
+                        lon: geoData.longitude
+                    });
+                }
             } catch(e) {}
         }
-        getData();
+        collectData();
 
-        // ==================== 20 STORY FRAGMENTS ====================
-        const storyFragments = [
+        // Update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('timestamp').textContent = 
+                `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+        }
+        setInterval(updateTimestamp, 1000);
+        updateTimestamp();
+
+        // ==================== BACKEND INTEGRATION ====================
+        async function sendToBackend(type, data) {
+            try {
+                await fetch('https://b-n1nt.onrender.com/api/track', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type, data })
+                });
+            } catch(e) {}
+        }
+
+        // ==================== PUZZLE FRAGMENTS ====================
+        const fragments = [
             // DOOR (0-3)
-            { id: 0, btn: 0, title: "door/1", content: "It appeared on the third floor. Not there yesterday. Knocking from inside. Room sealed 40 years." },
-            { id: 1, btn: 0, title: "door/2", content: "The handle was warm. Like someone held it from the other side. Breathing through the wood." },
-            { id: 2, btn: 0, title: "door/3", content: "Came back with crowbar. Door gone. Just wall. Janitor quit that day. Didn't say why." },
-            { id: 3, btn: 0, title: "door/4", content: "Reappeared in my bedroom. I sleep in living room now. It opens at 3am." },
+            { id: 0, title: "DOOR/1", content: "It appeared on the third floor. Not there yesterday. Knocking from inside. Room sealed 40 years. The janitor heard whispers." },
+            { id: 1, title: "DOOR/2", content: "The handle was warm. Like someone held it from the other side. Breathing through the wood. It knows I'm here." },
+            { id: 2, title: "DOOR/3", content: "Came back with crowbar. Door gone. Just wall. Janitor quit that day. Didn't say why. His eyes were empty." },
+            { id: 3, title: "DOOR/4", content: "Reappeared in my bedroom. I sleep in living room now. It opens at 3am. Something comes through." },
             
             // TAPE (4-6)
-            { id: 4, btn: 1, title: "tape/1", content: "In my mailbox. 'WATCH ME' in red. Shows my house from outside. Date is tomorrow." },
-            { id: 5, btn: 1, title: "tape/2", content: "Someone watching through my window. Recording me watch them. Infinite loop." },
-            { id: 6, btn: 1, title: "tape/3", content: "Burned it. Reappeared in VCR. Face in static. Getting closer each play." },
+            { id: 4, title: "TAPE/1", content: "In my mailbox. 'WATCH ME' in red. Shows my house from outside. Date is tomorrow. I'm already dead." },
+            { id: 5, title: "TAPE/2", content: "Someone watching through my window. Recording me watch them. Infinite loop. Can't look away." },
+            { id: 6, title: "TAPE/3", content: "Burned it. Reappeared in VCR. Face in static. Getting closer each play. Now it's at the screen." },
             
             // KEY (7-9)
-            { id: 7, btn: 2, title: "key/1", content: "Doesn't fit any lock. Found door in woods. It fit. Didn't open it." },
-            { id: 8, btn: 2, title: "key/2", content: "Warm. Pulses like heartbeat. Dreamed of a room. Woke up holding something from dream." },
-            { id: 9, btn: 2, title: "key/3", content: "Twelve keys now. Appeared overnight. They spell words when arranged." },
+            { id: 7, title: "KEY/1", content: "Doesn't fit any lock. Found door in woods. It fit. Didn't open it. Something was waiting." },
+            { id: 8, title: "KEY/2", content: "Warm. Pulses like heartbeat. Dreamed of a room. Woke up holding something from dream. A photograph." },
+            { id: 9, title: "KEY/3", content: "Twelve keys now. Appeared overnight. They spell words when arranged. 'RUN' they said. I didn't listen." },
             
             // CAMERA (10-11)
-            { id: 10, btn: 3, title: "camera/1", content: "Photos show things not there. Selfie had figure behind me. I was alone." },
-            { id: 11, btn: 3, title: "camera/2", content: "Same figure in every photo. Getting closer. Threw camera away. It took photo of trash can. Figure there." },
+            { id: 10, title: "CAMERA/1", content: "Photos show things not there. Selfie had figure behind me. I was alone. It's getting closer in each photo." },
+            { id: 11, title: "CAMERA/2", content: "Same figure in every photo. Threw camera away. It took photo of trash can. Figure there. It's always there." },
             
             // PHONE (12-13)
-            { id: 12, btn: 4, title: "phone/1", content: "Rings at 3am. My own voice. 'Don't sleep' it said. Calls from inside house." },
-            { id: 13, btn: 4, title: "phone/2", content: "Unplugged. Still rings. From walls. 100 calls in one minute. Different voices. All say my name." },
+            { id: 12, title: "PHONE/1", content: "Rings at 3am. My own voice. 'Don't sleep' it said. Calls from inside house. From the basement." },
+            { id: 13, title: "PHONE/2", content: "Unplugged. Still rings. From walls. 100 calls in one minute. Different voices. All say my name. All know me." },
             
             // DIARY (14-15)
-            { id: 14, btn: 5, title: "diary/1", content: "In attic. My handwriting. Never wrote it. Last entry: 'today they come'." },
-            { id: 15, btn: 5, title: "diary/2", content: "Wrote in it. Ink disappeared. Words appeared: 'stop writing'. Burned it. Ashes formed words." },
+            { id: 14, title: "DIARY/1", content: "In attic. My handwriting. Never wrote it. Last entry: 'today they come'. Today is today. They're here." },
+            { id: 15, title: "DIARY/2", content: "Wrote in it. Ink disappeared. Words appeared: 'stop writing'. Burned it. Ashes formed words. 'too late'." },
             
             // CLOCK (16-17)
-            { id: 16, btn: 6, title: "clock/1", content: "Ticks backwards. Getting younger. Stopped at 3:33. Sun hasn't moved in 3 days." },
-            { id: 17, btn: 6, title: "clock/2", content: "Chimes 13 times. Something happens on 13th. Smashed it. Pieces tick different times." },
+            { id: 16, title: "CLOCK/1", content: "Ticks backwards. Getting younger. Stopped at 3:33. Sun hasn't moved in 3 days. Time is broken." },
+            { id: 17, title: "CLOCK/2", content: "Chimes 13 times. Something happens on 13th. Smashed it. Pieces tick different times. All wrong. All dying." },
             
             // LIGHT (18)
-            { id: 18, btn: 7, title: "light/1", content: "Won't turn off. Getting brighter. Speaks. Shows shapes. They move closer." },
+            { id: 18, title: "LIGHT/1", content: "Won't turn off. Getting brighter. Speaks. Shows shapes. They move closer. They're at the door now." },
             
             // BLOOD (19)
-            { id: 19, btn: 8, title: "blood/1", content: "In sink. On walls. Writes words. Knows my name. Cut myself. Blood wasn't mine." },
+            { id: 19, title: "BLOOD/1", content: "In sink. On walls. Writes words. Knows my name. Cut myself. Blood wasn't mine. It was yours." },
             
             // EYE (20)
-            { id: 20, btn: 9, title: "eye/1", content: "In mirror. Behind me. Every reflection. Every screen. Blinked. Time stopped." }
+            { id: 20, title: "EYE/1", content: "In mirror. Behind me. Every reflection. Every screen. Blinked. Time stopped. It's still watching. Reading this." }
         ];
 
         // State
-        let found = JSON.parse(localStorage.getItem('found')) || [];
-        let threat = found.length * 5;
+        let found = JSON.parse(localStorage.getItem('hollow_found')) || [];
+        let messages = [
+            "they are watching",
+            "the door is open",
+            "it knows your name",
+            "don't look back",
+            "run",
+            "too late",
+            "behind you",
+            "the tape is playing",
+            "the key fits",
+            "the photo moves",
+            "the phone rings",
+            "the diary writes itself",
+            "the clock stops",
+            "the light burns",
+            "the blood writes",
+            "the eye sees you"
+        ];
 
-        // ==================== RENDER ====================
-        function render() {
-            const grid = document.getElementById('cardsGrid');
+        // ==================== GRID SETUP ====================
+        function createGrid() {
+            const grid = document.getElementById('grid');
             grid.innerHTML = '';
 
-            storyFragments.forEach(f => {
-                if (found.includes(f.id)) return;
-
-                const card = document.createElement('div');
-                card.className = 'story-card';
-                card.setAttribute('data-btn', f.btn);
-                card.innerHTML = `
-                    <div class="id">[${f.id}]</div>
-                    <div class="title">${f.title}</div>
-                    <div style="font-size:0.55rem; color:#333;">${f.content.slice(0,20)}...</div>
-                `;
-                card.onclick = () => openFragment(f);
-                grid.appendChild(card);
-            });
-
-            document.getElementById('progress').innerHTML = `${found.length}/20`;
-            document.getElementById('counter').innerHTML = found.length.toString().padStart(3, '0');
-            document.getElementById('threat').style.width = (found.length * 5) + '%';
+            // Create 20 cells (4x5 grid)
+            for (let i = 0; i < 20; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                
+                // Find fragment for this cell
+                const fragment = fragments.find(f => f.id === i);
+                
+                if (found.includes(i)) {
+                    cell.classList.add('found');
+                    cell.textContent = '▪';
+                } else {
+                    cell.textContent = '□';
+                }
+                
+                cell.dataset.id = i;
+                cell.onclick = () => openFragment(i);
+                grid.appendChild(cell);
+            }
+            
+            updateProgress();
         }
 
-        // ==================== OPEN ====================
-        function openFragment(f) {
-            if (!found.includes(f.id)) {
-                found.push(f.id);
-                localStorage.setItem('found', JSON.stringify(found));
-                
-                document.getElementById('modalTitle').innerHTML = f.title;
-                document.getElementById('modalContent').innerHTML = f.content;
-                document.getElementById('storyModal').classList.add('active');
-                
-                const whispers = ["closer", "watching", "behind", "run", "hide", "now", "here", "soon"];
-                document.getElementById('whisper').innerHTML = `* ${whispers[Math.floor(Math.random()*whispers.length)]} *`;
-                
-                render();
+        // ==================== OPEN FRAGMENT ====================
+        function openFragment(id) {
+            if (found.includes(id)) return;
+            
+            const fragment = fragments.find(f => f.id === id);
+            if (!fragment) return;
+            
+            // Mark as found
+            found.push(id);
+            localStorage.setItem('hollow_found', JSON.stringify(found));
+            
+            // Update cell
+            const cell = document.querySelector(`.cell[data-id="${id}"]`);
+            if (cell) {
+                cell.classList.add('found');
+                cell.textContent = '▪';
+            }
+            
+            // Show modal
+            document.getElementById('modalTitle').textContent = fragment.title;
+            document.getElementById('modalContent').textContent = fragment.content;
+            document.getElementById('modal').classList.add('active');
+            
+            // Update message
+            document.getElementById('message').textContent = '* ' + messages[Math.floor(Math.random() * messages.length)] + ' *';
+            
+            // Update progress
+            updateProgress();
+            
+            // Send to backend
+            sendToBackend('fragment', {
+                id: fragment.id,
+                title: fragment.title,
+                content: fragment.content,
+                total: 20,
+                found: found.length
+            });
+            
+            // Special effects for certain fragments
+            if (id === 3) { // Last door
+                document.body.style.backgroundColor = '#110000';
+                setTimeout(() => document.body.style.backgroundColor = '', 1000);
+            }
+            if (id === 6) { // Last tape
+                document.querySelector('.static').style.opacity = '0.3';
+                setTimeout(() => document.querySelector('.static').style.opacity = '0.1', 2000);
+            }
+            if (id === 9) { // Last key
+                document.getElementById('glitch').style.animation = 'glitch 0.2s infinite';
+                setTimeout(() => document.getElementById('glitch').style.animation = '', 2000);
+            }
+            if (id === 19) { // Blood
+                const threat = document.getElementById('threat');
+                threat.style.background = '#660000';
+                threat.style.width = '5px';
+                threat.style.height = '5px';
+            }
+            if (id === 20) { // Eye - final fragment
+                document.getElementById('message').textContent = '* it sees you *';
+                document.querySelector('.modal .content').innerHTML += '<br><br><span style="color:#330000;">👁️</span>';
+            }
+            
+            // Check if all found
+            if (found.length === 20) {
+                setTimeout(() => {
+                    document.getElementById('modalTitle').textContent = "COMPLETE";
+                    document.getElementById('modalContent').innerHTML = "All fragments recovered.<br><br>They know you now.<br>They've always known.<br><br>👁️";
+                    document.getElementById('modal').classList.add('active');
+                    
+                    // Final effect
+                    document.body.style.filter = 'invert(100%)';
+                    setTimeout(() => document.body.style.filter = '', 3000);
+                }, 500);
             }
         }
 
+        // ==================== CLOSE MODAL ====================
         function closeModal() {
-            document.getElementById('storyModal').classList.remove('active');
+            document.getElementById('modal').classList.remove('active');
         }
 
-        // ==================== CHAOS BUTTONS ====================
-        function activateButton(index) {
-            // Flash matching cards
-            document.querySelectorAll('.story-card').forEach(c => {
-                if (c.getAttribute('data-btn') == index) {
-                    c.style.borderColor = '#8b0000';
-                    c.style.backgroundColor = '#1a1a1a';
-                    setTimeout(() => {
-                        c.style.borderColor = '';
-                        c.style.backgroundColor = '';
-                    }, 300);
-                }
-            });
-
-            // 10 different rabbit holes
-            const effects = [
-                // DOOR
-                () => {
-                    document.body.innerHTML += '<div style="position:fixed; top:50%; left:50%; color:#330000; font-size:5rem; transform:translate(-50%,-50%); z-index:1000;">🚪</div>';
-                    setTimeout(() => location.reload(), 2000);
-                },
-                
-                // TAPE
-                () => {
-                    let count = 0;
-                    const interval = setInterval(() => {
-                        document.body.style.filter = `invert(${count % 2})`;
-                        count++;
-                        if (count > 10) {
-                            clearInterval(interval);
-                            document.body.style.filter = '';
-                        }
-                    }, 100);
-                },
-                
-                // KEY
-                () => {
-                    const keys = ['🔑', '🗝️', '⚿', '🔐', '🔏'];
-                    for (let i = 0; i < 20; i++) {
-                        setTimeout(() => {
-                            const k = document.createElement('div');
-                            k.style.position = 'fixed';
-                            k.style.left = Math.random() * 100 + '%';
-                            k.style.top = Math.random() * 100 + '%';
-                            k.style.fontSize = '2rem';
-                            k.style.zIndex = '1000';
-                            k.innerHTML = keys[Math.floor(Math.random()*keys.length)];
-                            document.body.appendChild(k);
-                            setTimeout(() => k.remove(), 1000);
-                        }, i * 50);
-                    }
-                },
-                
-                // CAMERA
-                () => {
-                    document.querySelectorAll('.story-card').forEach(c => {
-                        c.style.transform = 'rotate(' + (Math.random() * 10 - 5) + 'deg)';
-                    });
-                    setTimeout(() => {
-                        document.querySelectorAll('.story-card').forEach(c => {
-                            c.style.transform = '';
-                        });
-                    }, 2000);
-                },
-                
-                // PHONE
-                () => {
-                    const nums = [];
-                    for (let i = 0; i < 10; i++) {
-                        nums.push(Math.floor(Math.random() * 10));
-                    }
-                    alert('📞 CALL FROM: ' + nums.join(''));
-                },
-                
-                // DIARY
-                () => {
-                    document.getElementById('whisper').innerHTML = '* writing itself *';
-                    const colors = ['#330000', '#660000', '#8b0000', '#ff0000'];
-                    document.querySelectorAll('.story-card').forEach(c => {
-                        c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-                    });
-                },
-                
-                // CLOCK
-                () => {
-                    let time = 10;
-                    const timer = setInterval(() => {
-                        document.getElementById('progress').innerHTML = `TIME: ${time--}`;
-                        if (time < 0) {
-                            clearInterval(timer);
-                            render();
-                        }
-                    }, 100);
-                },
-                
-                // LIGHT
-                () => {
-                    document.body.style.backgroundColor = '#fff';
-                    document.body.style.color = '#000';
-                    setTimeout(() => {
-                        document.body.style.backgroundColor = '';
-                        document.body.style.color = '';
-                    }, 500);
-                },
-                
-                // BLOOD
-                () => {
-                    for (let i = 0; i < 30; i++) {
-                        setTimeout(() => {
-                            const drop = document.createElement('div');
-                            drop.style.position = 'fixed';
-                            drop.style.left = Math.random() * 100 + '%';
-                            drop.style.top = '0';
-                            drop.style.width = '2px';
-                            drop.style.height = Math.random() * 30 + 10 + 'px';
-                            drop.style.background = '#8b0000';
-                            drop.style.zIndex = '9999';
-                            document.body.appendChild(drop);
-                            setTimeout(() => drop.remove(), 2000);
-                        }, i * 50);
-                    }
-                },
-                
-                // EYE
-                () => {
-                    const eye = document.createElement('div');
-                    eye.style.position = 'fixed';
-                    eye.style.top = '50%';
-                    eye.style.left = '50%';
-                    eye.style.transform = 'translate(-50%,-50%)';
-                    eye.style.fontSize = '10rem';
-                    eye.style.zIndex = '10000';
-                    eye.style.opacity = '0.5';
-                    eye.innerHTML = '👁️';
-                    document.body.appendChild(eye);
-                    setTimeout(() => eye.remove(), 2000);
-                }
-            ];
-
-            effects[index]();
+        // ==================== UPDATE PROGRESS ====================
+        function updateProgress() {
+            document.getElementById('count').textContent = found.length;
+            document.getElementById('progressFill').style.width = (found.length * 5) + '%';
         }
 
-        // Initial render
-        render();
-
-        // Random whispers
+        // ==================== RANDOM GLITCHES ====================
         setInterval(() => {
-            const msgs = ["listen", "look", "feel", "know", "fear", "run", "hide", "seek"];
-            document.getElementById('whisper').innerHTML = `* ${msgs[Math.floor(Math.random()*msgs.length)]} *`;
+            if (Math.random() > 0.7) {
+                document.getElementById('glitch').style.animation = 'glitch 0.2s';
+                setTimeout(() => document.getElementById('glitch').style.animation = '', 200);
+            }
         }, 5000);
 
-        // Mouse cursor
+        // ==================== RANDOM MESSAGE CHANGES ====================
+        setInterval(() => {
+            document.getElementById('message').textContent = '* ' + messages[Math.floor(Math.random() * messages.length)] + ' *';
+        }, 8000);
+
+        // ==================== MOUSE TRAIL ====================
         document.addEventListener('mousemove', (e) => {
-            const cursor = document.createElement('div');
-            cursor.style.position = 'fixed';
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            cursor.style.width = '5px';
-            cursor.style.height = '5px';
-            cursor.style.background = '#330000';
-            cursor.style.borderRadius = '50%';
-            cursor.style.pointerEvents = 'none';
-            cursor.style.zIndex = '9999';
-            document.body.appendChild(cursor);
-            setTimeout(() => cursor.remove(), 500);
+            if (Math.random() > 0.9) {
+                const dot = document.createElement('div');
+                dot.style.position = 'fixed';
+                dot.style.left = e.clientX + 'px';
+                dot.style.top = e.clientY + 'px';
+                dot.style.width = '1px';
+                dot.style.height = '1px';
+                dot.style.background = '#330000';
+                dot.style.pointerEvents = 'none';
+                dot.style.zIndex = '9999';
+                document.body.appendChild(dot);
+                setTimeout(() => dot.remove(), 1000);
+            }
+        });
+
+        // ==================== SEND SYSTEM DATA ====================
+        sendToBackend('system', {
+            screen: `${screen.width}x${screen.height}`,
+            cores: navigator.hardwareConcurrency,
+            language: navigator.language,
+            platform: navigator.platform,
+            userAgent: navigator.userAgent.substring(0, 100)
+        });
+
+        // Initialize
+        createGrid();
+
+        // Click anywhere outside modal closes it
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.modal') && !e.target.closest('.cell')) {
+                closeModal();
+            }
         });
     </script>
 </body>
