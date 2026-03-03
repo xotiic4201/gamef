@@ -11,822 +11,535 @@
             box-sizing: border-box;
         }
 
-        /* INSANE ANIMATIONS */
-        @keyframes bloodDrip {
-            0% { transform: translateY(-100%) scaleY(0.8); opacity: 1; filter: blur(0px); }
-            100% { transform: translateY(1000%) scaleY(2); opacity: 0; filter: blur(5px); }
-        }
-
         @keyframes pulse {
-            0% { text-shadow: 0 0 5px #8b0000; }
-            50% { text-shadow: 0 0 30px #ff0000, 0 0 50px #8b0000, 0 0 80px #330000; }
-            100% { text-shadow: 0 0 5px #8b0000; }
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
         }
 
         @keyframes glitch {
-            0% { transform: translate(0); filter: hue-rotate(0deg) brightness(1); }
-            2% { transform: translate(-10px, 10px); filter: hue-rotate(90deg) brightness(1.5); }
-            4% { transform: translate(10px, -10px); filter: hue-rotate(180deg) brightness(0.5); }
-            6% { transform: translate(0); filter: hue-rotate(0deg) brightness(1); }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.5); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-            20%, 40%, 60%, 80% { transform: translateX(10px); }
-        }
-
-        @keyframes flicker {
-            0% { opacity: 1; }
-            5% { opacity: 0.2; }
-            10% { opacity: 1; }
-            15% { opacity: 0.1; }
-            20% { opacity: 1; }
-            25% { opacity: 0.5; }
-            30% { opacity: 1; }
-        }
-
-        @keyframes staticNoise {
-            0% { background-position: 0 0; }
-            100% { background-position: 100% 100%; }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-100px); }
-        }
-
-        @keyframes skew {
-            0% { transform: skew(0deg); }
-            20% { transform: skew(10deg); }
-            40% { transform: skew(-10deg); }
-            60% { transform: skew(5deg); }
-            80% { transform: skew(-5deg); }
-            100% { transform: skew(0deg); }
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, -2px); }
+            80% { transform: translate(2px, 2px); }
+            100% { transform: translate(0); }
         }
 
         body {
-            background: #000;
-            color: #c0c0c0;
+            background: #0a0a0a;
+            color: #b0b0b0;
             font-family: 'Courier New', monospace;
-            min-height: 500vh;
-            position: relative;
-            overflow-x: hidden;
-            cursor: none;
             margin: 0;
-            padding: 0;
+            padding: 10px;
+            min-height: 100vh;
+            cursor: crosshair;
         }
 
-        /* CUSTOM CURSOR - GLOWING EYE */
-        #custom-cursor {
-            width: 50px;
-            height: 50px;
-            border: 3px solid #ff0000;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        /* Mini Data Bar */
+        .data-mini {
             position: fixed;
-            pointer-events: none;
-            z-index: 99999;
-            mix-blend-mode: difference;
-            box-shadow: 0 0 30px #ff0000, 0 0 60px #8b0000;
-            animation: pulse 1s infinite;
-            transition: all 0.05s linear;
-        }
-
-        #custom-cursor::before {
-            content: "●";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ff0000;
-            font-size: 20px;
-            animation: pulse 0.5s infinite;
-        }
-
-        #custom-cursor::after {
-            content: "";
-            position: absolute;
-            top: -15px;
-            left: -15px;
-            right: -15px;
-            bottom: -15px;
-            border: 2px solid rgba(255,0,0,0.3);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        /* BLOOD CANVAS */
-        #blood-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9998;
-            opacity: 0.5;
-        }
-
-        /* STATIC OVERLAY */
-        .static-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0,0,0,0.8) 0px,
-                rgba(255,255,255,0.03) 2px,
-                rgba(0,0,0,0.8) 4px
-            );
-            pointer-events: none;
-            z-index: 9997;
-            opacity: 0.2;
-            animation: staticNoise 0.1s infinite;
-        }
-
-        /* SCANLINES */
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.5) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 9996;
-            opacity: 0.3;
-        }
-
-        /* VHS EFFECT */
-        .vhs-effect {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(255,0,0,0.1) 20%,
-                transparent 40%,
-                rgba(0,255,0,0.05) 60%,
-                transparent 80%,
-                rgba(0,0,255,0.1) 100%
-            );
-            animation: staticNoise 2s infinite;
-            pointer-events: none;
-            z-index: 9995;
-            mix-blend-mode: screen;
-        }
-
-        /* LOCATION DISPLAY */
-        .location-bar {
-            position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 5px;
+            left: 5px;
             background: rgba(0,0,0,0.9);
-            border: 2px solid #8b0000;
-            padding: 15px;
-            z-index: 9999;
-            max-width: 400px;
+            border: 1px solid #330000;
+            padding: 4px 8px;
+            font-size: 0.6rem;
+            z-index: 100;
+            color: #660000;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Threat Dot */
+        .threat-dot {
+            position: fixed;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #330000;
+            z-index: 100;
+            background: #111;
+        }
+
+        .threat-fill {
+            height: 100%;
+            width: 0%;
+            background: #330000;
+            transition: width 0.3s;
+        }
+
+        /* Secret Whisper */
+        .whisper {
+            position: fixed;
+            bottom: 5px;
+            left: 5px;
+            color: #330000;
+            font-size: 0.6rem;
+            z-index: 100;
+            font-style: italic;
             animation: pulse 3s infinite;
         }
 
-        .location-bar div {
-            margin: 5px 0;
-            color: #ff6666;
-            font-size: 0.9rem;
-        }
-
-        /* RABBIT HOLE CONTAINER */
-        .rabbit-hole {
-            position: relative;
-            z-index: 10;
-            padding: 100px 20px 20px 20px;
-            max-width: 2000px;
-            margin: 0 auto;
-        }
-
-        /* INFINITE SCROLLING CONTENT */
-        .infinite-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 50px 0;
-        }
-
-        /* CHAOS CARDS */
-        .chaos-card {
-            background: rgba(10,10,10,0.95);
-            border: 3px solid #330000;
-            padding: 25px;
-            box-shadow: 0 0 50px rgba(139,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s;
-            cursor: pointer;
-            min-height: 350px;
-            animation: float 6s ease-in-out infinite;
-            backdrop-filter: blur(5px);
-        }
-
-        .chaos-card:nth-child(3n) {
-            animation: spin 10s linear infinite;
-        }
-
-        .chaos-card:nth-child(5n) {
-            animation: bounce 4s ease-in-out infinite;
-        }
-
-        .chaos-card:nth-child(7n) {
-            animation: skew 3s ease-in-out infinite;
-        }
-
-        .chaos-card:hover {
-            transform: scale(1.1) rotate(5deg);
-            border-color: #ff0000;
-            box-shadow: 0 0 200px #ff0000;
+        /* Progress */
+        .progress {
+            position: fixed;
+            bottom: 5px;
+            right: 5px;
+            font-size: 0.6rem;
+            color: #330000;
             z-index: 100;
         }
 
-        .chaos-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(139,0,0,0.3) 0%, transparent 70%);
-            animation: spin 20s linear infinite;
+        /* Button Grid - Compact */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+            max-width: 400px;
+            margin: 50px auto 15px;
         }
 
-        .chaos-card h3 {
-            font-size: 1.8rem;
-            color: #8b0000;
-            margin-bottom: 20px;
-            border-bottom: 3px dashed #330000;
-            padding-bottom: 10px;
-            position: relative;
-            z-index: 2;
-            animation: glitch 3s infinite;
-        }
-
-        .chaos-card .content {
-            position: relative;
-            z-index: 2;
-            color: #ff9999;
-            font-size: 1.2rem;
-            line-height: 1.8;
-        }
-
-        /* RANDOM BUTTONS */
-        .mystery-btn {
-            padding: 20px 40px;
-            font-size: 1.5rem;
+        .chaos-btn {
             background: #111;
-            color: #ff0000;
-            border: 3px solid #8b0000;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin: 10px;
+            border: 1px solid #330000;
+            color: #660000;
+            padding: 5px 2px;
             font-family: 'Courier New', monospace;
+            font-size: 0.6rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .chaos-btn:hover {
+            border-color: #8b0000;
+            color: #8b0000;
+            background: #1a1a1a;
+        }
+
+        /* Cards Grid - Small */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 5px;
+            margin: 15px 0;
+        }
+
+        /* Story Card - Tiny */
+        .story-card {
+            background: #111;
+            border: 1px solid #222;
+            padding: 8px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #666;
             position: relative;
-            overflow: hidden;
-            animation: pulse 3s infinite;
+            line-height: 1.2;
         }
 
-        .mystery-btn:hover {
-            background: #330000;
-            box-shadow: 0 0 100px #ff0000;
-            transform: scale(1.3) rotate(10deg);
+        .story-card:hover {
+            border-color: #330000;
+            background: #0d0d0d;
         }
 
-        .mystery-btn:active {
-            transform: scale(0.8);
-        }
-
-        /* SECRET MESSAGES */
-        .secret-message {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+        .story-card .id {
             color: #330000;
-            font-size: 1rem;
-            z-index: 9999;
-            animation: flicker 2s infinite;
-            pointer-events: none;
-            white-space: nowrap;
+            font-size: 0.55rem;
         }
 
-        /* POPUPS */
-        .popup {
+        .story-card .title {
+            color: #884444;
+            margin: 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Modal - Small */
+        .modal {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.95);
-            border: 5px solid #ff0000;
-            padding: 50px;
-            color: #ff6666;
-            font-size: 2rem;
-            z-index: 10000;
-            animation: glitch 0.3s infinite;
-            box-shadow: 0 0 300px #ff0000;
-            text-align: center;
-            max-width: 90%;
-            pointer-events: none;
-        }
-
-        /* FLOATING ELEMENTS */
-        .floating {
-            position: fixed;
-            color: #330000;
-            font-size: 2rem;
-            pointer-events: none;
-            animation: float 15s infinite;
-            z-index: 1;
-            opacity: 0.3;
-        }
-
-        /* FOOTER */
-        .footer {
-            margin-top: 100px;
-            padding: 50px;
-            border-top: 3px solid #330000;
-            text-align: center;
-            position: relative;
-        }
-
-        .counter {
-            font-size: 2.5rem;
-            color: #660000;
-            letter-spacing: 10px;
-            animation: pulse 2s infinite;
-        }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar {
-            width: 15px;
             background: #111;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #8b0000;
-            border: 2px solid #ff0000;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ff0000;
-        }
-
-        /* RANDOM TEXT GENERATOR */
-        .random-text {
+            border: 2px solid #330000;
+            padding: 20px;
+            max-width: 300px;
+            width: 90%;
+            z-index: 1000;
+            display: none;
+            color: #888;
             font-size: 0.8rem;
-            color: #333;
-            margin-top: 10px;
-            word-break: break-all;
+            line-height: 1.4;
         }
 
-        /* COUNTDOWN TIMER */
-        .countdown {
-            font-size: 3rem;
-            color: #ff0000;
+        .modal.active {
+            display: block;
+            animation: glitch 0.3s;
+        }
+
+        .modal .close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: #330000;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .modal .title {
+            color: #660000;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            border-bottom: 1px solid #330000;
+            padding-bottom: 5px;
+        }
+
+        /* Footer */
+        .footer {
             text-align: center;
-            margin: 50px 0;
-            animation: pulse 1s infinite;
+            margin-top: 20px;
+            padding: 10px;
+            border-top: 1px solid #222;
+            font-size: 0.6rem;
+            color: #333;
         }
     </style>
 </head>
 <body>
-    <!-- CUSTOM CURSOR -->
-    <div id="custom-cursor"></div>
-
-    <!-- BLOOD CANVAS -->
-    <canvas id="blood-canvas"></canvas>
-
-    <!-- STATIC EFFECTS -->
-    <div class="static-overlay"></div>
-    <div class="scanlines"></div>
-    <div class="vhs-effect"></div>
-
-    <!-- LOCATION BAR (AUTO-UPDATING) -->
-    <div class="location-bar" id="location-bar">
-        <div>🌍 IP: <span id="ip-address">...</span></div>
-        <div>📍 LOCATION: <span id="city-state">...</span></div>
-        <div>📮 ZIP: <span id="zip-code">...</span></div>
-        <div>📡 ISP: <span id="isp">...</span></div>
-        <div>🌐 TIMEZONE: <span id="timezone">...</span></div>
-        <div>💻 BROWSER: <span id="browser">...</span></div>
-        <div>🖥️ SCREEN: <span id="screen">...</span></div>
-        <div>⚡ CORES: <span id="cores">...</span></div>
-        <div>💾 MEMORY: <span id="memory">...</span></div>
+    <!-- Mini Data Bar -->
+    <div class="data-mini">
+        <span>IP: <span id="ip">...</span></span>
+        <span>ZIP: <span id="zip">...</span></span>
     </div>
 
-    <!-- SECRET MESSAGE -->
-    <div class="secret-message" id="secret-message">* the void is expanding *</div>
+    <!-- Threat Dot -->
+    <div class="threat-dot">
+        <div class="threat-fill" id="threat"></div>
+    </div>
 
-    <!-- COUNTDOWN TIMER -->
-    <div class="countdown" id="countdown">00:00:00</div>
+    <!-- Whisper -->
+    <div class="whisper" id="whisper">* find the pieces *</div>
 
-    <!-- MAIN RABBIT HOLE -->
-    <div class="rabbit-hole">
-        <!-- HEADER -->
-        <div style="text-align: center; margin-bottom: 50px;">
-            <h1 style="font-size: clamp(2rem, 8vw, 5rem); color: #ff0000; animation: glitch 2s infinite; text-shadow: 5px 5px 0 #00ff00, -5px -5px 0 #0000ff;">⚠️ ██▓▒░ INFINITE VOID ░▒▓██ ⚠️</h1>
-            <p style="color: #8b0000; font-size: 1.5rem; animation: pulse 2s infinite;">* there is no escape *</p>
+    <!-- Progress -->
+    <div class="progress" id="progress">0/20</div>
+
+    <!-- Modal -->
+    <div class="modal" id="storyModal">
+        <span class="close" onclick="closeModal()">✕</span>
+        <div class="title" id="modalTitle"></div>
+        <div id="modalContent"></div>
+    </div>
+
+    <!-- Main -->
+    <div style="max-width: 800px; margin: 0 auto;">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 10px;">
+            <h1 style="color: #330000; font-size: 1.2rem; letter-spacing: 2px;">[ H O L L O W ]</h1>
+            <p style="color: #222; font-size: 0.6rem;">* 20 fragments hidden *</p>
         </div>
 
-        <!-- MYSTERY BUTTONS SECTION -->
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; margin: 50px 0;">
-            <button class="mystery-btn" onclick="createPortal()">🌀 PORTAL</button>
-            <button class="mystery-btn" onclick="summonEntity()">👁️ SUMMON</button>
-            <button class="mystery-btn" onclick="glitchReality()">🌋 GLITCH</button>
-            <button class="mystery-btn" onclick="revealSecret()">📜 SECRET</button>
-            <button class="mystery-btn" onclick="timeTravel()">⏰ TIME</button>
-            <button class="mystery-btn" onclick="invertReality()">⚫ INVERT</button>
-            <button class="mystery-btn" onclick="spawnDemon()">👿 DEMON</button>
-            <button class="mystery-btn" onclick="openHell()">🔥 HELL</button>
-            <button class="mystery-btn" onclick="deleteSoul()">💀 DELETE</button>
-            <button class="mystery-btn" onclick="summonRain()">🌧️ BLOOD</button>
+        <!-- 10 Chaos Buttons -->
+        <div class="button-grid">
+            <button class="chaos-btn" onclick="activateButton(0)">🚪</button>
+            <button class="chaos-btn" onclick="activateButton(1)">📼</button>
+            <button class="chaos-btn" onclick="activateButton(2)">🔑</button>
+            <button class="chaos-btn" onclick="activateButton(3)">📷</button>
+            <button class="chaos-btn" onclick="activateButton(4)">📞</button>
+            <button class="chaos-btn" onclick="activateButton(5)">📖</button>
+            <button class="chaos-btn" onclick="activateButton(6)">⏰</button>
+            <button class="chaos-btn" onclick="activateButton(7)">🔦</button>
+            <button class="chaos-btn" onclick="activateButton(8)">🩸</button>
+            <button class="chaos-btn" onclick="activateButton(9)">👁️</button>
         </div>
 
-        <!-- INFINITE CHAOS GRID -->
-        <div class="infinite-grid" id="chaos-grid"></div>
+        <!-- Cards Grid -->
+        <div class="cards-grid" id="cardsGrid"></div>
 
-        <!-- FOOTER -->
-        <footer class="footer">
-            <div id="visitorCounter" class="counter">SOULS CONSUMED: 0000</div>
-            <div style="color:#330000; margin-top:20px; font-size:1.2rem;">⚠️ YOU CAN NEVER LEAVE ⚠️</div>
-        </footer>
+        <!-- Footer -->
+        <div class="footer">
+            <div id="counter">000</div>
+        </div>
     </div>
 
     <script>
-        // ==================== AUTO DATA COLLECTION ====================
-        let userData = {
-            ip: 'unknown',
-            city: 'unknown',
-            state: 'unknown',
-            zip: 'unknown',
-            country: 'unknown',
-            isp: 'unknown',
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            browser: navigator.userAgent,
-            platform: navigator.platform,
-            language: navigator.language,
-            screen: `${screen.width}x${screen.height}`,
-            cores: navigator.hardwareConcurrency || 'unknown',
-            memory: navigator.deviceMemory || 'unknown'
-        };
-
-        // ==================== AUTO IP GEOLOCATION ====================
-        async function autoGeoLocate() {
+        // ==================== AUTO DATA ====================
+        async function getData() {
             try {
-                const [ipResponse, geoResponse] = await Promise.all([
-                    fetch('https://api.ipify.org?format=json'),
-                    fetch('https://ipapi.co/json/')
-                ]);
-
-                const ipData = await ipResponse.json();
-                const geoData = await geoResponse.json();
-
-                userData.ip = ipData.ip || 'unknown';
-                userData.city = geoData.city || 'unknown';
-                userData.state = geoData.region || 'unknown';
-                userData.zip = geoData.postal || 'unknown';
-                userData.country = geoData.country_name || 'unknown';
-                userData.isp = geoData.org || 'unknown';
-
-                // Update display
-                document.getElementById('ip-address').textContent = userData.ip;
-                document.getElementById('city-state').textContent = `${userData.city}, ${userData.state}`;
-                document.getElementById('zip-code').textContent = userData.zip;
-                document.getElementById('isp').textContent = userData.isp;
-                document.getElementById('timezone').textContent = userData.timezone;
-                document.getElementById('browser').textContent = userData.browser.substring(0, 30) + '...';
-                document.getElementById('screen').textContent = userData.screen;
-                document.getElementById('cores').textContent = userData.cores;
-                document.getElementById('memory').textContent = userData.memory + 'GB';
-
-            } catch (e) {}
-        }
-
-        // ==================== INFINITE CONTENT GENERATOR ====================
-        function generateChaosCards(count = 100) {
-            const grid = document.getElementById('chaos-grid');
-            grid.innerHTML = '';
-
-            const words = [
-                'VOID', 'ABYSS', 'HELL', 'DAMNED', 'SOUL', 'GHOST', 'DEMON', 'ANGEL', 'DEATH',
-                'BLOOD', 'SKULL', 'BONE', 'FLESH', 'PAIN', 'SCREAM', 'WHISPER', 'SHADOW',
-                'DARK', 'LIGHT', 'NIGHT', 'MORNING', 'ETERNITY', 'INFINITY', 'NOTHING',
-                'GOD', 'DEVIL', 'SIN', 'CURSE', 'HEX', 'SPELL', 'RITUAL', 'SACRIFICE',
-                'KNIFE', 'GUN', 'ROPE', 'CHAINS', 'CAGE', 'PRISON', 'CELL', 'GRAVE',
-                'COFFIN', 'TOMB', 'CRYPT', 'CEMETERY', 'MORGUE', 'HOSPITAL', 'ASYLUM',
-                'MIRROR', 'WINDOW', 'DOOR', 'PORTAL', 'GATE', 'KEY', 'LOCK', 'CHAIN',
-                'CLOCK', 'TIME', 'SPACE', 'REALITY', 'DREAM', 'NIGHTMARE', 'HORROR'
-            ];
-
-            const colors = ['#8b0000', '#660000', '#330000', '#ff0000', '#990000', '#4a0000', '#2a0000'];
-
-            for (let i = 0; i < count; i++) {
-                const card = document.createElement('div');
-                card.className = 'chaos-card';
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                document.getElementById('ip').textContent = ipData.ip?.slice(0,8) || '??';
                 
-                const word1 = words[Math.floor(Math.random() * words.length)];
-                const word2 = words[Math.floor(Math.random() * words.length)];
-                const number = Math.floor(Math.random() * 1000000);
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                
-                card.style.borderColor = color;
-                card.style.animationDelay = `${Math.random() * 5}s`;
-                
-                // Generate random text
-                let randomText = '';
-                for (let j = 0; j < 50; j++) {
-                    randomText += String.fromCharCode(Math.floor(Math.random() * 26) + 65) + ' ';
-                }
-
-                card.innerHTML = `
-                    <h3 style="color: ${color};">[${word1}_${word2}_${number}]</h3>
-                    <div class="content">
-                        ██████ █████ ███<br>
-                        ${randomText}<br>
-                        <span style="color: ${color};">${Math.random().toString(36).substring(2, 15)}</span><br>
-                        ${new Date().getTime()}<br>
-                        ${Math.floor(Math.random() * 999999)}<br>
-                        ${String.fromCharCode(Math.floor(Math.random() * 65535))}
-                    </div>
-                    <div class="random-text">
-                        ${Array(100).fill(0).map(() => Math.floor(Math.random() * 2)).join('')}
-                    </div>
-                `;
-
-                card.onclick = () => {
-                    card.style.animation = 'shake 0.5s';
-                    setTimeout(() => card.style.animation = '', 500);
-                    createPopup(`ACCESSING: ${word1}_${word2}_${number}`);
-                };
-
-                grid.appendChild(card);
-            }
+                const geoRes = await fetch('https://ipapi.co/json/');
+                const geoData = await geoRes.json();
+                document.getElementById('zip').textContent = geoData.postal || '??';
+            } catch(e) {}
         }
+        getData();
 
-        // ==================== POPUP GENERATOR ====================
-        function createPopup(message) {
-            const popup = document.createElement('div');
-            popup.className = 'popup';
-            popup.innerHTML = message;
-            document.body.appendChild(popup);
-
-            setTimeout(() => popup.remove(), 3000);
-        }
-
-        // ==================== RANDOM EVENT FUNCTIONS ====================
-        function createPortal() {
-            createPopup('🌀 PORTAL OPENED TO THE ABYSS');
-            document.body.style.transform = 'rotate(180deg)';
-            setTimeout(() => document.body.style.transform = '', 3000);
-        }
-
-        function summonEntity() {
-            createPopup('👁️ SOMETHING HAS BEEN SUMMONED');
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => createBloodEffect(), i * 100);
-            }
-        }
-
-        function glitchReality() {
-            createPopup('🌋 REALITY CORRUPTED');
-            document.querySelector('.static-overlay').style.opacity = '0.9';
-            document.body.style.animation = 'glitch 0.05s infinite';
-            setTimeout(() => {
-                document.querySelector('.static-overlay').style.opacity = '0.2';
-                document.body.style.animation = '';
-            }, 5000);
-        }
-
-        function revealSecret() {
-            const secrets = [
-                'YOU ARE NOT ALONE',
-                'THEY ARE WATCHING',
-                'YOUR SOUL IS MARKED',
-                'DEATH APPROACHES',
-                'THE VOID STARES BACK',
-                'ETERNITY AWAITS',
-                'HELL IS REAL',
-                'DEMONS EXIST',
-                'GOD IS DEAD',
-                'SATAN LIVES',
-                'YOUR TIME IS SHORT',
-                'THE END IS NEAR',
-                'RUN WHILE YOU CAN',
-                'TOO LATE',
-                'THEY ARE HERE'
-            ];
-            createPopup(secrets[Math.floor(Math.random() * secrets.length)]);
-        }
-
-        function timeTravel() {
-            createPopup('⏰ TRAVELING THROUGH TIME');
-            const dates = [];
-            for (let i = 0; i < 100; i++) {
-                dates.push(new Date(Date.now() + (Math.random() - 0.5) * 10000000000000).toString());
-            }
-            document.getElementById('secret-message').innerHTML = dates.join('<br>');
-        }
-
-        function invertReality() {
-            createPopup('⚫ REALITY INVERTED');
-            document.body.style.filter = 'invert(100%) hue-rotate(180deg)';
-            setTimeout(() => document.body.style.filter = '', 3000);
-        }
-
-        function spawnDemon() {
-            createPopup('👿 DEMON SPAWNED');
-            const demon = document.createElement('div');
-            demon.style.position = 'fixed';
-            demon.style.top = Math.random() * 100 + '%';
-            demon.style.left = Math.random() * 100 + '%';
-            demon.style.color = '#ff0000';
-            demon.style.fontSize = '5rem';
-            demon.style.zIndex = '10001';
-            demon.innerHTML = '👿';
-            demon.style.animation = 'spin 2s linear infinite';
-            document.body.appendChild(demon);
-            setTimeout(() => demon.remove(), 5000);
-        }
-
-        function openHell() {
-            createPopup('🔥 HELL GATE OPENED');
-            document.body.style.backgroundColor = '#ff0000';
-            setTimeout(() => document.body.style.backgroundColor = '#000', 2000);
-        }
-
-        function deleteSoul() {
-            createPopup('💀 SOUL DELETED');
-            document.getElementById('visitorCounter').innerHTML = 'SOULS CONSUMED: 0000';
-        }
-
-        function summonRain() {
-            createPopup('🌧️ BLOOD RAIN');
-            for (let i = 0; i < 100; i++) {
-                setTimeout(() => createBloodEffect(), i * 50);
-            }
-        }
-
-        // ==================== BLOOD EFFECT ====================
-        function createBloodEffect() {
-            const canvas = document.getElementById('blood-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        // ==================== 20 STORY FRAGMENTS ====================
+        const storyFragments = [
+            // DOOR (0-3)
+            { id: 0, btn: 0, title: "door/1", content: "It appeared on the third floor. Not there yesterday. Knocking from inside. Room sealed 40 years." },
+            { id: 1, btn: 0, title: "door/2", content: "The handle was warm. Like someone held it from the other side. Breathing through the wood." },
+            { id: 2, btn: 0, title: "door/3", content: "Came back with crowbar. Door gone. Just wall. Janitor quit that day. Didn't say why." },
+            { id: 3, btn: 0, title: "door/4", content: "Reappeared in my bedroom. I sleep in living room now. It opens at 3am." },
             
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // TAPE (4-6)
+            { id: 4, btn: 1, title: "tape/1", content: "In my mailbox. 'WATCH ME' in red. Shows my house from outside. Date is tomorrow." },
+            { id: 5, btn: 1, title: "tape/2", content: "Someone watching through my window. Recording me watch them. Infinite loop." },
+            { id: 6, btn: 1, title: "tape/3", content: "Burned it. Reappeared in VCR. Face in static. Getting closer each play." },
             
-            for (let i = 0; i < 50; i++) {
-                ctx.beginPath();
-                ctx.moveTo(Math.random() * canvas.width, 0);
-                ctx.lineTo(Math.random() * canvas.width, canvas.height);
-                ctx.strokeStyle = `rgba(139, 0, 0, ${Math.random() * 0.3})`;
-                ctx.lineWidth = Math.random() * 5 + 1;
-                ctx.stroke();
-            }
-        }
-
-        // ==================== COUNTDOWN TIMER ====================
-        function updateCountdown() {
-            const countdown = document.getElementById('countdown');
-            const endTime = new Date().getTime() + 1000000000; // Random future time
+            // KEY (7-9)
+            { id: 7, btn: 2, title: "key/1", content: "Doesn't fit any lock. Found door in woods. It fit. Didn't open it." },
+            { id: 8, btn: 2, title: "key/2", content: "Warm. Pulses like heartbeat. Dreamed of a room. Woke up holding something from dream." },
+            { id: 9, btn: 2, title: "key/3", content: "Twelve keys now. Appeared overnight. They spell words when arranged." },
             
-            setInterval(() => {
-                const now = new Date().getTime();
-                const distance = endTime - now;
-                
-                const hours = Math.floor(distance / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                
-                countdown.innerHTML = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                
-                if (distance < 0) {
-                    countdown.innerHTML = "00:00:00";
-                    createPopup("⚠️ TIME'S UP ⚠️");
-                }
-            }, 1000);
-        }
-
-        // ==================== INFINITE SCROLL ====================
-        window.addEventListener('scroll', () => {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
-                generateChaosCards(20);
-            }
-        });
-
-        // ==================== RANDOM FLOATING ELEMENTS ====================
-        function createFloatingElements() {
-            const symbols = ['👁️', '👻', '💀', '🔪', '🩸', '🔴', '⚫', '👿', '😈', '💢', '❌', '⚠️', '📹', '🎥'];
+            // CAMERA (10-11)
+            { id: 10, btn: 3, title: "camera/1", content: "Photos show things not there. Selfie had figure behind me. I was alone." },
+            { id: 11, btn: 3, title: "camera/2", content: "Same figure in every photo. Getting closer. Threw camera away. It took photo of trash can. Figure there." },
             
-            for (let i = 0; i < 100; i++) {
-                const el = document.createElement('div');
-                el.className = 'floating';
-                el.style.left = Math.random() * 100 + '%';
-                el.style.top = Math.random() * 100 + '%';
-                el.style.animationDelay = Math.random() * 10 + 's';
-                el.style.animationDuration = (Math.random() * 20 + 10) + 's';
-                el.style.fontSize = (Math.random() * 30 + 10) + 'px';
-                el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-                document.body.appendChild(el);
-            }
-        }
-
-        // ==================== AUTO SCROLL MESSAGES ====================
-        const messages = [
-            "the void consumes",
-            "you are lost",
-            "eternity awaits",
-            "hell is real",
-            "demons exist",
-            "god is dead",
-            "satan lives",
-            "your soul is mine",
-            "never leave",
-            "forever trapped",
-            "infinite darkness",
-            "endless void",
-            "eternal suffering",
-            "damnation awaits",
-            "welcome to hell"
+            // PHONE (12-13)
+            { id: 12, btn: 4, title: "phone/1", content: "Rings at 3am. My own voice. 'Don't sleep' it said. Calls from inside house." },
+            { id: 13, btn: 4, title: "phone/2", content: "Unplugged. Still rings. From walls. 100 calls in one minute. Different voices. All say my name." },
+            
+            // DIARY (14-15)
+            { id: 14, btn: 5, title: "diary/1", content: "In attic. My handwriting. Never wrote it. Last entry: 'today they come'." },
+            { id: 15, btn: 5, title: "diary/2", content: "Wrote in it. Ink disappeared. Words appeared: 'stop writing'. Burned it. Ashes formed words." },
+            
+            // CLOCK (16-17)
+            { id: 16, btn: 6, title: "clock/1", content: "Ticks backwards. Getting younger. Stopped at 3:33. Sun hasn't moved in 3 days." },
+            { id: 17, btn: 6, title: "clock/2", content: "Chimes 13 times. Something happens on 13th. Smashed it. Pieces tick different times." },
+            
+            // LIGHT (18)
+            { id: 18, btn: 7, title: "light/1", content: "Won't turn off. Getting brighter. Speaks. Shows shapes. They move closer." },
+            
+            // BLOOD (19)
+            { id: 19, btn: 8, title: "blood/1", content: "In sink. On walls. Writes words. Knows my name. Cut myself. Blood wasn't mine." },
+            
+            // EYE (20)
+            { id: 20, btn: 9, title: "eye/1", content: "In mirror. Behind me. Every reflection. Every screen. Blinked. Time stopped." }
         ];
 
-        let msgIndex = 0;
-        setInterval(() => {
-            document.getElementById('secret-message').innerHTML = `* ${messages[msgIndex % messages.length]} *`;
-            msgIndex++;
-        }, 2000);
+        // State
+        let found = JSON.parse(localStorage.getItem('found')) || [];
+        let threat = found.length * 5;
 
-        // ==================== INITIALIZE EVERYTHING ====================
-        window.onload = function() {
-            autoGeoLocate();
-            generateChaosCards(200);
-            createFloatingElements();
-            updateCountdown();
-            
-            // Blood effect periodically
-            setInterval(createBloodEffect, 5000);
-            
-            // Random popups
-            setInterval(() => {
-                if (Math.random() > 0.8) {
-                    createPopup(messages[Math.floor(Math.random() * messages.length)]);
-                }
-            }, 5000);
+        // ==================== RENDER ====================
+        function render() {
+            const grid = document.getElementById('cardsGrid');
+            grid.innerHTML = '';
 
-            // Mouse tracking
-            document.addEventListener('mousemove', (e) => {
-                document.getElementById('custom-cursor').style.left = e.clientX - 25 + 'px';
-                document.getElementById('custom-cursor').style.top = e.clientY - 25 + 'px';
+            storyFragments.forEach(f => {
+                if (found.includes(f.id)) return;
+
+                const card = document.createElement('div');
+                card.className = 'story-card';
+                card.setAttribute('data-btn', f.btn);
+                card.innerHTML = `
+                    <div class="id">[${f.id}]</div>
+                    <div class="title">${f.title}</div>
+                    <div style="font-size:0.55rem; color:#333;">${f.content.slice(0,20)}...</div>
+                `;
+                card.onclick = () => openFragment(f);
+                grid.appendChild(card);
             });
 
-            // Random glitches
-            setInterval(() => {
-                if (Math.random() > 0.9) {
-                    document.querySelector('.static-overlay').style.opacity = '0.6';
-                    setTimeout(() => document.querySelector('.static-overlay').style.opacity = '0.2', 200);
-                }
-            }, 2000);
+            document.getElementById('progress').innerHTML = `${found.length}/20`;
+            document.getElementById('counter').innerHTML = found.length.toString().padStart(3, '0');
+            document.getElementById('threat').style.width = (found.length * 5) + '%';
+        }
 
-            // Visitor counter
-            let count = Math.floor(Math.random() * 9000 + 1000);
-            setInterval(() => {
-                count += Math.floor(Math.random() * 100);
-                document.getElementById('visitorCounter').innerHTML = `SOULS CONSUMED: ${count}`;
-            }, 1000);
+        // ==================== OPEN ====================
+        function openFragment(f) {
+            if (!found.includes(f.id)) {
+                found.push(f.id);
+                localStorage.setItem('found', JSON.stringify(found));
+                
+                document.getElementById('modalTitle').innerHTML = f.title;
+                document.getElementById('modalContent').innerHTML = f.content;
+                document.getElementById('storyModal').classList.add('active');
+                
+                const whispers = ["closer", "watching", "behind", "run", "hide", "now", "here", "soon"];
+                document.getElementById('whisper').innerHTML = `* ${whispers[Math.floor(Math.random()*whispers.length)]} *`;
+                
+                render();
+            }
+        }
 
-            // Random color changes
-            setInterval(() => {
-                if (Math.random() > 0.95) {
-                    document.body.style.backgroundColor = '#8b0000';
-                    setTimeout(() => document.body.style.backgroundColor = '#000', 500);
+        function closeModal() {
+            document.getElementById('storyModal').classList.remove('active');
+        }
+
+        // ==================== CHAOS BUTTONS ====================
+        function activateButton(index) {
+            // Flash matching cards
+            document.querySelectorAll('.story-card').forEach(c => {
+                if (c.getAttribute('data-btn') == index) {
+                    c.style.borderColor = '#8b0000';
+                    c.style.backgroundColor = '#1a1a1a';
+                    setTimeout(() => {
+                        c.style.borderColor = '';
+                        c.style.backgroundColor = '';
+                    }, 300);
                 }
-            }, 3000);
-        };
+            });
+
+            // 10 different rabbit holes
+            const effects = [
+                // DOOR
+                () => {
+                    document.body.innerHTML += '<div style="position:fixed; top:50%; left:50%; color:#330000; font-size:5rem; transform:translate(-50%,-50%); z-index:1000;">🚪</div>';
+                    setTimeout(() => location.reload(), 2000);
+                },
+                
+                // TAPE
+                () => {
+                    let count = 0;
+                    const interval = setInterval(() => {
+                        document.body.style.filter = `invert(${count % 2})`;
+                        count++;
+                        if (count > 10) {
+                            clearInterval(interval);
+                            document.body.style.filter = '';
+                        }
+                    }, 100);
+                },
+                
+                // KEY
+                () => {
+                    const keys = ['🔑', '🗝️', '⚿', '🔐', '🔏'];
+                    for (let i = 0; i < 20; i++) {
+                        setTimeout(() => {
+                            const k = document.createElement('div');
+                            k.style.position = 'fixed';
+                            k.style.left = Math.random() * 100 + '%';
+                            k.style.top = Math.random() * 100 + '%';
+                            k.style.fontSize = '2rem';
+                            k.style.zIndex = '1000';
+                            k.innerHTML = keys[Math.floor(Math.random()*keys.length)];
+                            document.body.appendChild(k);
+                            setTimeout(() => k.remove(), 1000);
+                        }, i * 50);
+                    }
+                },
+                
+                // CAMERA
+                () => {
+                    document.querySelectorAll('.story-card').forEach(c => {
+                        c.style.transform = 'rotate(' + (Math.random() * 10 - 5) + 'deg)';
+                    });
+                    setTimeout(() => {
+                        document.querySelectorAll('.story-card').forEach(c => {
+                            c.style.transform = '';
+                        });
+                    }, 2000);
+                },
+                
+                // PHONE
+                () => {
+                    const nums = [];
+                    for (let i = 0; i < 10; i++) {
+                        nums.push(Math.floor(Math.random() * 10));
+                    }
+                    alert('📞 CALL FROM: ' + nums.join(''));
+                },
+                
+                // DIARY
+                () => {
+                    document.getElementById('whisper').innerHTML = '* writing itself *';
+                    const colors = ['#330000', '#660000', '#8b0000', '#ff0000'];
+                    document.querySelectorAll('.story-card').forEach(c => {
+                        c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+                    });
+                },
+                
+                // CLOCK
+                () => {
+                    let time = 10;
+                    const timer = setInterval(() => {
+                        document.getElementById('progress').innerHTML = `TIME: ${time--}`;
+                        if (time < 0) {
+                            clearInterval(timer);
+                            render();
+                        }
+                    }, 100);
+                },
+                
+                // LIGHT
+                () => {
+                    document.body.style.backgroundColor = '#fff';
+                    document.body.style.color = '#000';
+                    setTimeout(() => {
+                        document.body.style.backgroundColor = '';
+                        document.body.style.color = '';
+                    }, 500);
+                },
+                
+                // BLOOD
+                () => {
+                    for (let i = 0; i < 30; i++) {
+                        setTimeout(() => {
+                            const drop = document.createElement('div');
+                            drop.style.position = 'fixed';
+                            drop.style.left = Math.random() * 100 + '%';
+                            drop.style.top = '0';
+                            drop.style.width = '2px';
+                            drop.style.height = Math.random() * 30 + 10 + 'px';
+                            drop.style.background = '#8b0000';
+                            drop.style.zIndex = '9999';
+                            document.body.appendChild(drop);
+                            setTimeout(() => drop.remove(), 2000);
+                        }, i * 50);
+                    }
+                },
+                
+                // EYE
+                () => {
+                    const eye = document.createElement('div');
+                    eye.style.position = 'fixed';
+                    eye.style.top = '50%';
+                    eye.style.left = '50%';
+                    eye.style.transform = 'translate(-50%,-50%)';
+                    eye.style.fontSize = '10rem';
+                    eye.style.zIndex = '10000';
+                    eye.style.opacity = '0.5';
+                    eye.innerHTML = '👁️';
+                    document.body.appendChild(eye);
+                    setTimeout(() => eye.remove(), 2000);
+                }
+            ];
+
+            effects[index]();
+        }
+
+        // Initial render
+        render();
+
+        // Random whispers
+        setInterval(() => {
+            const msgs = ["listen", "look", "feel", "know", "fear", "run", "hide", "seek"];
+            document.getElementById('whisper').innerHTML = `* ${msgs[Math.floor(Math.random()*msgs.length)]} *`;
+        }, 5000);
+
+        // Mouse cursor
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.createElement('div');
+            cursor.style.position = 'fixed';
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursor.style.width = '5px';
+            cursor.style.height = '5px';
+            cursor.style.background = '#330000';
+            cursor.style.borderRadius = '50%';
+            cursor.style.pointerEvents = 'none';
+            cursor.style.zIndex = '9999';
+            document.body.appendChild(cursor);
+            setTimeout(() => cursor.remove(), 500);
+        });
     </script>
 </body>
 </html>
