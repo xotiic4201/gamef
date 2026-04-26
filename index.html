@@ -4,7 +4,95 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>I can see you</title>
-  <style>
+  <!-- Add these styles -->
+<style>
+    /* ... existing styles ... */
+    
+    /* TTS Notification */
+    .tts-notification {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.95);
+        border: 2px solid #00ff00;
+        border-radius: 8px;
+        padding: 15px 30px;
+        z-index: 200;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        animation: glowPulse 0.5s ease;
+        box-shadow: 0 0 20px #00ff00;
+    }
+    
+    .tts-message {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+    
+    .tts-controls {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    .tts-controls button {
+        background: #00ff00;
+        border: none;
+        padding: 5px 15px;
+        cursor: pointer;
+        font-family: monospace;
+        font-weight: bold;
+    }
+    
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 300;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(5px);
+    }
+    
+    .modal-content {
+        background: #000;
+        border: 3px solid #00ff00;
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 0 50px #00ff00;
+        animation: modalGlitch 0.3s ease;
+    }
+    
+    @keyframes modalGlitch {
+        0% { transform: scale(0.8); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .modal-content h2 {
+        color: #ff0000;
+        margin-bottom: 20px;
+        text-shadow: 0 0 10px #ff0000;
+    }
+    
+    .modal-content p {
+        margin-bottom: 20px;
+    }
+    
+    .modal-url {
+        color: #00ff00;
+        font-size: 1.2rem;
+        word-break: break-all;
+        background: rgba(0, 255, 0, 0.1);
+        padding: 10px;
+        border-radius: 5px;
+    }
     @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
     /* Reset */
